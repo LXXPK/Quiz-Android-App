@@ -22,8 +22,9 @@ class HomeViewModel : ViewModel() {
             _uiState.update { it.copy(isLoading = true) }
             try {
                 // TODO: Fetch quizzes from repository
-                // val quizzes = repository.getQuizzes()
-                // _uiState.update { it.copy(isLoading = false, quizzes = quizzes) }
+                // val activeQuizzes = repository.getActiveQuizzes()
+                // val suggestedQuizzes = repository.getSuggestedQuizzes()
+                // _uiState.update { it.copy(isLoading = false, activeQuizzes = activeQuizzes, suggestedQuizzes = suggestedQuizzes) }
                 _uiState.update { it.copy(isLoading = false) }
             } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false, errorMessage = e.message) }
