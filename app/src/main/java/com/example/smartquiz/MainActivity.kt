@@ -4,9 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.example.smartquiz.data.local.database.AppDatabase
 import com.example.smartquiz.data.local.entity.user.UserEntity
+import com.example.smartquiz.ui.SmartQuizApp
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 import kotlinx.coroutines.launch
 
@@ -40,12 +38,7 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             SmartQuizTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                SmartQuizApp()
             }
         }
     }
