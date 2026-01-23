@@ -4,18 +4,24 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,52 +30,68 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smartquiz.R
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 
-enum class QuizScreen(@StringRes val title: Int) {
-    Login(title = R.string.login_title),
-    Home(title = R.string.home_title),
-    Quiz(title = R.string.quiz_title),
-    Profile(title = R.string.profile_title),
-    History(title = R.string.history_title)
+enum class QuizScreen(@StringRes val title: Int, val showOnBottomBar: Boolean = true, val icon: ImageVector? = null, val iconSelected: ImageVector? = null) {
+    Login(title = R.string.login_title, showOnBottomBar = false),
+    Home(title = R.string.home_title, icon = Icons.Outlined.Home, iconSelected = Icons.Filled.Home),
+    Quiz(title = R.string.quiz_title, showOnBottomBar = false),
+    Profile(title = R.string.profile_title, icon = Icons.Outlined.Person, iconSelected = Icons.Filled.Person),
+    History(title = R.string.history_title, icon = Icons.Outlined.DateRange, iconSelected = Icons.Filled.DateRange)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SmartQuizAppBar(
+fun SmartQuizBottomBar(
     currentScreen: QuizScreen,
-    canNavigateBack: Boolean,
-    navigateUp: () -> Unit,
+    onTabSelected: (QuizScreen) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TopAppBar(
-        title = { Text(stringResource(currentScreen.title)) },
-        modifier = modifier,
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button)
-                    )
-                }
-            }
+    NavigationBar(modifier = modifier) {
+        QuizScreen.entries.filter { it.showOnBottomBar }.forEach { screen ->
+            val label = stringResource(screen.title)
+            NavigationBarItem(
+                selected = currentScreen == screen,
+                onClick = { onTabSelected(screen) },
+                icon = {
+                    val icon = if (currentScreen == screen) screen.iconSelected else screen.icon
+                    if (icon != null) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = stringResource(R.string.nav_item_description, label)
+                        )
+                    }
+                },
+                label = { Text(label) }
+            )
         }
-    )
+    }
 }
 
 @Composable
 fun SmartQuizApp(navController: NavHostController = rememberNavController()) {
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = QuizScreen.valueOf(
-        backStackEntry?.destination?.route ?: QuizScreen.Login.name
-    )
+    val currentRoute = backStackEntry?.destination?.route ?: QuizScreen.Login.name
+    val currentScreen = try {
+        QuizScreen.valueOf(currentRoute)
+    } catch (e: Exception) {
+        QuizScreen.Login
+    }
 
     Scaffold(
-        topBar = {
-            SmartQuizAppBar(
-                currentScreen = currentScreen,
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() }
-            )
+        bottomBar = {
+            // Hide bottom bar on Quiz and Login screens
+            if (currentScreen != QuizScreen.Quiz && currentScreen != QuizScreen.Login) {
+                SmartQuizBottomBar(
+                    currentScreen = currentScreen,
+                    onTabSelected = { screen ->
+                        navController.navigate(screen.name) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
+            }
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -101,24 +123,11 @@ fun SmartQuizApp(navController: NavHostController = rememberNavController()) {
 
 @Preview(showBackground = true)
 @Composable
-fun SmartQuizAppBarPreview() {
+fun SmartQuizBottomBarPreview() {
     SmartQuizTheme {
-        SmartQuizAppBar(
+        SmartQuizBottomBar(
             currentScreen = QuizScreen.Home,
-            canNavigateBack = false,
-            navigateUp = {}
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SmartQuizAppBarBackPreview() {
-    SmartQuizTheme {
-        SmartQuizAppBar(
-            currentScreen = QuizScreen.Quiz,
-            canNavigateBack = true,
-            navigateUp = {}
+            onTabSelected = {}
         )
     }
 }
