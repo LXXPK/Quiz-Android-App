@@ -1,14 +1,12 @@
 package com.example.smartquiz.ui.home
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
+import com.example.smartquiz.data.local.entity.user.UserEntity
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 
 @Composable
@@ -43,6 +42,14 @@ fun QuizListScreen(handleQuizCardClick: () -> Unit, uiState: HomeUiState, modifi
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(dimensionResource(id = R.dimen.medium_padding))
     ) {
+        item {
+            Text(
+                text = "Hello ${uiState.user?.name ?: "Guest"}",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.medium_padding))
+            )
+        }
+
         if (uiState.suggestedQuizzes.isNotEmpty()) {
             item {
                 Text(
@@ -87,27 +94,6 @@ fun QuizListScreen(handleQuizCardClick: () -> Unit, uiState: HomeUiState, modifi
 }
 
 @Composable
-fun QuizCard(handleQuizCardClick: () -> Unit, quiz: QuizEntity, modifier: Modifier = Modifier) {
-    Card(
-        onClick = handleQuizCardClick,
-        modifier = modifier
-    ) {
-        Column(
-            modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_padding))
-        ) {
-            Text(
-                text = quiz.title,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = quiz.category,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-@Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -133,17 +119,6 @@ fun ErrorScreen(message: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun QuizCardPreview() {
-    SmartQuizTheme {
-        QuizCard(
-            quiz = QuizEntity("1", "Sample Quiz", "Category", true),
-            handleQuizCardClick = {}
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
 fun QuizListPreview() {
     val sampleQuizzes = listOf(
         QuizEntity("1", "Android Basics", "Tech", true),
@@ -152,6 +127,7 @@ fun QuizListPreview() {
     SmartQuizTheme {
         QuizListScreen(
             uiState = HomeUiState(
+                user = UserEntity("1", "John Doe", "john@example.com", null),
                 suggestedQuizzes = sampleQuizzes,
                 activeQuizzes = sampleQuizzes.take(1)
             ),
