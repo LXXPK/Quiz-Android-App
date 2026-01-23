@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.example.smartquiz.data.local.database.AppDatabase
 import com.example.smartquiz.data.local.entity.user.UserEntity
+import com.example.smartquiz.navigation.RootNavGraph
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 import kotlinx.coroutines.launch
 
@@ -40,29 +42,20 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             SmartQuizTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+                RootNavGraph(navController)
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     SmartQuizTheme {
-        Greeting("Android")
+
     }
 }
