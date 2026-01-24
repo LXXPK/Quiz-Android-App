@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.example.smartquiz.data.local.database.AppDatabase
 import com.example.smartquiz.data.local.entity.user.UserEntity
-import com.example.smartquiz.ui.SmartQuizApp
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 import kotlinx.coroutines.launch
 
@@ -38,7 +37,6 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             SmartQuizTheme {
-                SmartQuizApp()
             }
         }
     }
