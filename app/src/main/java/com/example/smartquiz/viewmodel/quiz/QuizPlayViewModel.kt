@@ -35,6 +35,13 @@ class QuizPlayViewModel(
     private val _optionsMap =
         MutableStateFlow<Map<String, List<OptionEntity>>>(emptyMap())
 
+    // STEP 6 - Result Screen
+    private val _correctCount = MutableStateFlow(0)
+    val correctCount = _correctCount.asStateFlow()
+
+    private val _percentage = MutableStateFlow(0)
+    val percentage = _percentage.asStateFlow()
+
     fun loadQuiz(quizId: String) {
         viewModelScope.launch {
             val questionList = repository.getQuestionsForQuiz(quizId)
@@ -92,9 +99,25 @@ class QuizPlayViewModel(
         }
     }
 
+    fun submitQuiz(attemptId: Int) {
+
+        // 1. calculate final result
+        calculateScore()
+
+
+        // 2. persist result
+        viewModelScope.launch {
+            repository.saveQuizResult(
+                attemptId = attemptId,
+                score = score.value,
+                answers = answers.value
+            )
+        }
+    }
+
     // STEP 5: Calculate Score
     fun calculateScore() {
-        var correctCount = 0
+        var correct = 0
 
         val answersMap = answers.value
         val optionsMap = _optionsMap.value
@@ -111,10 +134,16 @@ class QuizPlayViewModel(
             }
 
             if (selectedOption?.isCorrect == true) {
-                correctCount++
+                correct++
             }
         }
 
-        _score.value = correctCount * 10
+        // STEP 6
+        _correctCount.value = correct
+        _score.value = correct * 10
+
+        val total = questions.value.size
+        _percentage.value =
+            if (total == 0) 0 else (correct * 100) / total
     }
 }

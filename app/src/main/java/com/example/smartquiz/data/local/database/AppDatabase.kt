@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.smartquiz.data.local.dao.quiz.QuestionDao
 import com.example.smartquiz.data.local.dao.quiz.QuizDao
 import com.example.smartquiz.data.local.dao.UserDao
+import com.example.smartquiz.data.local.dao.quiz.AnswerDao
 import com.example.smartquiz.data.local.dao.quiz.OptionDao
 import com.example.smartquiz.data.local.dao.quiz.QuizAttemptDao
 import com.example.smartquiz.data.local.entity.user.UserEntity
@@ -38,6 +39,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun questionDao(): QuestionDao
     abstract fun quizAttemptDao(): QuizAttemptDao
     abstract fun optionDao(): OptionDao
+    abstract fun answerDao(): AnswerDao
 
     companion object {
         @Volatile

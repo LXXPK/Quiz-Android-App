@@ -9,11 +9,13 @@ import com.example.smartquiz.data.repository.quiz.QuizRepository
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModelFactory
 
+
 @Composable
 fun QuizPlayScreen(
     quizId: String
 ) {
     val repository = remember { QuizRepository() }
+    var showResult by remember { mutableStateOf(false) }
 
     val viewModel: QuizPlayViewModel = viewModel(
         factory = QuizPlayViewModelFactory(repository)

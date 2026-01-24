@@ -1,9 +1,11 @@
 package com.example.smartquiz.data.repository.quiz
 
+import com.example.smartquiz.data.local.dao.quiz.AnswerDao
 import com.example.smartquiz.data.local.dao.quiz.OptionDao
 import com.example.smartquiz.data.local.dao.quiz.QuestionDao
 import com.example.smartquiz.data.local.dao.quiz.QuizAttemptDao
 import com.example.smartquiz.data.local.dao.quiz.QuizDao
+import com.example.smartquiz.data.local.entity.quiz.AnswerEntity
 import com.example.smartquiz.data.local.entity.quiz.OptionEntity
 import com.example.smartquiz.data.local.entity.quiz.QuestionEntity
 import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
@@ -13,7 +15,8 @@ class QuizRepository(
     private val quizDao: QuizDao? = null,
     private val questionDao: QuestionDao? = null,
     private val quizAttemptDao: QuizAttemptDao? = null,
-    private val optionDao: OptionDao? = null
+    private val optionDao: OptionDao? = null,
+    private val answerDao: AnswerDao? = null
 ) {
 
     suspend fun getQuizById(quizId: String): QuizEntity? {
@@ -85,5 +88,30 @@ class QuizRepository(
             else -> emptyList()
         }
 
+    }
+
+
+    suspend fun saveQuizResult(
+        attemptId: Int,
+        score: Int,
+        answers: Map<String, String>
+    ) {
+        // 1. Update score in quiz_attempts
+        quizAttemptDao?.updateScore(
+            attemptId = attemptId,
+            score = score
+        )
+
+        // 2. Convert answers map → AnswerEntity list
+        val answerEntities = answers.map { (questionId, optionId) ->
+            AnswerEntity(
+                attemptId = attemptId,
+                questionId = questionId,
+                selectedOptionId = optionId
+            )
+        }
+
+        // 3. Save answers
+        answerDao?.insertAnswers(answerEntities)
     }
 }
