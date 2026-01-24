@@ -1,108 +1,155 @@
 package com.example.smartquiz.data.repository.quiz
 
-import com.example.smartquiz.data.local.dao.quiz.AnswerDao
-import com.example.smartquiz.data.local.dao.quiz.OptionDao
-import com.example.smartquiz.data.local.dao.quiz.QuestionDao
-import com.example.smartquiz.data.local.dao.quiz.QuizAttemptDao
-import com.example.smartquiz.data.local.dao.quiz.QuizDao
-import com.example.smartquiz.data.local.entity.quiz.AnswerEntity
-import com.example.smartquiz.data.local.entity.quiz.OptionEntity
-import com.example.smartquiz.data.local.entity.quiz.QuestionEntity
-import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
-import com.example.smartquiz.data.local.entity.quiz.QuizEntity
+import com.example.smartquiz.data.local.dao.quiz.*
+import com.example.smartquiz.data.local.entity.quiz.*
 
+/*
+ * QuizRepository is the SINGLE source of truth for quiz-related data.
+ *
+ * Responsibilities:
+ * - Decide whether data comes from Dummy mode or Room DB
+ * - Hide data source details from ViewModels
+ * - Enforce quiz-related business rules (not UI logic)
+ *
+ * IMPORTANT:
+ * Switching between Dummy and Real DB requires changing ONLY `useDummyData`.
+ */
 class QuizRepository(
-    private val quizDao: QuizDao? = null,
-    private val questionDao: QuestionDao? = null,
-    private val quizAttemptDao: QuizAttemptDao? = null,
-    private val optionDao: OptionDao? = null,
-    private val answerDao: AnswerDao? = null
+    private val quizDao: QuizDao?,
+    private val questionDao: QuestionDao?,
+    private val quizAttemptDao: QuizAttemptDao?,
+    private val optionDao: OptionDao?,
+    private val answerDao: AnswerDao?,
+    private val useDummyData: Boolean = false
 ) {
 
+    /*
+     * Fetch quiz metadata (title, category, active state).
+     * Used by QuizDetails screen.
+     */
     suspend fun getQuizById(quizId: String): QuizEntity? {
-        return quizDao?.getQuizById(quizId)
+        return if (useDummyData) {
+            // Dummy quiz definition for development/testing
+            QuizEntity(
+                quizId = quizId,
+                title = "Dummy Quiz",
+                category = "General",
+                isActive = true
+            )
+        } else {
+            quizDao!!.getQuizById(quizId)
+        }
     }
 
+    /*
+     * Returns total number of questions in a quiz.
+     * Used only for display purposes (e.g., "10 Questions").
+     */
     suspend fun getQuestionCount(quizId: String): Int {
-        return questionDao!!.getQuestionCountForQuiz(quizId)
+        return if (useDummyData) {
+            2
+        } else {
+            questionDao!!.getQuestionCountForQuiz(quizId)
+        }
     }
 
+    /*
+     * Creates a new quiz attempt when user starts a quiz.
+     *
+     * Returns:
+     * - attemptId (primary key)
+     *
+     * NOTE:
+     * Score is initialized to 0 and updated only after submission.
+     */
     suspend fun createQuizAttempt(
         quizId: String,
         userId: String
     ): Int {
-        val attempt = QuizAttemptEntity(
-            quizId = quizId,
-            userId = userId,
-            score = 0, // initial score
-            attemptedAt = System.currentTimeMillis()
-        )
-
-        val attemptId = quizAttemptDao?.insertQuizAttempt(attempt)
-        return attemptId!!.toInt()
+        return if (useDummyData) {
+            // Dummy attempt id for development
+            1
+        } else {
+            val attempt = QuizAttemptEntity(
+                quizId = quizId,
+                userId = userId,
+                score = 0,
+                attemptedAt = System.currentTimeMillis()
+            )
+            quizAttemptDao!!.insertQuizAttempt(attempt).toInt()
+        }
     }
 
+    /*
+     * Fetches all questions belonging to a quiz.
+     * Questions themselves are neutral (no correctness info here).
+     */
     suspend fun getQuestionsForQuiz(
         quizId: String
     ): List<QuestionEntity> {
-//        return questionDao.getQuestionsForQuiz(quizId)
-
-        // dummy questions
-        return listOf(
-            QuestionEntity(
-                questionId = "q1",
-                quizId = quizId,
-                questionText = "What is the capital of France?"
-            ),
-            QuestionEntity(
-                questionId = "q2",
-                quizId = quizId,
-                questionText = "Which language is used for Android?"
+        return if (useDummyData) {
+            listOf(
+                QuestionEntity("q1", quizId, "What is the capital of France?"),
+                QuestionEntity("q2", quizId, "Which language is used for Android?")
             )
-        )
+        } else {
+            questionDao!!.getQuestionsForQuiz(quizId)
+        }
     }
 
+    /*
+     * Fetches all options for a given question.
+     * Correctness information is stored ONLY here.
+     */
     suspend fun getOptionsForQuestion(
         questionId: String
     ): List<OptionEntity> {
-//        return optionDao.getOptionsForQuestion(questionId)
-
-        // dummy options
-        return when (questionId) {
-            "q1" -> listOf(
-                OptionEntity("o1", "q1", "Paris", true),
-                OptionEntity("o2", "q1", "London", false),
-                OptionEntity("o3", "q1", "Berlin", false),
-                OptionEntity("o4", "q1", "Rome", false)
-            )
-
-
-            "q2" -> listOf(
-                OptionEntity("o5", "q2", "Kotlin", true),
-                OptionEntity("o6", "q2", "Python", false),
-                OptionEntity("o7", "q2", "Swift", false),
-                OptionEntity("o8", "q2", "JavaScript", false)
-            )
-
-
-            else -> emptyList()
+        return if (useDummyData) {
+            when (questionId) {
+                "q1" -> listOf(
+                    OptionEntity("o1", "q1", "Paris", true),
+                    OptionEntity("o2", "q1", "London", false),
+                    OptionEntity("o3", "q1", "Berlin", false),
+                    OptionEntity("o4", "q1", "Rome", false)
+                )
+                "q2" -> listOf(
+                    OptionEntity("o5", "q2", "Kotlin", true),
+                    OptionEntity("o6", "q2", "Python", false),
+                    OptionEntity("o7", "q2", "Swift", false),
+                    OptionEntity("o8", "q2", "JavaScript", false)
+                )
+                else -> emptyList()
+            }
+        } else {
+            optionDao!!.getOptionsForQuestion(questionId)
         }
-
     }
 
-
+    /*
+     * Persists final quiz result after submission.
+     *
+     * This method:
+     * 1. Updates score in QuizAttemptEntity
+     * 2. Saves user-selected answers
+     *
+     * IMPORTANT DESIGN RULE:
+     * - Correct / wrong is NOT stored
+     * - It can be derived later using AnswerEntity + OptionEntity
+     */
     suspend fun saveQuizResult(
         attemptId: Int,
         score: Int,
         answers: Map<String, String>
     ) {
-        // 1. Update score in quiz_attempts
-        quizAttemptDao?.updateScore(
-            attemptId = attemptId,
-            score = score
-        )
+        if (useDummyData) {
+            // No-op in dummy mode (nothing to persist)
+            return
+        }
 
-        // 2. Convert answers map → AnswerEntity list
+        // Update final score
+        quizAttemptDao!!.updateScore(attemptId, score)
+
+        // Convert in-memory answers to entities
         val answerEntities = answers.map { (questionId, optionId) ->
             AnswerEntity(
                 attemptId = attemptId,
@@ -111,7 +158,7 @@ class QuizRepository(
             )
         }
 
-        // 3. Save answers
-        answerDao?.insertAnswers(answerEntities)
+        // Persist answers in a single operation
+        answerDao!!.insertAnswers(answerEntities)
     }
 }

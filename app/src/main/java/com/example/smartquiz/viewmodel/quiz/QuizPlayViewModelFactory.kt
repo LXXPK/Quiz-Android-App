@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.smartquiz.data.repository.quiz.QuizRepository
 
 
-// Without hilt
+/* Without hilt (injecting dependencies manually, later Hiltview model will be
+ * implemented)
+ */
 class QuizPlayViewModelFactory(
     private val repository: QuizRepository
 ) : ViewModelProvider.Factory {
