@@ -1,4 +1,4 @@
-package com.example.smartquiz.ui.home
+package com.example.smartquiz.ui.home.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -14,9 +14,9 @@ import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 
 @Composable
-fun QuizCard(handleQuizCardClick: () -> Unit, quiz: QuizEntity, modifier: Modifier = Modifier) {
+fun QuizCard(handleQuizCardClick: (QuizEntity) -> Unit, quiz: QuizEntity, modifier: Modifier = Modifier) {
     Card(
-        onClick = handleQuizCardClick,
+        onClick = { handleQuizCardClick(quiz) },
         modifier = modifier
     ) {
         Column(
