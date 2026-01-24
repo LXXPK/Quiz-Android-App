@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smartquiz.data.local.database.AppDatabase
 import com.example.smartquiz.data.local.entity.user.UserEntity
 import com.example.smartquiz.navigation.RootNavGraph
+import com.example.smartquiz.ui.quiz.QuizDetailsScreen
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 import kotlinx.coroutines.launch
 
@@ -42,11 +43,11 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             SmartQuizTheme {
-                val navController = rememberNavController()
-                RootNavGraph(navController)
-                }
+//                val navController = rememberNavController()
+//                RootNavGraph(navController)
             }
         }
+
     }
 }
 
