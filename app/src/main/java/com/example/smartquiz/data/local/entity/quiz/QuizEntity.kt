@@ -8,5 +8,5 @@ data class QuizEntity(
     @PrimaryKey val quizId: String,
     val title: String,
     val category: String,
-    val isActive: Boolean
+    val isActive: Boolean,
 )
