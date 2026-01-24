@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.SmartQuiz" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.QuizApp.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.SmartQuiz</item>
+    </style>
+
+
 </resources>

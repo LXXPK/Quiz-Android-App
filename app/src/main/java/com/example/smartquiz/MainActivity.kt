@@ -5,50 +5,66 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.compose.rememberNavController
-import com.example.smartquiz.data.local.database.AppDatabase
-import com.example.smartquiz.data.local.entity.user.UserEntity
-import com.example.smartquiz.navigation.RootNavGraph
+import androidx.lifecycle.ViewModelProvider
+import com.example.smartquiz.ui.home.HomeScreen
+import com.example.smartquiz.ui.auth.AuthViewModel
+import com.example.smartquiz.ui.auth.AuthViewModelFactory
+import com.example.smartquiz.ui.auth.LoginScreen
 import com.example.smartquiz.ui.theme.SmartQuizTheme
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var authViewModel: AuthViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val db = AppDatabase.getDatabase(this)
-        android.util.Log.d("DB_CHECK", "DB instance created: $db")
-        lifecycleScope.launch {
-            val userDao = db.userDao()
 
-            userDao.insert(
-                UserEntity(
-                    userId = "test_1",
-                    name = "Test User",
-                    email = "test@gmail.com",
-                    photoUrl = null
-                )
-            )
+        authViewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(applicationContext)
+        )[AuthViewModel::class.java]
 
-            val users = userDao.getAll()
-            android.util.Log.d("DB_DATA", "Users count = ${users.size}")
-        }
         setContent {
             SmartQuizTheme {
-                val navController = rememberNavController()
-                RootNavGraph(navController)
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = Color.White
+                ) {
+
+
+
+                    var isLoggedIn by remember {
+                        mutableStateOf(authViewModel.getUid() != null)
+                    }
+
+                    if (isLoggedIn) {
+                        HomeScreen(
+                            userEmail = null,
+                            onLogout = {
+                                authViewModel.logout()
+                                isLoggedIn = false
+                            }
+                        )
+                    } else {
+                        LoginScreen(
+                            authViewModel = authViewModel,
+                            onLoginSuccess = {
+                                isLoggedIn = true
+                            }
+                        )
+                    }
                 }
             }
         }
     }
 }
+
 
 
 

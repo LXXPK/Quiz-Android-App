@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.kapt")
 }
 
@@ -56,6 +57,25 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation("androidx.core:core-splashscreen:1.0.1")
+//    Firebase project
+
+
+        // Firebase BoM (controls all Firebase versions)
+        implementation(platform("com.google.firebase:firebase-bom:34.8.0"))
+
+        // Firebase Authentication (NO VERSION HERE)
+        implementation("com.google.firebase:firebase-auth")
+
+        // Credential Manager (for Google Sign-In)
+        implementation("androidx.credentials:credentials:1.3.0")
+        implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+        implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+
+
+
+
     implementation("androidx.sqlite:sqlite:2.4.0")
 
     implementation("androidx.room:room-runtime:2.6.1")

@@ -1,5 +1,6 @@
 package com.example.smartquiz.data.local.database
 
+
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -29,6 +30,7 @@ import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
+
 
     companion object {
         @Volatile

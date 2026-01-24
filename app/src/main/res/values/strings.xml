@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SmartQuiz</string>
+    <string name="default_web_client_id">
+   425536860570-a8nvt7kh1gbb7bsb3gp9ffcoq97vedeu.apps.googleusercontent.com
+</string>
+
 </resources>
