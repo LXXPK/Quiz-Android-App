@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.example.smartquiz.viewmodel.quiz.QuizDetailsViewModel
 
-/*
+
 @Composable
 fun QuizDetailsScreen(
     quizId: String,
@@ -22,6 +22,10 @@ fun QuizDetailsScreen(
     viewModel: QuizDetailsViewModel,
     navController: NavController
 ) {
+    LaunchedEffect(quizId) {
+        viewModel.loadQuizDetails(quizId)
+    }
+
     val attemptId by viewModel.attemptId.collectAsState()
 
     Column() {
@@ -65,30 +69,3 @@ LaunchedEffect(attemptId) {
 }
 */
 
-
- */
-
-@Composable
-fun QuizDetailsScreen(
-    quizId: String,
-    userId: String
-) {
-    val context = LocalContext.current
-
-    Column {
-        Text("Quiz Details")
-        Text("Quiz ID: $quizId")
-        Text("User ID: $userId")
-
-        Button(onClick = {
-            // TEMP navigation without NavController
-            (context as ComponentActivity).setContent {
-                QuizPlayScreen(
-                    quizId = quizId
-                )
-            }
-        }) {
-            Text("Start Now")
-        }
-    }
-}
