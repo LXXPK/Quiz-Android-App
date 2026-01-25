@@ -98,7 +98,8 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect (Unit) {
                     quizPlayViewModel.setDummyResult(
                         totalQuestions = 10,
-                        correctAnswers = 7
+                        correctAnswers = 7,
+                        timeTakenSeconds = 3725 // 01:02:05
                     )
                 }
 
@@ -111,11 +112,15 @@ class MainActivity : ComponentActivity() {
                     }
                 )
 
-                 */
+                */
+
+
 
                 /*
                 * 3. To test for play page
                 * */
+
+
                 // Create QuizPlayViewModel
                 val quizPlayViewModel = remember {
                     QuizPlayViewModel(repository)
@@ -132,6 +137,7 @@ class MainActivity : ComponentActivity() {
                     attemptId = 1,
                     viewModel = quizPlayViewModel
                 )
+
             }
         }
 

@@ -2,6 +2,7 @@ package com.example.smartquiz.data.repository.quiz
 
 import com.example.smartquiz.data.local.dao.quiz.*
 import com.example.smartquiz.data.local.entity.quiz.*
+import javax.inject.Inject
 
 /*
  * QuizRepository is the SINGLE source of truth for quiz-related data.
@@ -9,12 +10,12 @@ import com.example.smartquiz.data.local.entity.quiz.*
  * Responsibilities:
  * - Decide whether data comes from Dummy mode or Room DB
  * - Hide data source details from ViewModels
- * - Enforce quiz-related business rules (not UI logic)
+ * - Persist quiz attempts, answers, and scores
  *
  * IMPORTANT:
  * Switching between Dummy and Real DB requires changing ONLY `useDummyData`.
  */
-class QuizRepository(
+class QuizRepository @Inject constructor(
     private val quizDao: QuizDao?,
     private val questionDao: QuestionDao?,
     private val quizAttemptDao: QuizAttemptDao?,
@@ -23,13 +24,10 @@ class QuizRepository(
     private val useDummyData: Boolean = false
 ) {
 
-    /*
-     * Fetch quiz metadata (title, category, active state).
-     * Used by QuizDetails screen.
-     */
+    /* ---------------- QUIZ METADATA ---------------- */
+
     suspend fun getQuizById(quizId: String): QuizEntity? {
         return if (useDummyData) {
-            // Dummy quiz definition for development/testing
             QuizEntity(
                 quizId = quizId,
                 title = "Dummy Quiz",
@@ -41,10 +39,6 @@ class QuizRepository(
         }
     }
 
-    /*
-     * Returns total number of questions in a quiz.
-     * Used only for display purposes (e.g., "10 Questions").
-     */
     suspend fun getQuestionCount(quizId: String): Int {
         return if (useDummyData) {
             2
@@ -53,37 +47,49 @@ class QuizRepository(
         }
     }
 
+    /* ---------------- QUIZ ATTEMPT ---------------- */
+
     /*
      * Creates a new quiz attempt when user starts a quiz.
      *
-     * Returns:
-     * - attemptId (primary key)
-     *
-     * NOTE:
-     * Score is initialized to 0 and updated only after submission.
+     * timeTakenSeconds is initialized to 0
+     * and updated only after submission.
      */
     suspend fun createQuizAttempt(
         quizId: String,
         userId: String
     ): Int {
         return if (useDummyData) {
-            // Dummy attempt id for development
+            // Dummy attempt id for development/testing
             1
         } else {
             val attempt = QuizAttemptEntity(
                 quizId = quizId,
                 userId = userId,
                 score = 0,
-                attemptedAt = System.currentTimeMillis()
+                attemptedAt = System.currentTimeMillis(),
+                timeTakenSeconds = 0
             )
             quizAttemptDao!!.insertQuizAttempt(attempt).toInt()
         }
     }
 
     /*
-     * Fetches all questions belonging to a quiz.
-     * Questions themselves are neutral (no correctness info here).
+     * Updates final score and time spent after quiz submission.
      */
+    suspend fun updateQuizAttemptResult(
+        attemptId: Int,
+        score: Int,
+        timeTakenSeconds: Int
+    ) {
+        if (useDummyData) return
+
+        quizAttemptDao!!.updateScore(attemptId, score)
+        quizAttemptDao.updateTimeTaken(attemptId, timeTakenSeconds)
+    }
+
+    /* ---------------- QUESTIONS ---------------- */
+
     suspend fun getQuestionsForQuiz(
         quizId: String
     ): List<QuestionEntity> {
@@ -97,10 +103,8 @@ class QuizRepository(
         }
     }
 
-    /*
-     * Fetches all options for a given question.
-     * Correctness information is stored ONLY here.
-     */
+    /* ---------------- OPTIONS ---------------- */
+
     suspend fun getOptionsForQuestion(
         questionId: String
     ): List<OptionEntity> {
@@ -125,31 +129,35 @@ class QuizRepository(
         }
     }
 
+    /* ---------------- ANSWERS + RESULT ---------------- */
+
     /*
      * Persists final quiz result after submission.
      *
      * This method:
-     * 1. Updates score in QuizAttemptEntity
+     * 1. Updates score + timeTakenSeconds
      * 2. Saves user-selected answers
      *
-     * IMPORTANT DESIGN RULE:
+     * IMPORTANT:
      * - Correct / wrong is NOT stored
-     * - It can be derived later using AnswerEntity + OptionEntity
+     * - It can be derived later
      */
     suspend fun saveQuizResult(
         attemptId: Int,
         score: Int,
+        timeTakenSeconds: Int,
         answers: Map<String, String>
     ) {
-        if (useDummyData) {
-            // No-op in dummy mode (nothing to persist)
-            return
-        }
+        if (useDummyData) return
 
-        // Update final score
-        quizAttemptDao!!.updateScore(attemptId, score)
+        // Update attempt result
+        updateQuizAttemptResult(
+            attemptId = attemptId,
+            score = score,
+            timeTakenSeconds = timeTakenSeconds
+        )
 
-        // Convert in-memory answers to entities
+        // Persist answers
         val answerEntities = answers.map { (questionId, optionId) ->
             AnswerEntity(
                 attemptId = attemptId,
@@ -158,7 +166,6 @@ class QuizRepository(
             )
         }
 
-        // Persist answers in a single operation
         answerDao!!.insertAnswers(answerEntities)
     }
 }

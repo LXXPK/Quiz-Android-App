@@ -10,5 +10,8 @@ data class QuizAttemptEntity(
     val quizId: String,
     val userId: String,
     val score: Int,
-    val attemptedAt: Long
+    val attemptedAt: Long,
+
+    // ⏱️ How long the user spent on this attempt (in seconds)
+    val timeTakenSeconds: Int
 )

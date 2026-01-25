@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 import com.example.smartquiz.data.repository.quiz.QuizRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /*
  * ViewModel responsible for Quiz Details screen.
@@ -21,10 +23,10 @@ import kotlinx.coroutines.launch
  * - Answers
  * - Scoring
  */
-class QuizDetailsViewModel(
+@HiltViewModel
+class QuizDetailsViewModel @Inject constructor(
     private val repository: QuizRepository
 ) : ViewModel() {
-
     /*
      * Quiz metadata (title, category, etc.)
      * Observed by UI.

@@ -13,25 +13,17 @@ fun QuizPlayScreen(
     attemptId: Int,
     viewModel: QuizPlayViewModel
 ) {
-    // Collect state from ViewModel
     val questions by viewModel.questions.collectAsState()
     val options by viewModel.options.collectAsState()
     val index by viewModel.currentIndex.collectAsState()
     val answers by viewModel.answers.collectAsState()
+    val elapsedTimeText by viewModel.elapsedTimeText.collectAsState()
     val isDummy by viewModel.isDummyMode.collectAsState()
 
-    /*
-     * Load quiz data once when screen is first shown.
-     * This is safe because ViewModel survives recomposition.
-     */
     LaunchedEffect(Unit) {
         viewModel.loadQuiz(quizId)
     }
 
-    /*
-     * Safety UI states.
-     * Prevents crashes during async loading.
-     */
     if (questions.isEmpty()) {
         Text(
             text = "Loading quiz questions...",
@@ -55,7 +47,7 @@ fun QuizPlayScreen(
         modifier = Modifier.padding(16.dp)
     ) {
 
-        // Dummy mode label for clarity during testing
+        // Dummy mode label
         if (isDummy) {
             Text(
                 text = "Dummy Quiz Mode",
@@ -65,11 +57,22 @@ fun QuizPlayScreen(
             Spacer(modifier = Modifier.height(8.dp))
         }
 
-        // Question progress
-        Text(
-            text = "Question ${index + 1} of ${questions.size}",
-            style = MaterialTheme.typography.labelMedium
-        )
+        // 🔝 Header: progress + timer
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Question ${index + 1} of ${questions.size}",
+                style = MaterialTheme.typography.labelMedium
+            )
+
+            // ⏱️ Elapsed time (already formatted by ViewModel)
+            Text(
+                text = elapsedTimeText,
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -81,10 +84,9 @@ fun QuizPlayScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Options list
+        // Options
         options.forEach { option ->
-            val selected =
-                option.optionId == selectedOptionId
+            val selected = option.optionId == selectedOptionId
 
             Button(
                 modifier = Modifier
@@ -110,7 +112,7 @@ fun QuizPlayScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Navigation buttons
+        // Navigation
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -125,16 +127,12 @@ fun QuizPlayScreen(
 
             if (index == questions.lastIndex) {
                 Button(
-                    enabled = selectedOptionId != null,
-                    onClick = {
-                        viewModel.submitQuiz(attemptId)
-                    }
+                    onClick = { viewModel.submitQuiz(attemptId) }
                 ) {
                     Text("Submit")
                 }
             } else {
                 Button(
-                    enabled = selectedOptionId != null,
                     onClick = { viewModel.nextQuestion() }
                 ) {
                     Text("Next")

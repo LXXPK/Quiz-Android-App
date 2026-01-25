@@ -39,9 +39,12 @@ fun QuizResultScreen(
     val correct by viewModel.correctCount.collectAsState()
     val totalQuestions =
         viewModel.questions.collectAsState().value.size
+    val elapsedTimeText by viewModel.elapsedTimeText.collectAsState()
 
     Column(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
     ) {
 
         /*
@@ -78,6 +81,14 @@ fun QuizResultScreen(
          */
         Text(
             text = "Accuracy: $percentage%",
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Time spent
+        Text(
+            text = "Time Spent: $elapsedTimeText",
             style = MaterialTheme.typography.bodyMedium
         )
 
