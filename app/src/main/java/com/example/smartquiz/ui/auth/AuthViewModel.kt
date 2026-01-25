@@ -1,16 +1,17 @@
 package com.example.smartquiz.ui.auth
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartquiz.data.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthViewModel(
+@HiltViewModel
+class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -21,7 +22,7 @@ class AuthViewModel(
         private set
 
     var loginSuccess by mutableStateOf(false)
-        private set   // 👈 THIS IS KEY
+        private set
 
     private val auth = FirebaseAuth.getInstance()
 
@@ -53,19 +54,6 @@ class AuthViewModel(
             }
     }
 
-    fun onFirebaseLoginSuccess(user: FirebaseUser) {
-        viewModelScope.launch {
-            try {
-                authRepository.handleLogin(user)
-                loginSuccess = true   // ✅ SIGNAL UI
-            } catch (e: Exception) {
-                errorMessage = e.message
-            } finally {
-                isLoading = false
-            }
-        }
-    }
-
     fun sendPasswordResetEmail(email: String) {
         if (email.isBlank()) {
             errorMessage = "Please enter your email"
@@ -92,14 +80,19 @@ class AuthViewModel(
     }
 
 
+    fun onFirebaseLoginSuccess(user: FirebaseUser) {
+        viewModelScope.launch {
+            authRepository.handleLogin(user)
+            loginSuccess = true
+            isLoading = false
+        }
+    }
+
     fun consumeLoginSuccess() {
         loginSuccess = false
     }
 
-    fun getUid(): String? {
-        return authRepository.getLoggedInUid()
-    }
-
+    fun getUid(): String? = authRepository.getLoggedInUid()
 
     fun logout() {
         authRepository.logout()

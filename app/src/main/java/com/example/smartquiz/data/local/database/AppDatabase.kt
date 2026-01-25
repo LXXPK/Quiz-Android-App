@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.smartquiz.data.local.dao.InterestDao
 import com.example.smartquiz.data.local.dao.UserDao
 import com.example.smartquiz.data.local.entity.user.UserEntity
 import com.example.smartquiz.data.local.entity.user.InterestEntity
@@ -28,24 +29,7 @@ import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun userDao(): UserDao
-
-
-    companion object {
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getDatabase(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "smart_quiz_db"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
+    abstract fun interestDao(): InterestDao
 }
+
