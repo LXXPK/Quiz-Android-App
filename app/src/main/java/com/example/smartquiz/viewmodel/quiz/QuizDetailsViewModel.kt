@@ -1,5 +1,6 @@
 package com.example.smartquiz.viewmodel.quiz
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
@@ -56,18 +57,19 @@ class QuizDetailsViewModel @Inject constructor(
      * Loads quiz metadata and question count.
      */
     fun loadQuizDetails(quizId: String) {
+
+
         viewModelScope.launch {
             _uiState.value = UiState(isLoading = true)
 
-
             try {
-                _quiz.value = repository.getQuizById(quizId)
-                _questionCount.value =
-                    repository.getQuestionCount(quizId)
 
+                Log.d("QUIZ_CHECK", "Quiz loaded = ${_quiz.value}")
+
+                _quiz.value = repository.getQuizById(quizId)
+                _questionCount.value = repository.getQuestionCount(quizId)
 
                 _uiState.value = UiState(isLoading = false)
-
 
             } catch (e: Exception) {
                 _uiState.value = UiState(

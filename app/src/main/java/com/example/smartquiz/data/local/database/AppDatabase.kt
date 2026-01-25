@@ -39,22 +39,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun quizAttemptDao(): QuizAttemptDao
     abstract fun optionDao(): OptionDao
     abstract fun answerDao(): AnswerDao
-
-
-    companion object {
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getDatabase(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "smart_quiz_db"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
 }
