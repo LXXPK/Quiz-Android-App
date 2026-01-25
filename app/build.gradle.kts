@@ -1,19 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.kapt")
 }
 
 android {
     namespace = "com.example.smartquiz"
-    compileSdk = 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.smartquiz"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -36,6 +35,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
     buildFeatures {
         compose = true
     }
@@ -50,9 +52,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui.text)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.compose.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -61,28 +60,14 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation("androidx.core:core-splashscreen:1.0.1")
-//    Firebase project
-
-
-        // Firebase BoM (controls all Firebase versions)
-        implementation(platform("com.google.firebase:firebase-bom:34.8.0"))
-
-        // Firebase Authentication (NO VERSION HERE)
-        implementation("com.google.firebase:firebase-auth")
-
-        // Credential Manager (for Google Sign-In)
-        implementation("androidx.credentials:credentials:1.3.0")
-        implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
-        implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
-
-
-
-
-
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
     implementation("androidx.sqlite:sqlite:2.4.0")
-
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.navigation:navigation-compose:2.8.5")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 }
