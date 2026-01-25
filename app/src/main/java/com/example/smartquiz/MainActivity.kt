@@ -27,7 +27,9 @@ import com.example.smartquiz.ui.theme.SmartQuizTheme
 import com.example.smartquiz.viewmodel.quiz.QuizDetailsViewModel
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
 import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

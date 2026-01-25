@@ -3,78 +3,100 @@ package com.example.smartquiz.ui.quiz
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
 
+/**
+ * QuizPlayScreen
+ *
+ * Responsibilities:
+ * - Display questions and options
+ * - Show progress and elapsed time
+ * - Forward user actions to ViewModel
+ *
+ * This screen does NOT:
+ * - Calculate score
+ * - Store answers
+ * - Handle timing logic
+ */
 @Composable
 fun QuizPlayScreen(
     quizId: String,
     attemptId: Int,
-    viewModel: QuizPlayViewModel
+    viewModel: QuizPlayViewModel = hiltViewModel()
 ) {
-    val questions by viewModel.questions.collectAsState()
-    val options by viewModel.options.collectAsState()
-    val index by viewModel.currentIndex.collectAsState()
-    val answers by viewModel.answers.collectAsState()
-    val elapsedTimeText by viewModel.elapsedTimeText.collectAsState()
-    val isDummy by viewModel.isDummyMode.collectAsState()
 
-    LaunchedEffect(Unit) {
+    // Load quiz once when screen starts
+    LaunchedEffect(quizId) {
         viewModel.loadQuiz(quizId)
     }
 
+    // Observe ViewModel state
+    val questions by viewModel.questions.collectAsState()
+    val options by viewModel.options.collectAsState()
+    val currentIndex by viewModel.currentIndex.collectAsState()
+    val answers by viewModel.answers.collectAsState()
+    val elapsedTime by viewModel.elapsedTimeText.collectAsState()
+
+    val uiState by viewModel.uiState.collectAsState()
+
+    if (uiState.isLoading) {
+        Box(Modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+        return
+    }
+
+    uiState.errorMessage?.let {
+        Box(Modifier.fillMaxSize()) {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+        return
+    }
+
+    // Basic loading state
     if (questions.isEmpty()) {
-        Text(
-            text = "Loading quiz questions...",
-            modifier = Modifier.padding(16.dp)
-        )
+        Box(modifier = Modifier.padding(16.dp)) {
+            Text("Loading quiz...")
+        }
         return
     }
 
-    if (index !in questions.indices) {
-        Text(
-            text = "Invalid question index",
-            modifier = Modifier.padding(16.dp)
-        )
-        return
-    }
-
-    val question = questions[index]
+    val question = questions[currentIndex]
     val selectedOptionId = answers[question.questionId]
 
     Column(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
 
-        // Dummy mode label
-        if (isDummy) {
-            Text(
-                text = "Dummy Quiz Mode",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-
-        // 🔝 Header: progress + timer
+        // Header: progress + timer
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Question ${index + 1} of ${questions.size}",
+                text = "Question ${currentIndex + 1} of ${questions.size}",
                 style = MaterialTheme.typography.labelMedium
             )
 
-            // ⏱️ Elapsed time (already formatted by ViewModel)
             Text(
-                text = elapsedTimeText,
+                text = elapsedTime,
                 style = MaterialTheme.typography.labelMedium
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Question text
         Text(
@@ -86,7 +108,7 @@ fun QuizPlayScreen(
 
         // Options
         options.forEach { option ->
-            val selected = option.optionId == selectedOptionId
+            val isSelected = option.optionId == selectedOptionId
 
             Button(
                 modifier = Modifier
@@ -94,13 +116,13 @@ fun QuizPlayScreen(
                     .padding(vertical = 4.dp),
                 onClick = {
                     viewModel.selectOption(
-                        question.questionId,
-                        option.optionId
+                        questionId = question.questionId,
+                        optionId = option.optionId
                     )
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor =
-                        if (selected)
+                        if (isSelected)
                             MaterialTheme.colorScheme.primary
                         else
                             MaterialTheme.colorScheme.secondary
@@ -112,20 +134,20 @@ fun QuizPlayScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Navigation
+        // Navigation buttons
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
             Button(
-                enabled = index > 0,
+                enabled = currentIndex > 0,
                 onClick = { viewModel.previousQuestion() }
             ) {
                 Text("Previous")
             }
 
-            if (index == questions.lastIndex) {
+            if (currentIndex == questions.lastIndex) {
                 Button(
                     onClick = { viewModel.submitQuiz(attemptId) }
                 ) {
