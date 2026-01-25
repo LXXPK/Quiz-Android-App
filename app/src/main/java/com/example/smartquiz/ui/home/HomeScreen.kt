@@ -7,11 +7,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen(
     userEmail: String? = null,
+    onProfile: () -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
     Box(
@@ -34,11 +36,29 @@ fun HomeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(onClick = onProfile) {
+                Text("Go to Profile")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(onClick = onLogout) {
                 Text("Logout")
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    MaterialTheme {
+        HomeScreen(
+            userEmail = "omkar@gmail.com",
+            onProfile = {},
+            onLogout = {}
+        )
     }
 }

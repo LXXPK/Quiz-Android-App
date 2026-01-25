@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import com.example.smartquiz.utils.isValidEmail
 import com.example.smartquiz.utils.isValidPassword
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LoginScreen(

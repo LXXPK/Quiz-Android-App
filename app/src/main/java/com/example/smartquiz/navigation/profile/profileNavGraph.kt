@@ -1,33 +1,31 @@
-//package com.example.smartquiz.navigation.profile
-//
-//import androidx.navigation.NavController
-//import androidx.navigation.NavGraphBuilder
-//import androidx.navigation.compose.composable
-//import com.example.smartquiz.navigation.Route
-//import com.example.smartquiz.ui.profile.EditInterestsScreen
-//import com.example.smartquiz.ui.profile.ProfileScreen
-//
-///**
-// * Profile feature navigation
-// * Owned by Profile team member
-// */
-//fun NavGraphBuilder.profileNavGraph(
-//    navController: NavController
-//) {
-//
-//    composable(Route.Profile.route) {
-//        ProfileScreen(
-//            onEditInterests = {
-//                navController.navigate(Route.EditInterests.route)
-//            }
-//        )
-//    }
-//
-//    composable(Route.EditInterests.route) {
-//        EditInterestsScreen(
-//            onBack = {
-//                navController.popBackStack()
-//            }
-//        )
-//    }
-//}
+package com.example.smartquiz.navigation.profile
+
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
+import com.example.smartquiz.navigation.Routes
+import com.example.smartquiz.ui.profile.ProfileScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartquiz.ui.auth.AuthViewModel
+
+fun NavGraphBuilder.profileNavGraph(
+    navController: NavHostController
+) {
+
+    composable(Routes.PROFILE) {
+
+        val authViewModel: AuthViewModel = hiltViewModel()
+
+        ProfileScreen(
+            onBack = {
+                navController.popBackStack()
+            },
+            onLogout = {
+                authViewModel.logout()
+                navController.navigate(Routes.AUTH) {
+                    popUpTo(Routes.HOME) { inclusive = true }
+                }
+            }
+        )
+    }
+}

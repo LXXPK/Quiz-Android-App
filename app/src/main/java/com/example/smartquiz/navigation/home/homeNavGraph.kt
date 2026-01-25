@@ -1,35 +1,32 @@
-//package com.example.smartquiz.navigation.home
-//
-//import androidx.navigation.NavController
-//import androidx.navigation.NavGraphBuilder
-//import androidx.navigation.compose.composable
-//import com.example.smartquiz.navigation.Route
-//import com.example.smartquiz.ui.history.HistoryScreen
-//import com.example.smartquiz.ui.home.HomeScreen
-//
-///**
-// * Home + History navigation
-// * Owned by Home/History team member
-// */
-//fun NavGraphBuilder.homeNavGraph(
-//    navController: NavController
-//) {
-//
-//    composable(Route.Home.route) {
-//        HomeScreen(
-//            onQuizClick = { quizId ->
-//                navController.navigate(Route.QuizPlay.create(quizId))
-//            },
-//            onProfileClick = {
-//                navController.navigate(Route.Profile.route)
-//            },
-//            onHistoryClick = {
-//                navController.navigate(Route.History.route)
-//            }
-//        )
-//    }
-//
-//    composable(Route.History.route) {
-//        HistoryScreen()
-//    }
-//}
+package com.example.smartquiz.navigation.home
+
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
+import com.example.smartquiz.navigation.Routes
+import com.example.smartquiz.ui.home.HomeScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartquiz.ui.auth.AuthViewModel
+
+fun NavGraphBuilder.homeNavGraph(
+    navController: NavHostController
+) {
+
+    composable(Routes.HOME) {
+
+        val authViewModel: AuthViewModel = hiltViewModel()
+
+        HomeScreen(
+            userEmail = null,
+            onProfile = {
+                navController.navigate(Routes.PROFILE)
+            },
+            onLogout = {
+                authViewModel.logout()
+                navController.navigate(Routes.AUTH) {
+                    popUpTo(Routes.HOME) { inclusive = true }
+                }
+            }
+        )
+    }
+}

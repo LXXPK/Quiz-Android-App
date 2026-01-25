@@ -8,9 +8,12 @@ import com.example.smartquiz.data.local.entity.user.InterestEntity
 @Dao
 interface InterestDao {
 
-    @Insert
-    suspend fun insertInterest(interest: InterestEntity)
-
     @Query("SELECT * FROM interests WHERE userId = :uid")
     suspend fun getInterestsByUser(uid: String): List<InterestEntity>
+
+    @Query("DELETE FROM interests WHERE userId = :uid")
+    suspend fun deleteUserInterests(uid: String)
+
+    @Insert
+    suspend fun insertInterests(interests: List<InterestEntity>)
 }
