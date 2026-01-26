@@ -1,8 +1,10 @@
 package com.example.smartquiz.ui.home
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -13,15 +15,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 import com.example.smartquiz.data.local.entity.user.UserEntity
+import com.example.smartquiz.ui.home.components.ActiveQuizCard
 import com.example.smartquiz.ui.home.components.HeaderSection
-import com.example.smartquiz.ui.home.components.QuizCard
+import com.example.smartquiz.ui.home.components.HorizontalTitledQuizList
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 
 @Composable
-fun HomeScreenContent(handleQuizCardClick: (QuizEntity) -> Unit, uiState: HomeUiState, modifier: Modifier = Modifier) {
+fun HomeScreenContent(
+    homeViewModel: HomeViewModel,
+    handleQuizCardClick: (QuizEntity) -> Unit,
+    uiState: HomeUiState,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(dimensionResource(id = R.dimen.medium_padding))
@@ -34,21 +43,18 @@ fun HomeScreenContent(handleQuizCardClick: (QuizEntity) -> Unit, uiState: HomeUi
             )
         }
 
+        item {
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_padding)))
+        }
+
         if (uiState.suggestedQuizzes.isNotEmpty()) {
             item {
-                Text(
-                    text = stringResource(R.string.suggested_quizzes),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.small_padding))
-                )
-            }
-            items(uiState.suggestedQuizzes) { quiz ->
-                QuizCard(
-                    quiz = quiz,
-                    handleQuizCardClick = handleQuizCardClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = dimensionResource(id = R.dimen.small_padding))
+                HorizontalTitledQuizList(
+                    title = stringResource(R.string.suggested_quizzes),
+                    quizzes = uiState.suggestedQuizzes,
+                    onViewAllClick = { /*TODO*/ },
+                    onQuizCardClick = handleQuizCardClick,
+                    limit = 5
                 )
             }
         }
@@ -65,9 +71,14 @@ fun HomeScreenContent(handleQuizCardClick: (QuizEntity) -> Unit, uiState: HomeUi
                 )
             }
             items(uiState.activeQuizzes) { quiz ->
-                QuizCard(
+                val (activeTime, expirationTime, progress) = homeViewModel.getQuizProgress(quiz.quizId)
+
+                ActiveQuizCard(
                     quiz = quiz,
                     handleQuizCardClick = handleQuizCardClick,
+                    activeTime = activeTime,
+                    expirationTime = expirationTime,
+                    progress = progress,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = dimensionResource(id = R.dimen.small_padding))
@@ -102,6 +113,7 @@ fun HomeScreenContentPreview() {
     )
     SmartQuizTheme {
         HomeScreenContent(
+            homeViewModel = viewModel(),
             uiState = HomeUiState(
                 user = UserEntity("1", "John Doe", "john@example.com", null, 5, 0),
                 suggestedQuizzes = suggestedQuizzes,

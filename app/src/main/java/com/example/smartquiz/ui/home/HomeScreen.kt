@@ -1,3 +1,4 @@
+
 package com.example.smartquiz.ui.home
 
 import androidx.compose.runtime.Composable
@@ -15,6 +16,10 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel(), handleQuizCardClick: 
     } else if (homeUiState.errorMessage != null) {
         ErrorScreen(message = homeUiState.errorMessage!!)
     } else {
-        HomeScreenContent(handleQuizCardClick = handleQuizCardClick, uiState = homeUiState)
+        HomeScreenContent(
+            homeViewModel = homeViewModel,
+            handleQuizCardClick = handleQuizCardClick, 
+            uiState = homeUiState
+        )
     }
 }

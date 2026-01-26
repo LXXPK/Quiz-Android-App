@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class HomeViewModel : ViewModel() {
 
@@ -30,5 +31,13 @@ class HomeViewModel : ViewModel() {
                 _uiState.update { it.copy(isLoading = false, errorMessage = e.message) }
             }
         }
+    }
+
+    fun getQuizProgress(quizId: String): Triple<Date, Date, Float> {
+        // TODO: Fetch quiz progress from repository based on quizId, also change return type
+        val activeTime = Date(System.currentTimeMillis() + 3600000) // Dummy Data: active in 1 hour
+        val expirationTime = Date(System.currentTimeMillis() + 7200000) // Dummy Data: expires in 2 hours
+        val progress = 0.5f
+        return Triple(activeTime, expirationTime, progress)
     }
 }
