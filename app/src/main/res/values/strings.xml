@@ -33,4 +33,15 @@
         <item quantity="one">Active in %d minute</item>
         <item quantity="other">Active in %d minutes</item>
     </plurals>
+    <string name="quiz_history_title">Quiz History</string>
+    <string name="no_history_available">No history available</string>
+    <string name="quiz_id_label">Quiz ID: %1$s</string>
+    <string name="score_format">Score: %1$d%%</string>
+    <string name="date_label">Date: %1$s</string>
+    <string name="failed_to_load_history">Failed to load history</string>
+    <string name="statistics_title">Statistics</string>
+    <string name="average_score_label">Average Score</string>
+    <string name="total_quizzes_label">Total Quizzes</string>
+    <string name="highest_score_label">Highest Score</string>
+    <string name="back">Back</string>
 </resources>
