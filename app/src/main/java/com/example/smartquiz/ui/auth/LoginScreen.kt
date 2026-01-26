@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import com.example.smartquiz.utils.isValidEmail
 import com.example.smartquiz.utils.isValidPassword
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.smartquiz.viewmodel.auth.AuthViewModel
 
 @Composable
 fun LoginScreen(

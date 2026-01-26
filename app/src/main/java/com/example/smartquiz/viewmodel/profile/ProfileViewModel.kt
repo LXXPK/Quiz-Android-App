@@ -1,5 +1,4 @@
-package com.example.smartquiz.ui.profile
-
+package com.example.smartquiz.viewmodel.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

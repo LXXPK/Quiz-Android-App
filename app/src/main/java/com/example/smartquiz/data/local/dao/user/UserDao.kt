@@ -1,4 +1,4 @@
-package com.example.smartquiz.data.local.dao
+package com.example.smartquiz.data.local.dao.user
 
 import androidx.room.Dao
 import androidx.room.Insert

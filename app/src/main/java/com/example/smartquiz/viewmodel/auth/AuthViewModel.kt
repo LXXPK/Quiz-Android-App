@@ -1,6 +1,9 @@
-package com.example.smartquiz.ui.auth
+package com.example.smartquiz.viewmodel.auth
 
-import androidx.compose.runtime.*
+import android.util.Patterns
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartquiz.data.repository.AuthRepository
@@ -60,7 +63,7 @@ class AuthViewModel @Inject constructor(
             return
         }
 
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             errorMessage = "Invalid email format"
             return
         }

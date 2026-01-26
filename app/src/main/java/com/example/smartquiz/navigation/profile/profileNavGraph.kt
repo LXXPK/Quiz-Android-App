@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import com.example.smartquiz.navigation.Routes
 import com.example.smartquiz.ui.profile.ProfileScreen
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartquiz.ui.auth.AuthViewModel
+import com.example.smartquiz.viewmodel.auth.AuthViewModel
 
 fun NavGraphBuilder.profileNavGraph(
     navController: NavHostController

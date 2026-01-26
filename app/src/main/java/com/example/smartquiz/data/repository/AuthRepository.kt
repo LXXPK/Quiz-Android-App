@@ -1,6 +1,6 @@
 package com.example.smartquiz.data.repository
 
-import com.example.smartquiz.data.local.dao.UserDao
+import com.example.smartquiz.data.local.dao.user.UserDao
 import com.example.smartquiz.data.local.entity.user.UserEntity
 import com.example.smartquiz.data.local.session.SessionManager
 import com.google.firebase.auth.FirebaseAuth

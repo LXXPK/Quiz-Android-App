@@ -1,7 +1,7 @@
 package com.example.smartquiz.data.repository
 
-import com.example.smartquiz.data.local.dao.InterestDao
-import com.example.smartquiz.data.local.dao.UserDao
+import com.example.smartquiz.data.local.dao.user.InterestDao
+import com.example.smartquiz.data.local.dao.user.UserDao
 import com.example.smartquiz.data.local.entity.user.InterestEntity
 import com.example.smartquiz.data.local.entity.user.UserEntity
 import javax.inject.Inject
@@ -11,7 +11,6 @@ class ProfileRepository @Inject constructor(
     private val userDao: UserDao
 ) {
 
-    /* -------- INTERESTS -------- */
 
     suspend fun getUserInterests(userId: String): List<InterestEntity> {
         return interestDao.getInterestsByUser(userId)
@@ -30,11 +29,10 @@ class ProfileRepository @Inject constructor(
             )
         }
 
-        interestDao.insertInterests(entities) // ✅ now valid
+        interestDao.insertInterests(entities)
     }
 
 
-    /* -------- USER INFO -------- */
 
     suspend fun getUserProfile(userId: String): UserEntity? {
         return userDao.getUserById(userId)

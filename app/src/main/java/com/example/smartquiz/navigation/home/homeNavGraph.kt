@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import com.example.smartquiz.navigation.Routes
 import com.example.smartquiz.ui.home.HomeScreen
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartquiz.ui.auth.AuthViewModel
+import com.example.smartquiz.viewmodel.auth.AuthViewModel
 
 fun NavGraphBuilder.homeNavGraph(
     navController: NavHostController
@@ -17,7 +17,6 @@ fun NavGraphBuilder.homeNavGraph(
         val authViewModel: AuthViewModel = hiltViewModel()
 
         HomeScreen(
-            userEmail = null,
             onProfile = {
                 navController.navigate(Routes.PROFILE)
             },
@@ -26,6 +25,11 @@ fun NavGraphBuilder.homeNavGraph(
                 navController.navigate(Routes.AUTH) {
                     popUpTo(Routes.HOME) { inclusive = true }
                 }
+            },
+            onCategoryClick = { category ->
+                navController.navigate(
+                    Routes.quizList(category)
+                )
             }
         )
     }
