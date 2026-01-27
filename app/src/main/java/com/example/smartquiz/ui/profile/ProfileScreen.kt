@@ -1,7 +1,5 @@
 package com.example.smartquiz.ui.profile
 
-
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.FlowRow
@@ -17,11 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartquiz.viewmodel.profile.ProfileViewModel
-
+import androidx.compose.animation.animateColorAsState
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -45,15 +42,16 @@ fun ProfileScreen(
     val selected = remember { mutableStateListOf<String>() }
 
     var expandInterests by remember { mutableStateOf(false) }
-    var showMenu by remember { mutableStateOf(false) }
     var isEditMode by remember { mutableStateOf(true) }
 
     val maxSelection = 4
     val canSave = selected.isNotEmpty()
 
+
     LaunchedEffect(Unit) {
         viewModel.loadProfile()
     }
+
 
     LaunchedEffect(savedInterests) {
         selected.clear()
@@ -71,6 +69,7 @@ fun ProfileScreen(
                 .padding(16.dp)
         ) {
 
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
@@ -78,10 +77,7 @@ fun ProfileScreen(
                 Box(
                     modifier = Modifier
                         .size(90.dp)
-                        .background(
-                            MaterialTheme.colorScheme.surfaceVariant,
-                            CircleShape
-                        ),
+                        .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Text("👤")
@@ -89,11 +85,7 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    user?.name ?: "",
-                    style = MaterialTheme.typography.titleMedium
-                )
-
+                Text(user?.name ?: "", style = MaterialTheme.typography.titleMedium)
                 Text(
                     user?.email ?: "",
                     style = MaterialTheme.typography.bodyMedium,
@@ -104,7 +96,7 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Text("Your Interest", style = MaterialTheme.typography.titleMedium)
+            Text("Your Interests", style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(12.dp))
 
             Surface(
@@ -119,23 +111,35 @@ fun ProfileScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
-                        Text(
-                            if (isEditMode) "Select your interest"
-                            else "Your interests"
-                        )
+                        Text(if (isEditMode) "Select your interests" else "Your interests")
 
                         if (isEditMode) {
-                            IconButton(onClick = {
-                                expandInterests = !expandInterests
-                            }) {
-                                Icon(
-                                    Icons.Default.KeyboardArrowDown,
-                                    contentDescription = "Expand"
-                                )
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+
+                                if (selected.isNotEmpty()) {
+                                    TextButton(
+                                        onClick = { selected.clear() },
+                                        contentPadding = PaddingValues(horizontal = 4.dp)
+                                    ) {
+                                        Text(
+                                            "Clear all",
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                    }
+                                }
+
+                                IconButton(onClick = {
+                                    expandInterests = !expandInterests
+                                }) {
+                                    Icon(
+                                        Icons.Default.KeyboardArrowDown,
+                                        contentDescription = "Expand"
+                                    )
+                                }
                             }
                         }
                     }
+
 
                     if (!isEditMode) {
                         FlowRow(
@@ -143,27 +147,22 @@ fun ProfileScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             selected.forEach { interest ->
-                                AssistChip(
-                                    onClick = {},
-                                    label = { Text(interest) }
-                                )
+                                AssistChip(onClick = {}, label = { Text(interest) })
                             }
                         }
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        TextButton(
-                            onClick = {
-                                isEditMode = true
-                                expandInterests = true
-                            }
-                        ) {
-                            Text("Edit your interest")
+                        TextButton(onClick = {
+                            isEditMode = true
+                            expandInterests = true
+                        }) {
+                            Text("Edit your interests")
                         }
                     }
 
-                    if (isEditMode && expandInterests) {
 
+                    if (isEditMode && expandInterests) {
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Column(
@@ -171,7 +170,6 @@ fun ProfileScreen(
                                 .height(200.dp)
                                 .verticalScroll(rememberScrollState())
                         ) {
-
                             FlowRow(
                                 maxItemsInEachRow = 3,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -179,22 +177,36 @@ fun ProfileScreen(
                             ) {
                                 allInterests.forEach { interest ->
                                     val isSelected = interest in selected
-                                    val disabled =
-                                        !isSelected && selected.size >= maxSelection
+                                    val disabled = !isSelected && selected.size >= maxSelection
+
+
+                                    val backgroundColor by animateColorAsState(
+                                        targetValue = if (isSelected)
+                                            MaterialTheme.colorScheme.primary
+                                        else
+                                            MaterialTheme.colorScheme.surfaceVariant
+                                    )
+
+                                    val labelColor by animateColorAsState(
+                                        targetValue = if (isSelected)
+                                            MaterialTheme.colorScheme.onPrimary
+                                        else
+                                            MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
 
                                     AssistChip(
                                         onClick = {
-                                            if (isSelected) {
-                                                selected.remove(interest)
-                                            } else if (!disabled) {
-                                                selected.add(interest)
-                                            }
+                                            if (isSelected) selected.remove(interest)
+                                            else if (!disabled) selected.add(interest)
                                         },
-                                        label = { Text(interest) },
+                                        label = { Text(interest, color = labelColor) },
                                         enabled = !disabled,
                                         modifier = Modifier
                                             .height(48.dp)
-                                            .alpha(if (disabled) 0.4f else 1f)
+                                            .alpha(if (disabled) 0.4f else 1f),
+                                        colors = AssistChipDefaults.assistChipColors(
+                                            containerColor = backgroundColor
+                                        )
                                     )
                                 }
                             }
@@ -221,3 +233,4 @@ fun ProfileScreen(
         }
     }
 }
+

@@ -61,11 +61,12 @@ fun QuizDetailsScreen(
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = quiz?.title ?: "",
+                        text = quiz?.title ?: "Quiz",
                         style = MaterialTheme.typography.titleLarge
                     )
+                    Spacer(modifier = Modifier.height(4.dp))
 
-                    Text("Category: ${quiz?.category}")
+                    Text("Category: ${quiz?.category?:"-"}")
                     Text("$questionCount Questions")
 
                     Spacer(modifier = Modifier.height(24.dp))
