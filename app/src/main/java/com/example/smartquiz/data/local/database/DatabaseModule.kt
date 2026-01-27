@@ -37,9 +37,9 @@ object DatabaseModule {
 
                     // TEMP: seed one quiz for verification
                     db.execSQL("""
-                INSERT INTO quizzes (quizId, title, category, isActive)
-                VALUES ('test_quiz_1', 'Sample Quiz', 'General', 1)
-            """)
+                        INSERT INTO quizzes (quizId, title, category, isActive)
+                        VALUES ('test_quiz_1', 'Sample Quiz', 'General', 1)
+                    """)
                 }
             })
             .build()
