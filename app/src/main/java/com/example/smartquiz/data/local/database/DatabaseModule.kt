@@ -16,6 +16,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Singleton
 
 @Module
@@ -31,14 +34,21 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "smart_quiz_db"
-        )
-            .addCallback(object : RoomDatabase.Callback() {
-                override fun onCreate(db: SupportSQLiteDatabase) {
-                    super.onCreate(db)
-                    seedDatabase(context)
+        ).addCallback(object : RoomDatabase.Callback() {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                super.onCreate(db)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val database = Room.databaseBuilder(
+                        context,
+                        AppDatabase::class.java,
+                        "smart_quiz_db"
+                    ).build()
+
+                    seedDatabase(database)
                 }
-            })
-            .build()
+            }
+        }).build()
 
 
     @Provides

@@ -18,7 +18,7 @@ class QuizPlayViewModel @Inject constructor(
     private val repository: QuizRepository
 ) : ViewModel() {
 
-
+    /* ---------------- DATA ---------------- */
 
     private val _questions = MutableStateFlow<List<QuestionEntity>>(emptyList())
     val questions = _questions.asStateFlow()
@@ -32,6 +32,13 @@ class QuizPlayViewModel @Inject constructor(
     private val _answers = MutableStateFlow<Map<String, String>>(emptyMap())
     val answers = _answers.asStateFlow()
 
+    /* ---------------- VISITED ---------------- */
+
+    private val _visitedQuestions = MutableStateFlow<Set<Int>>(emptySet())
+    val visitedQuestions = _visitedQuestions.asStateFlow()
+
+    /* ---------------- RESULT ---------------- */
+
     private val _score = MutableStateFlow(0)
     val score = _score.asStateFlow()
 
@@ -41,50 +48,115 @@ class QuizPlayViewModel @Inject constructor(
     private val _percentage = MutableStateFlow(0)
     val percentage = _percentage.asStateFlow()
 
-    private val optionsCache =
-        mutableMapOf<String, List<OptionEntity>>()
+    /* ---------------- SUBMIT META ---------------- */
 
+    val attemptedCount: StateFlow<Int> =
+        answers.map { it.size }
+            .stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
-    private var quizStartTimeMillis: Long = 0L
+    val unattemptedCount: StateFlow<Int> =
+        combine(questions, attemptedCount) { q, a ->
+            q.size - a
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
+
+    /* ---------------- PALETTE & DIALOG STATE ---------------- */
+
+    private val _showPalette = MutableStateFlow(false)
+    val showPalette = _showPalette.asStateFlow()
+
+    private val _showSubmitDialog = MutableStateFlow(false)
+    val showSubmitDialog = _showSubmitDialog.asStateFlow()
+
+    private val _showTimeoutDialog = MutableStateFlow(false)
+    val showTimeoutDialog = _showTimeoutDialog.asStateFlow()
+
+    private val _isQuizFinished = MutableStateFlow(false)
+    val isQuizFinished = _isQuizFinished.asStateFlow()
+
+    /* ---------------- TIMER (COUNTDOWN) ---------------- */
+
+    private val totalTimeSeconds = 2 * 60   // 2 minutes (change if needed)
+
+    private val _remainingSeconds = MutableStateFlow(totalTimeSeconds)
+    val remainingSeconds = _remainingSeconds.asStateFlow()
+
+    val remainingTimeText: StateFlow<String> =
+        remainingSeconds.map { seconds ->
+            val m = seconds / 60
+            val s = seconds % 60
+            "%02d:%02d".format(m, s)
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            "02:00"
+        )
+
+    val timerProgress: StateFlow<Float> =
+        remainingSeconds.map { seconds ->
+            seconds.toFloat() / totalTimeSeconds.toFloat()
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            1f
+        )
+
+    enum class TimerColorState { NORMAL, WARNING, DANGER }
+
+    val timerColorState: StateFlow<TimerColorState> =
+        remainingSeconds.map {
+            when {
+                it <= 30 -> TimerColorState.DANGER
+                it <= 60 -> TimerColorState.WARNING
+                else -> TimerColorState.NORMAL
+            }
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            TimerColorState.NORMAL
+        )
+
+    /* ---------------- TIMER BLINK ---------------- */
+
+    val isBlinking: StateFlow<Boolean> =
+        remainingSeconds
+            .map { seconds ->
+                seconds in 1..(5 * 60)   // blink when <= 5 minutes left
+            }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                false
+            )
+
     private var timerJob: Job? = null
     private var isSubmitted = false
 
-    private val _elapsedSeconds = MutableStateFlow(0)
-    val elapsedSeconds = _elapsedSeconds.asStateFlow()
+    /* ---------------- CACHE ---------------- */
 
-    val elapsedTimeText: StateFlow<String> =
-        elapsedSeconds.map { seconds ->
-            val h = seconds / 3600
-            val m = (seconds % 3600) / 60
-            val s = seconds % 60
-            "%02d:%02d:%02d".format(h, m, s)
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = "00:00:00"
-        )
+    private val optionsCache = mutableMapOf<String, List<OptionEntity>>()
+
+    /* ---------------- UI STATE ---------------- */
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
+    /* ---------------- LOAD ---------------- */
 
-    fun loadQuiz(quizId: String) {
+    fun loadQuiz(quizId: String, attemptId: Int) {
         viewModelScope.launch {
             _uiState.value = UiState(isLoading = true)
-
             try {
                 resetState()
-                startTimer()
+                startTimer(attemptId)
 
-                _questions.value =
-                    repository.getQuestionsForQuiz(quizId)
+                _questions.value = repository.getQuestionsForQuiz(quizId)
 
                 if (_questions.value.isNotEmpty()) {
+                    markVisited(0)
                     loadOptionsForCurrentQuestion()
                 }
 
                 _uiState.value = UiState(isLoading = false)
-
             } catch (e: Exception) {
                 _uiState.value = UiState(
                     isLoading = false,
@@ -97,36 +169,47 @@ class QuizPlayViewModel @Inject constructor(
     private fun resetState() {
         _currentIndex.value = 0
         _answers.value = emptyMap()
+        _visitedQuestions.value = emptySet()
         _score.value = 0
         _correctCount.value = 0
         _percentage.value = 0
-        _elapsedSeconds.value = 0
+        _remainingSeconds.value = totalTimeSeconds
         optionsCache.clear()
         isSubmitted = false
+        _isQuizFinished.value = false
+        _showTimeoutDialog.value = false
+        _showSubmitDialog.value = false
+        _showPalette.value = false
     }
 
-    private fun startTimer() {
-        quizStartTimeMillis = System.currentTimeMillis()
+    /* ---------------- TIMER LOGIC ---------------- */
+
+    private fun startTimer(attemptId: Int) {
         timerJob?.cancel()
 
         timerJob = viewModelScope.launch {
-            while (true) {
+            while (_remainingSeconds.value > 0 && !isSubmitted) {
                 delay(1000)
-                _elapsedSeconds.value =
-                    ((System.currentTimeMillis() - quizStartTimeMillis) / 1000).toInt()
+                _remainingSeconds.value = _remainingSeconds.value - 1
+            }
+
+            if (_remainingSeconds.value <= 0 && !isSubmitted) {
+                _showTimeoutDialog.value = true
+                submitQuiz(attemptId, isTimeout = true)
             }
         }
     }
 
+    /* ---------------- QUESTIONS ---------------- */
 
+    private fun markVisited(index: Int) {
+        _visitedQuestions.value = _visitedQuestions.value + index
+    }
 
     private fun loadOptionsForCurrentQuestion() {
         val question = _questions.value[_currentIndex.value]
-
         viewModelScope.launch {
-            val opts =
-                repository.getOptionsForQuestion(question.questionId)
-
+            val opts = repository.getOptionsForQuestion(question.questionId)
             _options.value = opts
             optionsCache[question.questionId] = opts
         }
@@ -141,6 +224,7 @@ class QuizPlayViewModel @Inject constructor(
     fun nextQuestion() {
         if (_currentIndex.value < _questions.value.lastIndex) {
             _currentIndex.value++
+            markVisited(_currentIndex.value)
             loadOptionsForCurrentQuestion()
         }
     }
@@ -148,20 +232,46 @@ class QuizPlayViewModel @Inject constructor(
     fun previousQuestion() {
         if (_currentIndex.value > 0) {
             _currentIndex.value--
+            markVisited(_currentIndex.value)
             loadOptionsForCurrentQuestion()
         }
     }
 
+    fun jumpToQuestion(index: Int) {
+        if (index in _questions.value.indices) {
+            _currentIndex.value = index
+            markVisited(index)
+            loadOptionsForCurrentQuestion()
+        }
+    }
 
-    fun submitQuiz(attemptId: Int) {
+    /* ---------------- PALETTE & SUBMIT EVENTS ---------------- */
+
+    fun togglePalette() {
+        _showPalette.value = !_showPalette.value
+    }
+
+    fun openSubmitDialog() {
+        _showSubmitDialog.value = true
+    }
+
+    fun closeSubmitDialog() {
+        _showSubmitDialog.value = false
+    }
+
+    /* ---------------- SUBMIT ---------------- */
+
+    fun submitQuiz(
+        attemptId: Int,
+        isTimeout: Boolean = false
+    ) {
         if (isSubmitted) return
         isSubmitted = true
 
         timerJob?.cancel()
         calculateScore()
 
-        val timeTakenSeconds =
-            ((System.currentTimeMillis() - quizStartTimeMillis) / 1000).toInt()
+        val timeTakenSeconds = totalTimeSeconds - _remainingSeconds.value
 
         viewModelScope.launch {
             repository.saveQuizResult(
@@ -171,30 +281,26 @@ class QuizPlayViewModel @Inject constructor(
                 answers = _answers.value
             )
         }
+
+        _isQuizFinished.value = true
     }
 
     private fun calculateScore() {
         var correct = 0
-
         _questions.value.forEach { question ->
-            val selectedOptionId =
-                _answers.value[question.questionId] ?: return@forEach
-
+            val selected = _answers.value[question.questionId] ?: return@forEach
             val option =
                 optionsCache[question.questionId]
-                    ?.find { it.optionId == selectedOptionId }
+                    ?.find { it.optionId == selected }
 
-            if (option?.isCorrect == true) {
-                correct++
-            }
+            if (option?.isCorrect == true) correct++
         }
 
         _correctCount.value = correct
         _score.value = correct * 10
-
-        val total = _questions.value.size
         _percentage.value =
-            if (total == 0) 0 else (correct * 100) / total
+            if (_questions.value.isEmpty()) 0
+            else (correct * 100) / _questions.value.size
     }
 
     override fun onCleared() {
