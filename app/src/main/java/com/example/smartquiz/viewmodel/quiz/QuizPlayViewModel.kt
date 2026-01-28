@@ -50,6 +50,9 @@ class QuizPlayViewModel @Inject constructor(
 
     /* ---------------- SUBMIT META ---------------- */
 
+    var currentAttemptId: Int = -1
+        private set
+
     val attemptedCount: StateFlow<Int> =
         answers.map { it.size }
             .stateIn(viewModelScope, SharingStarted.Eagerly, 0)
@@ -147,6 +150,7 @@ class QuizPlayViewModel @Inject constructor(
             _uiState.value = UiState(isLoading = true)
             try {
                 resetState()
+                currentAttemptId = attemptId
                 startTimer(attemptId)
 
                 _questions.value = repository.getQuestionsForQuiz(quizId)
@@ -167,6 +171,7 @@ class QuizPlayViewModel @Inject constructor(
     }
 
     private fun resetState() {
+        currentAttemptId = -1
         _currentIndex.value = 0
         _answers.value = emptyMap()
         _visitedQuestions.value = emptySet()
@@ -195,7 +200,7 @@ class QuizPlayViewModel @Inject constructor(
 
             if (_remainingSeconds.value <= 0 && !isSubmitted) {
                 _showTimeoutDialog.value = true
-                submitQuiz(attemptId, isTimeout = true)
+                submitQuiz( isTimeout = true)
             }
         }
     }
@@ -262,9 +267,13 @@ class QuizPlayViewModel @Inject constructor(
     /* ---------------- SUBMIT ---------------- */
 
     fun submitQuiz(
-        attemptId: Int,
         isTimeout: Boolean = false
     ) {
+        val attemptId = currentAttemptId
+        if (attemptId <= 0) return
+        if (attemptId <= 0) {
+            return
+        }
         if (isSubmitted) return
         isSubmitted = true
 

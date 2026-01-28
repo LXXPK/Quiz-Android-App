@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
+import com.example.smartquiz.viewmodel.history.QuizHistoryViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 

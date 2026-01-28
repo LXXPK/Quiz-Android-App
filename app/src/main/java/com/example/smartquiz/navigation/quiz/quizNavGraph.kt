@@ -6,7 +6,11 @@ import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.example.smartquiz.navigation.Routes
 import com.example.smartquiz.ui.quiz.*
+import com.example.smartquiz.ui.quiz.quizdetails.QuizDetailsScreen
+import com.example.smartquiz.ui.quiz.quizplay.QuizPlayScreen
+import com.example.smartquiz.ui.quiz.quizlist.QuizListScreen
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
+import com.example.smartquiz.ui.quiz.quizresult.QuizResultScreen
 
 fun NavGraphBuilder.quizNavGraph(
     navController: NavController

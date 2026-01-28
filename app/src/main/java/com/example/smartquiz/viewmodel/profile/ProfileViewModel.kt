@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartquiz.data.local.entity.user.InterestEntity
 import com.example.smartquiz.data.local.entity.user.UserEntity
 import com.example.smartquiz.data.local.session.SessionManager
-import com.example.smartquiz.data.repository.ProfileRepository
+import com.example.smartquiz.data.repository.profile.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

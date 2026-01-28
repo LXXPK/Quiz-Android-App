@@ -1,39 +1,16 @@
 package com.example.smartquiz.ui.auth
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
-import com.example.smartquiz.utils.isValidEmail
-import com.example.smartquiz.utils.isValidPassword
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartquiz.viewmodel.auth.AuthViewModel
+import kotlinx.coroutines.launch
+import com.example.smartquiz.utils.*
+import androidx.compose.material3.*
 
 @Composable
 fun LoginScreen(
@@ -43,14 +20,13 @@ fun LoginScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoginMode by remember { mutableStateOf(true) }
-    val keyboardController = LocalSoftwareKeyboardController.current
 
-
-//    val snackbarHostState = remember { SnackbarHostState() }
+    /* ---------- SIDE EFFECTS ---------- */
 
     LaunchedEffect(authViewModel.errorMessage) {
         authViewModel.errorMessage?.let {
@@ -65,132 +41,81 @@ fun LoginScreen(
         }
     }
 
-
     val authHandler = remember {
         GoogleAuthHandler(
             context = context,
-            onFirebaseUser = {
-                authViewModel.onFirebaseLoginSuccess(it)
-
-            },
+            onFirebaseUser = authViewModel::onFirebaseLoginSuccess,
             onError = {
                 scope.launch { snackbarHostState.showSnackbar(it) }
             }
         )
     }
 
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-
-            contentAlignment = Alignment.Center
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(24.dp)
-            ) {
 
-                Text(
-                    text = if (isLoginMode) "Login" else "Register",
-                    style = MaterialTheme.typography.headlineMedium
-                )
+            LoginHeader(isLoginMode = isLoginMode)
 
-                Spacer(modifier = Modifier.height(20.dp))
+            Spacer(Modifier.height(20.dp))
 
-                OutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = { Text("Email") },
-                    singleLine = true
-                )
+            LoginForm(
+                email = email,
+                password = password,
+                isLoginMode = isLoginMode,
+                isLoading = authViewModel.isLoading,
+                onEmailChange = { email = it },
+                onPasswordChange = { password = it },
+                onSubmit = {
+                    keyboardController?.hide()
 
-                Spacer(modifier = Modifier.height(12.dp))
+                    when {
+                        email.isBlank() || password.isBlank() ->
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Fields cannot be empty")
+                            }
 
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text("Password") },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation()
-                )
+                        !isValidEmail(email) ->
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Invalid email format")
+                            }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                        !isValidPassword(password) ->
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Password must be at least 6 characters")
+                            }
 
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        keyboardController?.hide()
-                        when {
-                            email.isBlank() || password.isBlank() ->
-                                scope.launch {
-                                    snackbarHostState.showSnackbar("Fields cannot be empty")
-                                }
-
-                            !isValidEmail(email) ->
-                                scope.launch {
-                                    snackbarHostState.showSnackbar("Invalid email format")
-                                }
-
-                            !isValidPassword(password) ->
-                                scope.launch {
-                                    snackbarHostState.showSnackbar("Password must be at least 6 characters")
-                                }
-
-                            else -> {
-                                if (isLoginMode) {
-                                    authViewModel.loginWithEmailPassword(email, password)
-                                } else {
-                                    authViewModel.registerWithEmailPassword(email, password)
-                                }
+                        else -> {
+                            if (isLoginMode) {
+                                authViewModel.loginWithEmailPassword(email, password)
+                            } else {
+                                authViewModel.registerWithEmailPassword(email, password)
                             }
                         }
                     }
-                ) {
-                    Text(if (isLoginMode) "Login" else "Register")
+                },
+                onForgotPassword = {
+                    keyboardController?.hide()
+                    authViewModel.sendPasswordResetEmail(email)
+                },
+                onToggleMode = {
+                    isLoginMode = !isLoginMode
                 }
-                if (isLoginMode) {
-                    TextButton(
-                        onClick = {
-                            keyboardController?.hide()
-                            authViewModel.sendPasswordResetEmail(email)
-                        }
-                    ) {
-                        Text("Forgot password?")
-                    }
+            )
+
+            Spacer(Modifier.height(24.dp))
+
+            SocialLoginSection(
+                onGoogleSignIn = {
+                    keyboardController?.hide()
+                    scope.launch { authHandler.signIn() }
                 }
-
-
-                TextButton(onClick = { isLoginMode = !isLoginMode }) {
-                    Text(
-                        if (isLoginMode)
-                            "No account? Register"
-                        else
-                            "Already have an account? Login"
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text("OR")
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        keyboardController?.hide()
-                        scope.launch { authHandler.signIn() }
-                    }
-                ) {
-                    Text("Sign in with Google")
-                }
-
-                if (authViewModel.isLoading) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    CircularProgressIndicator()
-                }
-            }
-
+            )
+        }
     }
 }
