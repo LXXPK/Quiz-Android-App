@@ -62,6 +62,7 @@ fun NavGraphBuilder.quizNavGraph(
             attemptId = backStack.arguments!!.getInt("attemptId"),
             viewModel = viewModel,
             onFinish = {
+
                 navController.navigate(Routes.QUIZ_RESULT)
             }
         )
