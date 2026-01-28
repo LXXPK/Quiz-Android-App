@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.smartquiz.viewmodel.auth.AuthViewModel
 import com.example.smartquiz.navigation.auth.authNavGraph
+import com.example.smartquiz.navigation.history.historyNavGraph
 import com.example.smartquiz.navigation.home.homeNavGraph
 import com.example.smartquiz.navigation.profile.profileNavGraph
 import com.example.smartquiz.navigation.quiz.quizNavGraph
@@ -33,5 +34,6 @@ fun RootNavGraph(
         homeNavGraph(navController)
         profileNavGraph(navController)
         quizNavGraph(navController)
+        historyNavGraph()
     }
 }

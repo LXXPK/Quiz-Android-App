@@ -22,4 +22,12 @@ interface QuizAttemptDao {
         attemptId: Int,
         timeTaken: Int
     )
+
+    @Query("""
+    SELECT * FROM quiz_attempts
+    WHERE userId = :userId
+    ORDER BY attemptedAt DESC
+""")
+    suspend fun getAttemptsForUser(userId: String): List<QuizAttemptEntity>
+
 }

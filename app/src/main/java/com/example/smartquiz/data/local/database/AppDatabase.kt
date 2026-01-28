@@ -28,7 +28,7 @@ import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
         QuizAttemptEntity::class,
         AnswerEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

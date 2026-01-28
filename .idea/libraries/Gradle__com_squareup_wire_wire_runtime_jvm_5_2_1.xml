@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.squareup.wire:wire-runtime-jvm:5.2.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.squareup.wire" artifactId="wire-runtime-jvm" version="5.2.1" baseVersion="5.2.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.wire/wire-runtime-jvm/5.2.1/c6591571cfc99ed593d847e7df87b61485970e23/wire-runtime-jvm-5.2.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.wire/wire-runtime-jvm/5.2.1/73e67707fa2224d6e735279105d890b20ed47940/wire-runtime-jvm-5.2.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.wire/wire-runtime-jvm/5.2.1/bf97daae3fb7ab7fb036d5777ea943d0eedfaced/wire-runtime-jvm-5.2.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

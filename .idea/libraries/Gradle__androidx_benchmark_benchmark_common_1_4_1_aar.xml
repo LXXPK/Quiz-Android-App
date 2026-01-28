@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.benchmark:benchmark-common:1.4.1@aar" external-system-id="GRADLE">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/8.13/transforms/8bcd4bb48fbacadbd696b991852231f6/transformed/benchmark-common-1.4.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/8.13/transforms/8bcd4bb48fbacadbd696b991852231f6/transformed/benchmark-common-1.4.1/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/8.13/transforms/8bcd4bb48fbacadbd696b991852231f6/transformed/benchmark-common-1.4.1/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.benchmark/benchmark-common/1.4.1/70d739048a42678cfa781f631e6faecbe8ac01f0/benchmark-common-1.4.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.benchmark/benchmark-common/1.4.1/8462647e27d42c72b8fa7ec3e3a370f3c3a49799/benchmark-common-1.4.1-samples-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

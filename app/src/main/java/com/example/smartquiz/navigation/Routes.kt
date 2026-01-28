@@ -4,6 +4,7 @@ object Routes {
 
     const val AUTH = "auth"
     const val HOME = "home"
+    const val HISTORY = "history"
     const val PROFILE = "profile"
 
     const val QUIZ_LIST = "quiz_list"
