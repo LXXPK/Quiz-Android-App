@@ -1,6 +1,5 @@
 package com.example.smartquiz.ui.auth
 
-
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -38,6 +38,7 @@ import com.example.smartquiz.viewmodel.auth.AuthViewModel
 @Composable
 fun LoginScreen(
     authViewModel: AuthViewModel,
+    snackbarHostState: SnackbarHostState,
     onLoginSuccess: () -> Unit
 ) {
     val context = LocalContext.current
@@ -46,8 +47,10 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoginMode by remember { mutableStateOf(true) }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-    val snackbarHostState = remember { SnackbarHostState() }
+
+//    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(authViewModel.errorMessage) {
         authViewModel.errorMessage?.let {
@@ -76,14 +79,11 @@ fun LoginScreen(
         )
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { padding ->
 
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
+                .fillMaxSize(),
+
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -120,6 +120,7 @@ fun LoginScreen(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
+                        keyboardController?.hide()
                         when {
                             email.isBlank() || password.isBlank() ->
                                 scope.launch {
@@ -151,6 +152,7 @@ fun LoginScreen(
                 if (isLoginMode) {
                     TextButton(
                         onClick = {
+                            keyboardController?.hide()
                             authViewModel.sendPasswordResetEmail(email)
                         }
                     ) {
@@ -177,6 +179,7 @@ fun LoginScreen(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
+                        keyboardController?.hide()
                         scope.launch { authHandler.signIn() }
                     }
                 ) {
@@ -188,6 +191,6 @@ fun LoginScreen(
                     CircularProgressIndicator()
                 }
             }
-        }
+
     }
 }

@@ -63,7 +63,11 @@ fun NavGraphBuilder.quizNavGraph(
             viewModel = viewModel,
             onFinish = {
 
-                navController.navigate(Routes.QUIZ_RESULT)
+                navController.navigate(Routes.QUIZ_RESULT) {
+//                    popUpTo(Routes.HOME) {
+//                        inclusive = false
+//                    }
+                }
             }
         )
     }

@@ -67,9 +67,6 @@ fun NavGraphBuilder.homeNavGraph(
             },
             onHistoryClick = {
                 navController.navigate(Routes.HISTORY)
-            },
-            onProfileClick = {
-                navController.navigate(Routes.PROFILE)
             }
         )
     }

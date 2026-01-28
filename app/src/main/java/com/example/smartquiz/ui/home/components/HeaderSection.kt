@@ -19,7 +19,6 @@ fun HeaderSection(
     userName: String,
     streak: Int,
     onHistoryClick: () -> Unit,
-    onProfileClick: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -68,13 +67,7 @@ fun HeaderSection(
                     .clickable { onHistoryClick() }
             )
 
-            Icon(
-                imageVector = Icons.Outlined.AccountCircle,
-                contentDescription = "Profile",
-                modifier = Modifier
-                    .size(30.dp)
-                    .clickable { onProfileClick() }
-            )
+
         }
     }
 }

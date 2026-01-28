@@ -16,4 +16,6 @@ interface InterestDao {
 
     @Insert
     suspend fun insertInterests(interests: List<InterestEntity>)
+    @Query("SELECT * FROM interests WHERE userId = :userId")
+    suspend fun getInterestsByUserId(userId: String): List<InterestEntity>
 }

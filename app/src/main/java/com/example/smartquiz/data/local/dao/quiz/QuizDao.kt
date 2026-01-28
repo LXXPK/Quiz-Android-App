@@ -25,6 +25,9 @@ interface QuizDao {
     @Query("SELECT DISTINCT category FROM quizzes WHERE isActive = 1")
     suspend fun getCategories(): List<String>
 
+    @Query("SELECT DISTINCT category FROM quizzes")
+    suspend fun getDistinctCategories(): List<String>
+
     @Query("SELECT * FROM quizzes")
     suspend fun getAllQuizzes(): List<QuizEntity>
 

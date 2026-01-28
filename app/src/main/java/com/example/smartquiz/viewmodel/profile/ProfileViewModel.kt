@@ -26,6 +26,11 @@ class ProfileViewModel @Inject constructor(
         MutableStateFlow<UserEntity?>(null)
     val user: StateFlow<UserEntity?> = _user
 
+    // ✅ NEW
+    private val _availableCategories =
+        MutableStateFlow<List<String>>(emptyList())
+    val availableCategories: StateFlow<List<String>> = _availableCategories
+
     private fun uid(): String =
         sessionManager.getUid()
             ?: throw IllegalStateException("User not logged in")
@@ -33,10 +38,16 @@ class ProfileViewModel @Inject constructor(
     fun loadProfile() {
         viewModelScope.launch {
             val userId = uid()
-            _interests.value =
-                repository.getUserInterests(userId)
+
             _user.value =
                 repository.getUserProfile(userId)
+
+            _interests.value =
+                repository.getUserInterests(userId)
+
+            // ✅ LOAD CATEGORIES FROM QUIZZES
+            _availableCategories.value =
+                repository.getAvailableCategories()
         }
     }
 

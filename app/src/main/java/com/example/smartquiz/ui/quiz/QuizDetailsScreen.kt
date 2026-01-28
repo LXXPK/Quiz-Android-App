@@ -1,7 +1,9 @@
 package com.example.smartquiz.ui.quiz
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Timer
@@ -41,7 +43,8 @@ fun QuizDetailsScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()
+        .verticalScroll(rememberScrollState())) {
 
         when {
             uiState.isLoading -> {

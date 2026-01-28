@@ -5,6 +5,8 @@ package com.example.smartquiz.ui.home
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +24,6 @@ fun HomeScreenContent(
     handleQuizCardClick: (QuizEntity) -> Unit,
     onCategoryViewAll: (String) -> Unit,
     onHistoryClick: () -> Unit,
-    onProfileClick: () -> Unit,
     uiState: HomeUiState,
     modifier: Modifier = Modifier
 ) {
@@ -37,7 +38,7 @@ fun HomeScreenContent(
                 userName = uiState.user?.name ?: stringResource(R.string.guest),
                 streak = uiState.user?.currentStreak ?: 0,
                 onHistoryClick = onHistoryClick,
-                onProfileClick = onProfileClick
+
             )
         }
 
@@ -55,17 +56,42 @@ fun HomeScreenContent(
         item { Spacer(modifier = Modifier.height(24.dp)) }
 
         /* ---------- SUGGESTED QUIZZES ---------- */
-        if (uiState.suggestedQuizzes.isNotEmpty()) {
-            item {
-                HorizontalTitledQuizList(
-                    title = stringResource(R.string.suggested_quizzes),
-                    quizzes = uiState.suggestedQuizzes,
-                    onViewAllClick = {},
-                    onQuizCardClick = handleQuizCardClick,
-                    limit = 5
-                )
+        /* ---------- SUGGESTED QUIZZES ---------- */
+        item {
+            when {
+                uiState.suggestedQuizzes.isNotEmpty() -> {
+                    HorizontalTitledQuizList(
+                        title = "Recommended for you",
+                        quizzes = uiState.suggestedQuizzes,
+                        onViewAllClick = {},
+                        onQuizCardClick = handleQuizCardClick,
+                        limit = 4
+                    )
+                }
+
+                uiState.user != null -> {
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    ) {
+                        Column(Modifier.padding(16.dp)) {
+                            Text(
+                                "Personalize your feed 🎯",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(Modifier.height(6.dp))
+                            Text(
+                                "Select interests in Profile to get quiz recommendations.",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                    }
+                }
             }
         }
+
 
         /* ---------- CATEGORY SECTIONS ---------- */
         uiState.quizzesByCategory.forEach { (category, quizzes) ->

@@ -33,11 +33,8 @@ fun ProfileScreen(
     val user by viewModel.user.collectAsState()
     val savedInterests by viewModel.interests.collectAsState()
 
-    val allInterests = listOf(
-        "DSA", "Android", "Backend",
-        "Java", "Kotlin", "SQL",
-        "Python", "C++"
-    )
+    val allInterests by viewModel.availableCategories.collectAsState()
+
 
     val selected = remember { mutableStateListOf<String>() }
 
@@ -96,7 +93,19 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Text("Your Interests", style = MaterialTheme.typography.titleMedium)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Your Interests", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    "${selected.size}/4 selected",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
             Spacer(modifier = Modifier.height(12.dp))
 
             Surface(
@@ -202,12 +211,14 @@ fun ProfileScreen(
                                         label = { Text(interest, color = labelColor) },
                                         enabled = !disabled,
                                         modifier = Modifier
-                                            .height(48.dp)
+                                            .height(40.dp)
                                             .alpha(if (disabled) 0.4f else 1f),
+                                        shape = RoundedCornerShape(20.dp),
                                         colors = AssistChipDefaults.assistChipColors(
                                             containerColor = backgroundColor
                                         )
                                     )
+
                                 }
                             }
                         }
@@ -230,6 +241,10 @@ fun ProfileScreen(
                     Text("Save Profile")
                 }
             }
+            Spacer(modifier = Modifier.height(32.dp))
+
+
+
         }
     }
 }

@@ -11,7 +11,6 @@ fun HomeScreen(
     handleQuizCardClick: (QuizEntity) -> Unit,
     onCategoryViewAll: (String) -> Unit,
     onHistoryClick: () -> Unit,
-    onProfileClick: () -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by homeViewModel.uiState.collectAsState()
@@ -30,7 +29,6 @@ fun HomeScreen(
                 handleQuizCardClick = handleQuizCardClick,
                 onCategoryViewAll = onCategoryViewAll,
                 onHistoryClick = onHistoryClick,
-                onProfileClick = onProfileClick,
                 uiState = uiState
             )
     }

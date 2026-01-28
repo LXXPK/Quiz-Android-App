@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.ui.Modifier
 import com.example.smartquiz.navigation.RootNavGraph
+import com.example.smartquiz.ui.AppScaffold
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,9 +20,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SmartQuizTheme {
-                Box(modifier = Modifier.statusBarsPadding()) {
-                    RootNavGraph()
-                }
+
+                AppScaffold()
+
             }
         }
     }

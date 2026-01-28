@@ -4,6 +4,7 @@ package com.example.smartquiz.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 import com.example.smartquiz.data.local.session.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +26,6 @@ class HomeViewModel @Inject constructor(
 
     fun loadHome() {
         val uid = sessionManager.getUid()
-
         if (uid == null) {
             _uiState.update {
                 it.copy(errorMessage = "User not logged in")
@@ -38,20 +38,35 @@ class HomeViewModel @Inject constructor(
 
             try {
                 val user = repository.getUser(uid)
-                val suggested = repository.getSuggestedQuizzes()
-                val active = repository.getActiveQuizzes()
 
-                val groupedByCategory = suggested.groupBy { it.category }
+                // ✅ LOAD INTERESTS
+                val interests = repository.getUserInterests(uid)
+                    .map { it.interest }
+
+                // ✅ LOAD ALL QUIZZES
+                val allQuizzes = repository.getAllQuizzes()
+
+                // ✅ BUILD SUGGESTED (MAX 4)
+                val suggested = buildSuggestedQuizzes(
+                    allQuizzes = allQuizzes,
+                    interests = interests
+                )
+
+                // ✅ GROUP ALL QUIZZES BY CATEGORY
+                val groupedByCategory = allQuizzes.groupBy { it.category }
+
+                val active = repository.getActiveQuizzes()
 
                 _uiState.update {
                     it.copy(
                         isLoading = false,
                         user = user,
                         suggestedQuizzes = suggested,
-                        activeQuizzes = active,
-                        quizzesByCategory = groupedByCategory
+                        quizzesByCategory = groupedByCategory,
+                        activeQuizzes = active
                     )
                 }
+
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
@@ -63,11 +78,25 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    // TEMP — replace with real attempt logic later
-    fun getQuizProgress(quizId: String): Triple<Date, Date, Float> {
-        val activeTime = Date(System.currentTimeMillis() - 3600000)
-        val expirationTime = Date(System.currentTimeMillis() + 7200000)
-        val progress = 0.3f
-        return Triple(activeTime, expirationTime, progress)
+    private fun buildSuggestedQuizzes(
+        allQuizzes: List<QuizEntity>,
+        interests: List<String>
+    ): List<QuizEntity> {
+        if (interests.isEmpty()) return emptyList()
+
+        return allQuizzes
+            .filter { quiz ->
+                interests.any { it.equals(quiz.category, ignoreCase = true) }
+            }
+            .shuffled()
+            .take(4)
     }
+
+    // TEMP
+    fun getQuizProgress(quizId: String) =
+        Triple(
+            Date(System.currentTimeMillis() - 3600000),
+            Date(System.currentTimeMillis() + 7200000),
+            0.3f
+        )
 }
