@@ -21,7 +21,6 @@ import com.example.smartquiz.viewmodel.quiz.QuizDetailsViewModel
 @Composable
 fun QuizDetailsScreen(
     quizId: String,
-    userId: String,
     navController: NavController,
     viewModel: QuizDetailsViewModel = hiltViewModel()
 ) {
@@ -68,8 +67,7 @@ fun QuizDetailsScreen(
                     questionCount = questionCount,
                     onStartQuiz = {
                         viewModel.onStartQuizClicked(
-                            quizId = quizId,
-                            userId = userId
+                            quizId = quizId
                         )
                     }
                 )

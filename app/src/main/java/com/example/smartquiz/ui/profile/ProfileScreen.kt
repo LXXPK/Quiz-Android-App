@@ -20,6 +20,10 @@ fun ProfileScreen(
     val selected = remember { mutableStateListOf<String>() }
     var isEditMode by remember { mutableStateOf(true) }
     var expand by remember { mutableStateOf(false) }
+    val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.errorMessage.collectAsState()
+
+
 
     LaunchedEffect(Unit) {
         viewModel.loadProfile()

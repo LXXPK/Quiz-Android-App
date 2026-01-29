@@ -10,7 +10,7 @@ import javax.inject.Inject
 class ProfileRepository @Inject constructor(
     private val interestDao: InterestDao,
     private val userDao: UserDao,
-    private val quizDao: QuizDao   // ✅ ADD THIS
+    private val quizDao: QuizDao
 ) {
 
     suspend fun getAvailableCategories(): List<String> {

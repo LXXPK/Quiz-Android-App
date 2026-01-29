@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- MAIN APP THEME : PURE MATERIAL 3 + NO ACTION BAR -->
-    <style name="Theme.SmartQuiz" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Kill title bar completely -->
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-    </style>
 
+    <style name="Theme.SmartQuiz" parent="Theme.Material3.DayNight.NoActionBar"/>
 
     <style name="Theme.QuizApp.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/splash_bg</item>

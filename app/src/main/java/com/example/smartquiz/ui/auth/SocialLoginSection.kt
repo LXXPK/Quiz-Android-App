@@ -4,20 +4,30 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import com.example.smartquiz.R
 
 @Composable
 fun SocialLoginSection(
     onGoogleSignIn: () -> Unit
 ) {
-    Text("OR")
+    Text(
+        text = stringResource(R.string.label_or)
+    )
 
-    Spacer(Modifier.height(16.dp))
+    Spacer(
+        modifier = Modifier.height(
+            dimensionResource(R.dimen.spacing_medium)
+        )
+    )
 
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = onGoogleSignIn
     ) {
-        Text("Sign in with Google")
+        Text(
+            text = stringResource(R.string.action_sign_in_google)
+        )
     }
 }

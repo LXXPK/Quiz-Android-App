@@ -7,6 +7,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.smartquiz.R
 
 @Composable
 fun EmptyQuizState() {
@@ -15,7 +17,7 @@ fun EmptyQuizState() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "No quizzes available",
+            text = stringResource(R.string.quiz_list_empty),
             style = MaterialTheme.typography.bodyLarge
         )
     }

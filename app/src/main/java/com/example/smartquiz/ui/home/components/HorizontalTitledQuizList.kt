@@ -59,26 +59,3 @@ fun HorizontalTitledQuizList(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun HorizontalTitledQuizListPreview() {
-    val quizzes = listOf(
-        QuizEntity("1", "Android Basics", "Technology", true),
-        QuizEntity("2", "Kotlin Coroutines", "Technology", true),
-        QuizEntity("3", "Jetpack Compose UI", "Design", true),
-        QuizEntity("4", "Material 3 Design", "Design", true),
-        QuizEntity("8", "Advanced Networking", "Tech", true),
-        QuizEntity("9", "Unit Testing", "Tech", true),
-    )
-    SmartQuizTheme {
-        HorizontalTitledQuizList(
-            title = "Suggested Quizzes",
-            quizzes = quizzes,
-            limit = 4,
-            onViewAllClick = {},
-            onQuizCardClick = {},
-            modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_padding))
-        )
-    }
-}

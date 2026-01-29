@@ -40,20 +40,20 @@ class HomeViewModel @Inject constructor(
             try {
                 val user = repository.getUser(uid)
 
-                // ✅ LOAD INTERESTS
+
                 val interests = repository.getUserInterests(uid)
                     .map { it.interest }
 
-                // ✅ LOAD ALL QUIZZES
+
                 val allQuizzes = repository.getAllQuizzes()
 
-                // ✅ BUILD SUGGESTED (MAX 4)
+
                 val suggested = buildSuggestedQuizzes(
                     allQuizzes = allQuizzes,
                     interests = interests
                 )
 
-                // ✅ GROUP ALL QUIZZES BY CATEGORY
+
                 val groupedByCategory = allQuizzes.groupBy { it.category }
 
                 val active = repository.getActiveQuizzes()
@@ -93,11 +93,14 @@ class HomeViewModel @Inject constructor(
             .take(4)
     }
 
-    // TEMP
-    fun getQuizProgress(quizId: String) =
-        Triple(
-            Date(System.currentTimeMillis() - 3600000),
-            Date(System.currentTimeMillis() + 7200000),
-            0.3f
-        )
+
+    fun getQuizProgress(quiz: QuizEntity): Triple<Date, Date, Float> {
+        val activeTime = Date(quiz.startTime)
+        val expirationTime = Date(quiz.endTime)
+
+
+        val progress = 0f
+
+        return Triple(activeTime, expirationTime, progress)
+    }
 }

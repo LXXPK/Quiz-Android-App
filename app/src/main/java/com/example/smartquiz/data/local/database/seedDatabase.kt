@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.example.smartquiz.data.local.entity.quiz.*
+import com.example.smartquiz.utils.DatabaseConstants.DATABASE_NAME
 
 fun seedDatabase(context: Context) {
     CoroutineScope(Dispatchers.IO).launch {
@@ -13,7 +14,7 @@ fun seedDatabase(context: Context) {
         val db = Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "smart_quiz_db"
+            DATABASE_NAME
         )
             .fallbackToDestructiveMigration()
             .build()
@@ -21,29 +22,46 @@ fun seedDatabase(context: Context) {
         val quizDao = db.quizDao()
         val questionDao = db.questionDao()
         val optionDao = db.optionDao()
-
-
+        val now = System.currentTimeMillis()
+        val oneDay = 24 * 60 * 60 * 1000L
+        val oneMinute = 60 * 1000L
+        val twoMinutes = 2 * 60 * 1000L
         quizDao.insertAll(
             listOf(
-                QuizEntity("gen_1", "General Knowledge Basics", "General", true),
-                QuizEntity("gen_2", "World Geography", "General", true),
-                QuizEntity("gen_3", "Famous Personalities", "General", true),
+                QuizEntity("gen_1", "General Knowledge Basics", "General", true,  startTime = now,
+                    endTime = now + oneDay),
+                QuizEntity("gen_2", "World Geography", "General", true,  startTime = now,
+                    endTime = now + oneDay),
+                QuizEntity("gen_3", "Famous Personalities", "General", true,  startTime = now,
+                    endTime = now + oneDay),
 
-                QuizEntity("tech_1", "Android Fundamentals", "Tech", true),
-                QuizEntity("tech_2", "Programming Basics", "Tech", true),
-                QuizEntity("tech_3", "Computer Networks", "Tech", true),
+                QuizEntity("tech_1", "Android Fundamentals", "Tech", true,  startTime = now,
+                    endTime = now + oneDay),
+                QuizEntity("tech_2", "Programming Basics", "Tech", true,  startTime = now,
+                    endTime = now + oneDay),
+                QuizEntity("tech_3", "Computer Networks", "Tech", true,  startTime = now,
+                    endTime = now + oneDay),
 
-                QuizEntity("sci_1", "Physics Basics", "Science", true),
-                QuizEntity("sci_2", "Chemistry Fundamentals", "Science", true),
-                QuizEntity("sci_3", "Biology Basics", "Science", true),
+                QuizEntity("sci_1", "Physics Basics", "Science", true,  startTime = now,
+                    endTime = now + oneDay),
+                QuizEntity("sci_2", "Chemistry Fundamentals", "Science", true,  startTime = now,
+                    endTime = now + oneDay),
+                QuizEntity("sci_3", "Biology Basics", "Science", true,  startTime = now,
+                    endTime = now + oneDay),
 
-                QuizEntity("sport_1", "Cricket World", "Sports", true),
-                QuizEntity("sport_2", "Olympics Quiz", "Sports", true),
-                QuizEntity("sport_3", "Football Legends", "Sports", true),
+                QuizEntity("sport_1", "Cricket World", "Sports", true,  startTime = now,
+                    endTime = now + oneDay),
+                QuizEntity("sport_2", "Olympics Quiz", "Sports", true,  startTime = now,
+                    endTime = now + oneDay),
+                QuizEntity("sport_3", "Football Legends", "Sports", true,  startTime = now,
+                    endTime = now + oneDay),
 
-                QuizEntity("his_1", "Indian History", "History", true),
-                QuizEntity("his_2", "World History", "History", true),
-                QuizEntity("his_3", "Ancient Civilizations", "History", true),
+                QuizEntity("his_1", "Indian History", "History", true,  startTime = now,
+                    endTime = now + twoMinutes),
+                QuizEntity("his_2", "World History", "History", true,  startTime = now,
+                    endTime = now + twoMinutes),
+                QuizEntity("his_3", "Ancient Civilizations", "History", true,  startTime = now,
+                    endTime = now + twoMinutes),
             )
         )
 

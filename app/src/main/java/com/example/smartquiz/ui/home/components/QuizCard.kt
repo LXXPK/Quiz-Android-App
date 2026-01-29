@@ -33,14 +33,3 @@ fun QuizCard(handleQuizCardClick: (QuizEntity) -> Unit, quiz: QuizEntity, modifi
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun QuizCardPreview() {
-    SmartQuizTheme {
-        QuizCard(
-            quiz = QuizEntity("1", "Sample Quiz", "Category", true),
-            handleQuizCardClick = {}
-        )
-    }
-}

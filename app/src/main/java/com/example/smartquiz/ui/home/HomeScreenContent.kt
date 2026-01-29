@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 import com.example.smartquiz.ui.home.components.*
+import com.example.smartquiz.ui.home.HomeViewModel
+
 
 @Composable
 fun HomeScreenContent(
@@ -24,46 +26,49 @@ fun HomeScreenContent(
     handleQuizCardClick: (QuizEntity) -> Unit,
     onCategoryViewAll: (String) -> Unit,
     onHistoryClick: () -> Unit,
+    onSuggestedViewAll: () -> Unit,
     uiState: HomeUiState,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(dimensionResource(id = R.dimen.medium_padding))
+        contentPadding = PaddingValues(
+            dimensionResource(id = R.dimen.medium_padding)
+        )
     ) {
 
-        /* ---------- HEADER ---------- */
         item {
             HeaderSection(
-                userName = uiState.user?.name ?: stringResource(R.string.guest),
+                userName = uiState.user?.name
+                    ?: stringResource(R.string.guest),
                 streak = uiState.user?.currentStreak ?: 0,
-                onHistoryClick = onHistoryClick,
-
+                onHistoryClick = onHistoryClick
             )
         }
 
-        /* ---------- BANNER ---------- */
         item {
             HomeBannerCarousel(
                 banners = listOf(
-                    "🔥 Daily Challenge",
-                    "🏆 Weekly Top Quiz",
-                    "⚡ Boost Your Streak"
+                    stringResource(R.string.home_banner_daily_challenge),
+                    stringResource(R.string.home_banner_weekly_top),
+                    stringResource(R.string.home_banner_boost_streak)
                 )
             )
         }
 
         item { Spacer(modifier = Modifier.height(24.dp)) }
 
-        /* ---------- SUGGESTED QUIZZES ---------- */
-        /* ---------- SUGGESTED QUIZZES ---------- */
         item {
             when {
                 uiState.suggestedQuizzes.isNotEmpty() -> {
                     HorizontalTitledQuizList(
-                        title = "Recommended for you",
+                        title = stringResource(
+                            R.string.home_recommended_title
+                        ),
                         quizzes = uiState.suggestedQuizzes,
-                        onViewAllClick = {},
+                        onViewAllClick = {
+                            onSuggestedViewAll()
+                        },
                         onQuizCardClick = handleQuizCardClick,
                         limit = 4
                     )
@@ -73,18 +78,25 @@ fun HomeScreenContent(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                            containerColor =
+                                MaterialTheme.colorScheme.surfaceVariant
                         )
                     ) {
                         Column(Modifier.padding(16.dp)) {
                             Text(
-                                "Personalize your feed 🎯",
-                                style = MaterialTheme.typography.titleMedium
+                                text = stringResource(
+                                    R.string.home_personalize_title
+                                ),
+                                style =
+                                    MaterialTheme.typography.titleMedium
                             )
                             Spacer(Modifier.height(6.dp))
                             Text(
-                                "Select interests in Profile to get quiz recommendations.",
-                                style = MaterialTheme.typography.bodySmall
+                                text = stringResource(
+                                    R.string.home_personalize_subtitle
+                                ),
+                                style =
+                                    MaterialTheme.typography.bodySmall
                             )
                         }
                     }
@@ -93,7 +105,6 @@ fun HomeScreenContent(
         }
 
 
-        /* ---------- CATEGORY SECTIONS ---------- */
         uiState.quizzesByCategory.forEach { (category, quizzes) ->
             item {
                 Spacer(modifier = Modifier.height(24.dp))
@@ -112,13 +123,16 @@ fun HomeScreenContent(
                 Text(
                     text = stringResource(R.string.active_quizzes),
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
+                    modifier = Modifier.padding(
+                        top = 24.dp,
+                        bottom = 12.dp
+                    )
                 )
             }
 
             items(uiState.activeQuizzes) { quiz ->
                 val (activeTime, expirationTime, progress) =
-                    homeViewModel.getQuizProgress(quiz.quizId)
+                    homeViewModel.getQuizProgress(quiz)
 
                 ActiveQuizCard(
                     quiz = quiz,
@@ -131,6 +145,7 @@ fun HomeScreenContent(
                         .padding(vertical = 6.dp)
                 )
             }
+
         }
     }
 }

@@ -74,30 +74,12 @@ fun LoginScreen(
                 onSubmit = {
                     keyboardController?.hide()
 
-                    when {
-                        email.isBlank() || password.isBlank() ->
-                            scope.launch {
-                                snackbarHostState.showSnackbar("Fields cannot be empty")
-                            }
-
-                        !isValidEmail(email) ->
-                            scope.launch {
-                                snackbarHostState.showSnackbar("Invalid email format")
-                            }
-
-                        !isValidPassword(password) ->
-                            scope.launch {
-                                snackbarHostState.showSnackbar("Password must be at least 6 characters")
-                            }
-
-                        else -> {
-                            if (isLoginMode) {
-                                authViewModel.loginWithEmailPassword(email, password)
-                            } else {
-                                authViewModel.registerWithEmailPassword(email, password)
-                            }
-                        }
+                    if (isLoginMode) {
+                        authViewModel.loginWithEmailPassword(email, password)
+                    } else {
+                        authViewModel.registerWithEmailPassword(email, password)
                     }
+
                 },
                 onForgotPassword = {
                     keyboardController?.hide()

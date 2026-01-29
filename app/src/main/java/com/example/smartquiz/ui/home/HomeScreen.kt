@@ -1,15 +1,17 @@
-
-
 package com.example.smartquiz.ui.home
 
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
+import com.example.smartquiz.navigation.Routes
+import com.example.smartquiz.ui.home.HomeViewModel
+
 
 @Composable
 fun HomeScreen(
     handleQuizCardClick: (QuizEntity) -> Unit,
     onCategoryViewAll: (String) -> Unit,
+    onSuggestedViewAll: () -> Unit,
     onHistoryClick: () -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -28,6 +30,7 @@ fun HomeScreen(
                 homeViewModel = homeViewModel,
                 handleQuizCardClick = handleQuizCardClick,
                 onCategoryViewAll = onCategoryViewAll,
+                onSuggestedViewAll = onSuggestedViewAll,
                 onHistoryClick = onHistoryClick,
                 uiState = uiState
             )

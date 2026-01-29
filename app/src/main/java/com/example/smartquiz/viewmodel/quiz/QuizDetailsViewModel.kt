@@ -3,6 +3,7 @@ package com.example.smartquiz.viewmodel.quiz
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
+import com.example.smartquiz.data.local.session.SessionManager
 import com.example.smartquiz.data.repository.quiz.QuizRepository
 import com.example.smartquiz.ui.common.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,9 +14,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizDetailsViewModel @Inject constructor(
-    private val repository: QuizRepository
+    private val repository: QuizRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
+    private val userId: String =
+        sessionManager.getUid()
+            ?: throw IllegalStateException("User not logged in")
     private val _quiz = MutableStateFlow<QuizEntity?>(null)
     val quiz = _quiz.asStateFlow()
 
@@ -46,8 +51,7 @@ class QuizDetailsViewModel @Inject constructor(
     }
 
     fun onStartQuizClicked(
-        quizId: String,
-        userId: String
+        quizId: String
     ) {
         viewModelScope.launch {
             _uiState.value = UiState(isLoading = true)

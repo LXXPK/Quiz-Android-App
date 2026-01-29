@@ -80,7 +80,7 @@ fun QuizHistoryScreen(
     }
 }
 
-/* ---------- STATS SECTION ---------- */
+
 
 @Composable
 private fun HistoryStatsSection(uiState: QuizHistoryUiState) {
@@ -160,7 +160,7 @@ private fun StatCard(
     }
 }
 
-/* ---------- HISTORY ITEM ---------- */
+
 
 @Composable
 private fun HistoryItemCard(attempt: QuizAttemptEntity) {
@@ -210,7 +210,6 @@ private fun HistoryItemCard(attempt: QuizAttemptEntity) {
     }
 }
 
-/* ---------- EMPTY STATE ---------- */
 
 @Composable
 private fun EmptyHistoryState() {

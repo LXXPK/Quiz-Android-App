@@ -26,7 +26,6 @@ class ProfileViewModel @Inject constructor(
         MutableStateFlow<UserEntity?>(null)
     val user: StateFlow<UserEntity?> = _user
 
-    // ✅ NEW
     private val _availableCategories =
         MutableStateFlow<List<String>>(emptyList())
     val availableCategories: StateFlow<List<String>> = _availableCategories
@@ -35,27 +34,53 @@ class ProfileViewModel @Inject constructor(
         sessionManager.getUid()
             ?: throw IllegalStateException("User not logged in")
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
     fun loadProfile() {
         viewModelScope.launch {
-            val userId = uid()
+            try {
+                _isLoading.value = true
+                _errorMessage.value = null
 
-            _user.value =
-                repository.getUserProfile(userId)
+                val userId = sessionManager.getUid()
+                    ?: run {
+                        _errorMessage.value = "Session expired. Please login again."
+                        return@launch
+                    }
 
-            _interests.value =
-                repository.getUserInterests(userId)
+                _user.value = repository.getUserProfile(userId)
+                _interests.value = repository.getUserInterests(userId)
+                _availableCategories.value =
+                    repository.getAvailableCategories()
 
-            // ✅ LOAD CATEGORIES FROM QUIZZES
-            _availableCategories.value =
-                repository.getAvailableCategories()
+            } catch (e: Exception) {
+                _errorMessage.value =
+                    e.message ?: "Failed to load profile"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
+
 
     fun saveInterests(selected: List<String>) {
         viewModelScope.launch {
-            repository.saveUserInterests(uid(), selected)
-            _interests.value =
-                repository.getUserInterests(uid())
+            try {
+                _isLoading.value = true
+                repository.saveUserInterests(uid(), selected)
+                _interests.value =
+                    repository.getUserInterests(uid())
+            } catch (e: Exception) {
+                _errorMessage.value =
+                    e.message ?: "Failed to save interests"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
+
 }

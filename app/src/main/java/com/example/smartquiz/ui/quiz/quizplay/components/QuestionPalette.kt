@@ -17,7 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.smartquiz.R
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
 
 @Composable
@@ -37,29 +39,27 @@ fun QuestionPalette(
             modifier = Modifier.padding(16.dp)
         ) {
 
-            /* ---------- HEADER ---------- */
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Question Palette",
+                    text = stringResource(R.string.quiz_question_palette_title),
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 IconButton(onClick = viewModel::togglePalette) {
                     Icon(
                         imageVector = Icons.Default.KeyboardArrowUp,
-                        contentDescription = "Close"
+                        contentDescription = stringResource(
+                            R.string.action_close
+                        )
                     )
                 }
             }
 
             Spacer(Modifier.height(12.dp))
-
-            /* ---------- GRID ---------- */
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(5),
@@ -68,12 +68,14 @@ fun QuestionPalette(
             ) {
                 itemsIndexed(questions) { index, question ->
 
-                    val isAnswered = answers.containsKey(question.questionId)
-                    val isVisited = visited.contains(index)
+                    val isAnswered =
+                        answers.containsKey(question.questionId)
+                    val isVisited =
+                        visited.contains(index)
 
                     val backgroundColor = when {
-                        isAnswered -> Color(0xFF2E7D32)   // green
-                        isVisited -> Color(0xFFD32F2F)   // red
+                        isAnswered -> Color(0xFF2E7D32)
+                        isVisited -> Color(0xFFD32F2F)
                         else -> Color.LightGray
                     }
 

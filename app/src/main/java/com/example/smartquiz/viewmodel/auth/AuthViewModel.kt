@@ -30,6 +30,7 @@ class AuthViewModel @Inject constructor(
     private val auth = FirebaseAuth.getInstance()
 
     fun loginWithEmailPassword(email: String, password: String) {
+        if (!validate(email, password)) return
         isLoading = true
         errorMessage = null
 
@@ -43,7 +44,27 @@ class AuthViewModel @Inject constructor(
             }
     }
 
+    private fun validate(email: String, password: String): Boolean {
+        return when {
+            email.isBlank() || password.isBlank() -> {
+                errorMessage = "Fields cannot be empty"
+                false
+            }
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                errorMessage = "Invalid email format"
+                false
+            }
+            password.length < 6 -> {
+                errorMessage = "Password must be at least 6 characters"
+                false
+            }
+            else -> true
+        }
+    }
+
+
     fun registerWithEmailPassword(email: String, password: String) {
+        if (!validate(email, password)) return
         isLoading = true
         errorMessage = null
 

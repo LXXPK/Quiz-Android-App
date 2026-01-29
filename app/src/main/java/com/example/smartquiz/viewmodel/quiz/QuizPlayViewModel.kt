@@ -6,6 +6,10 @@ import com.example.smartquiz.data.local.entity.quiz.OptionEntity
 import com.example.smartquiz.data.local.entity.quiz.QuestionEntity
 import com.example.smartquiz.data.repository.quiz.QuizRepository
 import com.example.smartquiz.ui.common.UiState
+import com.example.smartquiz.utils.QuizConfig
+import com.example.smartquiz.utils.QuizConfig.CURRENT_ATTEMPT_ID
+import com.example.smartquiz.utils.QuizConfig.DANGER_TIME_SECONDS
+import com.example.smartquiz.utils.QuizConfig.WARNING_TIME_SECONDS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -18,7 +22,7 @@ class QuizPlayViewModel @Inject constructor(
     private val repository: QuizRepository
 ) : ViewModel() {
 
-    /* ---------------- DATA ---------------- */
+
 
     private val _questions = MutableStateFlow<List<QuestionEntity>>(emptyList())
     val questions = _questions.asStateFlow()
@@ -32,12 +36,12 @@ class QuizPlayViewModel @Inject constructor(
     private val _answers = MutableStateFlow<Map<String, String>>(emptyMap())
     val answers = _answers.asStateFlow()
 
-    /* ---------------- VISITED ---------------- */
+
 
     private val _visitedQuestions = MutableStateFlow<Set<Int>>(emptySet())
     val visitedQuestions = _visitedQuestions.asStateFlow()
 
-    /* ---------------- RESULT ---------------- */
+
 
     private val _score = MutableStateFlow(0)
     val score = _score.asStateFlow()
@@ -48,9 +52,9 @@ class QuizPlayViewModel @Inject constructor(
     private val _percentage = MutableStateFlow(0)
     val percentage = _percentage.asStateFlow()
 
-    /* ---------------- SUBMIT META ---------------- */
 
-    var currentAttemptId: Int = -1
+
+    var currentAttemptId: Int = CURRENT_ATTEMPT_ID
         private set
 
     val attemptedCount: StateFlow<Int> =
@@ -62,7 +66,7 @@ class QuizPlayViewModel @Inject constructor(
             q.size - a
         }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
-    /* ---------------- PALETTE & DIALOG STATE ---------------- */
+
 
     private val _showPalette = MutableStateFlow(false)
     val showPalette = _showPalette.asStateFlow()
@@ -76,17 +80,17 @@ class QuizPlayViewModel @Inject constructor(
     private val _isQuizFinished = MutableStateFlow(false)
     val isQuizFinished = _isQuizFinished.asStateFlow()
 
-    /* ---------------- TIMER (COUNTDOWN) ---------------- */
 
-    private val totalTimeSeconds = 2 * 60   // 2 minutes (change if needed)
+
+    private val totalTimeSeconds = QuizConfig.TIME_LIMIT_SECONDS
 
     private val _remainingSeconds = MutableStateFlow(totalTimeSeconds)
     val remainingSeconds = _remainingSeconds.asStateFlow()
 
     val remainingTimeText: StateFlow<String> =
         remainingSeconds.map { seconds ->
-            val m = seconds / 60
-            val s = seconds % 60
+            val m = seconds / QuizConfig.WARNING_TIME_SECONDS
+            val s = seconds % QuizConfig.WARNING_TIME_SECONDS
             "%02d:%02d".format(m, s)
         }.stateIn(
             viewModelScope,
@@ -108,8 +112,8 @@ class QuizPlayViewModel @Inject constructor(
     val timerColorState: StateFlow<TimerColorState> =
         remainingSeconds.map {
             when {
-                it <= 30 -> TimerColorState.DANGER
-                it <= 60 -> TimerColorState.WARNING
+                it <= DANGER_TIME_SECONDS  -> TimerColorState.DANGER
+                it <= WARNING_TIME_SECONDS  -> TimerColorState.WARNING
                 else -> TimerColorState.NORMAL
             }
         }.stateIn(
@@ -118,12 +122,12 @@ class QuizPlayViewModel @Inject constructor(
             TimerColorState.NORMAL
         )
 
-    /* ---------------- TIMER BLINK ---------------- */
+
 
     val isBlinking: StateFlow<Boolean> =
         remainingSeconds
             .map { seconds ->
-                seconds in 1..(5 * 60)   // blink when <= 5 minutes left
+                seconds in 1..(2 * 60)
             }
             .stateIn(
                 viewModelScope,
@@ -134,16 +138,16 @@ class QuizPlayViewModel @Inject constructor(
     private var timerJob: Job? = null
     private var isSubmitted = false
 
-    /* ---------------- CACHE ---------------- */
+
 
     private val optionsCache = mutableMapOf<String, List<OptionEntity>>()
 
-    /* ---------------- UI STATE ---------------- */
+
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
-    /* ---------------- LOAD ---------------- */
+
 
     fun loadQuiz(quizId: String, attemptId: Int) {
         viewModelScope.launch {
@@ -171,7 +175,7 @@ class QuizPlayViewModel @Inject constructor(
     }
 
     private fun resetState() {
-        currentAttemptId = -1
+        currentAttemptId = CURRENT_ATTEMPT_ID
         _currentIndex.value = 0
         _answers.value = emptyMap()
         _visitedQuestions.value = emptySet()
@@ -187,7 +191,7 @@ class QuizPlayViewModel @Inject constructor(
         _showPalette.value = false
     }
 
-    /* ---------------- TIMER LOGIC ---------------- */
+
 
     private fun startTimer(attemptId: Int) {
         timerJob?.cancel()
@@ -205,7 +209,7 @@ class QuizPlayViewModel @Inject constructor(
         }
     }
 
-    /* ---------------- QUESTIONS ---------------- */
+
 
     private fun markVisited(index: Int) {
         _visitedQuestions.value = _visitedQuestions.value + index
@@ -250,7 +254,7 @@ class QuizPlayViewModel @Inject constructor(
         }
     }
 
-    /* ---------------- PALETTE & SUBMIT EVENTS ---------------- */
+
 
     fun togglePalette() {
         _showPalette.value = !_showPalette.value
@@ -264,7 +268,7 @@ class QuizPlayViewModel @Inject constructor(
         _showSubmitDialog.value = false
     }
 
-    /* ---------------- SUBMIT ---------------- */
+
 
     fun submitQuiz(
         isTimeout: Boolean = false
@@ -306,7 +310,7 @@ class QuizPlayViewModel @Inject constructor(
         }
 
         _correctCount.value = correct
-        _score.value = correct * 10
+        _score.value = correct * QuizConfig.POINTS_PER_QUESTION
         _percentage.value =
             if (_questions.value.isEmpty()) 0
             else (correct * 100) / _questions.value.size

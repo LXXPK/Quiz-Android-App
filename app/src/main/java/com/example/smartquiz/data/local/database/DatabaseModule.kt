@@ -11,6 +11,7 @@ import com.example.smartquiz.data.local.dao.quiz.OptionDao
 import com.example.smartquiz.data.local.dao.quiz.QuestionDao
 import com.example.smartquiz.data.local.dao.quiz.QuizAttemptDao
 import com.example.smartquiz.data.local.dao.quiz.QuizDao
+import com.example.smartquiz.utils.DatabaseConstants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,7 +31,7 @@ object DatabaseModule {
         Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "smart_quiz_db"
+            DATABASE_NAME
         )
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {

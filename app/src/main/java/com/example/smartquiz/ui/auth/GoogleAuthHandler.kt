@@ -43,7 +43,7 @@ class GoogleAuthHandler(
             handleCredential(result.credential)
 
         } catch (e: Exception) {
-            onError(e.localizedMessage ?: "Login failed")
+            onError(e.localizedMessage ?: context.getString(R.string.error_login_failed))
         }
     }
 
@@ -57,7 +57,9 @@ class GoogleAuthHandler(
 
             firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
         } else {
-            onError("Invalid credential type")
+            onError(
+                context.getString(R.string.error_invalid_credential)
+            )
         }
     }
 
@@ -70,7 +72,10 @@ class GoogleAuthHandler(
                 it.user?.let(onFirebaseUser)
             }
             .addOnFailureListener {
-                onError(it.localizedMessage ?: "Firebase login failed")
+                onError(it.localizedMessage ?:
+                context.getString(
+                    R.string.error_firebase_login_failed
+                ))
             }
     }
 }

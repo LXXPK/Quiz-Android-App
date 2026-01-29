@@ -6,16 +6,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.shape.RoundedCornerShape
+import com.example.smartquiz.R
 
 @Composable
 fun QuizInstructionsCard() {
@@ -25,19 +27,26 @@ fun QuizInstructionsCard() {
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
-            verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+            verticalArrangement =
+                androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
         ) {
             Row {
-                Icon(Icons.Outlined.Info, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = null
+                )
                 Spacer(Modifier.width(8.dp))
-                Text("Instructions", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = stringResource(R.string.quiz_instructions_title),
+                    style = MaterialTheme.typography.titleMedium
+                )
             }
 
-            Text("• Each question carries equal marks.")
-            Text("• Navigate freely between questions.")
-            Text("• Timer starts immediately.")
-            Text("• Auto-submit on timeout.")
-            Text("• Answers cannot be changed after submission.")
+            Text(stringResource(R.string.quiz_instruction_equal_marks))
+            Text(stringResource(R.string.quiz_instruction_navigation))
+            Text(stringResource(R.string.quiz_instruction_timer_start))
+            Text(stringResource(R.string.quiz_instruction_auto_submit))
+            Text(stringResource(R.string.quiz_instruction_no_change))
         }
     }
 }

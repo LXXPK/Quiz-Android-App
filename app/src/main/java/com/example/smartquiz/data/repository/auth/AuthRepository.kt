@@ -3,6 +3,7 @@ package com.example.smartquiz.data.repository.auth
 import com.example.smartquiz.data.local.dao.user.UserDao
 import com.example.smartquiz.data.local.entity.user.UserEntity
 import com.example.smartquiz.data.local.session.SessionManager
+import com.example.smartquiz.utils.ErrorConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
@@ -15,16 +16,21 @@ class AuthRepository @Inject constructor(
 ) {
 
     suspend fun handleLogin(user: FirebaseUser) {
-        val entity = UserEntity(
-            userId = user.uid,
-            name = user.displayName ?: "",
-            email = user.email ?: "",
-            photoUrl = user.photoUrl?.toString()
-        )
+        try {
+            val entity = UserEntity(
+                userId = user.uid,
+                name = user.displayName ?: "",
+                email = user.email ?: "",
+                photoUrl = user.photoUrl?.toString()
+            )
 
-        userDao.insertUser(entity)
-        sessionManager.saveUid(user.uid)
+            userDao.insertUser(entity)
+            sessionManager.saveUid(user.uid)
+        } catch (e: Exception) {
+            throw RuntimeException(ErrorConstants.AUTH_PERSIST_FAILED, e)
+        }
     }
+
 
     fun getLoggedInUid(): String? = sessionManager.getUid()
 

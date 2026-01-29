@@ -24,7 +24,7 @@ fun InterestsSection(
     onExpandToggle: () -> Unit,
     onClearAll: () -> Unit,
     onSave: () -> Unit,
-    onToggleInterest: (String) -> Unit   // ✅ NEW
+    onToggleInterest: (String) -> Unit
 ) {
     Column {
 
