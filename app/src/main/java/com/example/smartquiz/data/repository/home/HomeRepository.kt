@@ -29,4 +29,8 @@ class HomeRepository @Inject constructor(
     suspend fun getActiveQuizzes(): List<QuizEntity> {
         return quizDao.getActiveQuizzes()
     }
+
+    suspend fun updateStreak(uid: String, streak: Int, lastDate: Long) {
+        userDao.updateStreak(uid, streak, lastDate)
+    }
 }
