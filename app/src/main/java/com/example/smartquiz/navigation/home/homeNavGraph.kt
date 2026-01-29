@@ -1,35 +1,40 @@
+
+
 package com.example.smartquiz.navigation.home
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.smartquiz.navigation.Route
-import com.example.smartquiz.ui.history.HistoryScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartquiz.navigation.Routes
 import com.example.smartquiz.ui.home.HomeScreen
+import com.example.smartquiz.viewmodel.auth.AuthViewModel
 
-/**
- * Home + History navigation
- * Owned by Home/History team member
- */
 fun NavGraphBuilder.homeNavGraph(
-    navController: NavController
+    navController: NavHostController
 ) {
+    composable(Routes.HOME) {
 
-    composable(Route.Home.route) {
+        val authViewModel: AuthViewModel = hiltViewModel()
+
         HomeScreen(
-            onQuizClick = { quizId ->
-                navController.navigate(Route.QuizPlay.create(quizId))
+            handleQuizCardClick = { quiz ->
+                val uid = authViewModel.getUid() ?: return@HomeScreen
+                navController.navigate(
+                    Routes.quizDetails(quiz.quizId)
+                )
             },
-            onProfileClick = {
-                navController.navigate(Route.Profile.route)
+            onCategoryViewAll = { category ->
+                navController.navigate(Routes.quizList(category))
+            },
+            onSuggestedViewAll = {
+                navController.navigate(
+                    Routes.SUGGESTED_QUIZZES
+                )
             },
             onHistoryClick = {
-                navController.navigate(Route.History.route)
+                navController.navigate(Routes.HISTORY)
             }
         )
-    }
-
-    composable(Route.History.route) {
-        HistoryScreen()
     }
 }

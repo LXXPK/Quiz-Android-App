@@ -1,26 +1,28 @@
 package com.example.smartquiz.navigation.auth
 
-import androidx.navigation.NavController
+import androidx.compose.material3.SnackbarHostState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.smartquiz.navigation.Route
-import com.example.smartquiz.ui.auth.AuthScreen
+import com.example.smartquiz.navigation.Routes
+import com.example.smartquiz.ui.auth.LoginScreen
+import com.example.smartquiz.viewmodel.auth.AuthViewModel
 
-/**
- * Auth feature navigation
- * Owned by Auth team member
- */
 fun NavGraphBuilder.authNavGraph(
-    navController: NavController
+    navController: NavHostController,
+    snackbarHostState: SnackbarHostState
 ) {
+    composable(Routes.AUTH) {
 
-    composable(Route.Auth.route) {
-        AuthScreen(
+        val authViewModel: AuthViewModel = hiltViewModel()
+
+        LoginScreen(
+            authViewModel = authViewModel,
+            snackbarHostState = snackbarHostState,
             onLoginSuccess = {
-                navController.navigate(Route.Home.route) {
-                    popUpTo(Route.Auth.route) {
-                        inclusive = true
-                    }
+                navController.navigate(Routes.HOME) {
+                    popUpTo(Routes.AUTH) { inclusive = true }
                 }
             }
         )

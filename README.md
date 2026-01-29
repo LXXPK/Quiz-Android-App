@@ -109,7 +109,7 @@ com.example.smartquiz
 ├── utils  
 ├── theme  
 ├── MainActivity.kt    
-└── QuizApplication.kt
+└── QuizApplication.kt 
 
 
 ---

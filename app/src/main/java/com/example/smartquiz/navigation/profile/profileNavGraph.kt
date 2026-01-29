@@ -1,32 +1,26 @@
 package com.example.smartquiz.navigation.profile
 
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.smartquiz.navigation.Route
-import com.example.smartquiz.ui.profile.EditInterestsScreen
+import com.example.smartquiz.navigation.Routes
 import com.example.smartquiz.ui.profile.ProfileScreen
+import com.example.smartquiz.viewmodel.auth.AuthViewModel
 
-/**
- * Profile feature navigation
- * Owned by Profile team member
- */
 fun NavGraphBuilder.profileNavGraph(
-    navController: NavController
+    navController: NavHostController
 ) {
+    composable(Routes.PROFILE) {
 
-    composable(Route.Profile.route) {
+        val authViewModel: AuthViewModel = hiltViewModel()
+
         ProfileScreen(
-            onEditInterests = {
-                navController.navigate(Route.EditInterests.route)
-            }
-        )
-    }
-
-    composable(Route.EditInterests.route) {
-        EditInterestsScreen(
-            onBack = {
-                navController.popBackStack()
+            onLogout = {
+                authViewModel.logout()
+                navController.navigate(Routes.AUTH) {
+                    popUpTo(0) { inclusive = true }
+                }
             }
         )
     }
