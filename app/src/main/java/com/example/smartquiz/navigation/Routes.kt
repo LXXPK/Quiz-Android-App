@@ -1,24 +1,29 @@
-sealed class Route(val route: String) {
+package com.example.smartquiz.navigation
 
-    // Auth
-    object Auth : Route("auth")
+object Routes {
 
-    // Home
-    object Home : Route("home")
+    const val AUTH = "auth"
+    const val HOME = "home"
+    const val HISTORY = "history"
+    const val PROFILE = "profile"
 
-    // Quiz
-    object QuizList : Route("quiz_list")
-    object QuizPlay : Route("quiz_play/{quizId}") {
-        fun create(quizId: String) = "quiz_play/$quizId"
-    }
-    object QuizResult : Route("quiz_result/{attemptId}") {
-        fun create(attemptId: Int) = "quiz_result/$attemptId"
-    }
+    const val QUIZ_LIST = "quiz_list"
+    const val QUIZ_DETAILS = "quiz_details"
 
-    // Profile
-    object Profile : Route("profile")
-    object EditInterests : Route("profile/edit_interests")
+    const val SUGGESTED_QUIZZES = "suggested_quizzes"
 
-    // History
-    object History : Route("history")
+
+    const val QUIZ_PLAY = "quiz_play/{quizId}/{attemptId}"
+    const val QUIZ_RESULT = "quiz_result"
+
+    fun suggestedQuizzes() = SUGGESTED_QUIZZES
+
+    fun quizList(category: String) =
+        "$QUIZ_LIST/$category"
+
+    fun quizDetails(quizId: String) =
+        "$QUIZ_DETAILS/$quizId"
+
+    fun quizPlay(quizId: String, attemptId: Int) =
+        "quiz_play/$quizId/$attemptId"
 }
