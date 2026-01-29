@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartquiz.data.local.entity.quiz.OptionEntity
 import com.example.smartquiz.data.local.entity.quiz.QuestionEntity
+import com.example.smartquiz.data.local.session.SessionManager
 import com.example.smartquiz.data.repository.quiz.QuizRepository
 import com.example.smartquiz.ui.common.UiState
 import com.example.smartquiz.utils.QuizConfig
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizPlayViewModel @Inject constructor(
-    private val repository: QuizRepository
+    private val repository: QuizRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
 
@@ -51,6 +53,7 @@ class QuizPlayViewModel @Inject constructor(
 
     private val _percentage = MutableStateFlow(0)
     val percentage = _percentage.asStateFlow()
+
 
 
 
@@ -146,6 +149,20 @@ class QuizPlayViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
+
+    val timeTakenText: StateFlow<String> =
+        remainingSeconds
+            .map { remaining ->
+                val taken = totalTimeSeconds - remaining
+                val minutes = taken / 60
+                val seconds = taken % 60
+                "%02d:%02d".format(minutes, seconds)
+            }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5_000),
+                "00:00"
+            )
 
 
 
@@ -293,9 +310,12 @@ class QuizPlayViewModel @Inject constructor(
                 timeTakenSeconds = timeTakenSeconds,
                 answers = _answers.value
             )
+            repository.updateUserStreak(sessionManager.getUid()!!)
+
         }
 
         _isQuizFinished.value = true
+
     }
 
     private fun calculateScore() {

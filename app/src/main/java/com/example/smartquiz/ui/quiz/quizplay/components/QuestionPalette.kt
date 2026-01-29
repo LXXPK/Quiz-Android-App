@@ -1,3 +1,4 @@
+
 package com.example.smartquiz.ui.quiz.quizplay.components
 
 import androidx.compose.foundation.background
@@ -30,10 +31,12 @@ fun QuestionPalette(
     val answers by viewModel.answers.collectAsState()
     val visited by viewModel.visitedQuestions.collectAsState()
 
+    val colors = MaterialTheme.colorScheme
+
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        tonalElevation = 8.dp,
-        shadowElevation = 8.dp
+        tonalElevation = 6.dp,
+        shadowElevation = 6.dp
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -49,17 +52,32 @@ fun QuestionPalette(
                     style = MaterialTheme.typography.titleMedium
                 )
 
-                IconButton(onClick = viewModel::togglePalette) {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowUp,
-                        contentDescription = stringResource(
-                            R.string.action_close
-                        )
-                    )
-                }
             }
 
             Spacer(Modifier.height(12.dp))
+
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                PaletteLegendItem(
+                    color = colors.primaryContainer,
+                    label = "Answered"
+                )
+
+                PaletteLegendItem(
+                    color = colors.errorContainer,
+                    label = "Visited"
+                )
+
+                PaletteLegendItem(
+                    color = colors.surfaceVariant,
+                    label = "Not Visited"
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(5),
@@ -74,9 +92,15 @@ fun QuestionPalette(
                         visited.contains(index)
 
                     val backgroundColor = when {
-                        isAnswered -> Color(0xFF2E7D32)
-                        isVisited -> Color(0xFFD32F2F)
-                        else -> Color.LightGray
+                        isAnswered -> colors.primaryContainer
+                        isVisited -> colors.errorContainer
+                        else -> colors.surfaceVariant
+                    }
+
+                    val textColor = when {
+                        isAnswered -> colors.onPrimaryContainer
+                        isVisited -> colors.onErrorContainer
+                        else -> colors.onSurfaceVariant
                     }
 
                     Box(
@@ -92,12 +116,34 @@ fun QuestionPalette(
                     ) {
                         Text(
                             text = "${index + 1}",
-                            color = Color.White,
+                            color = textColor,
                             style = MaterialTheme.typography.labelLarge
                         )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun PaletteLegendItem(
+    color: Color,
+    label: String
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(12.dp)
+                .clip(CircleShape)
+                .background(color)
+        )
+        Spacer(Modifier.width(6.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium
+        )
     }
 }

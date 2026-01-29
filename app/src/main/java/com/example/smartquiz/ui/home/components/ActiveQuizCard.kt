@@ -26,6 +26,7 @@ private enum class RelativeTimeType {
     EXPIRATION
 }
 
+
 @Composable
 fun ActiveQuizCard(
     handleQuizCardClick: (QuizEntity) -> Unit,
@@ -35,7 +36,6 @@ fun ActiveQuizCard(
     progress: Float,
     modifier: Modifier = Modifier
 ) {
-    /* ---------- CLOCK ---------- */
     var now by remember { mutableStateOf(System.currentTimeMillis()) }
 
     LaunchedEffect(Unit) {
@@ -48,102 +48,115 @@ fun ActiveQuizCard(
     val isLive = now in activeTime.time until expirationTime.time
     val isExpired = now >= expirationTime.time
 
-    /* ---------- CARD COLOR (IMPORTANT FIX) ---------- */
     val cardColor = when {
-        isExpired ->
-            MaterialTheme.colorScheme.surfaceVariant
-
-        isLive ->
-            MaterialTheme.colorScheme.surface
-
-        else ->
-            MaterialTheme.colorScheme.surface
+        isExpired -> MaterialTheme.colorScheme.surfaceVariant
+        else -> MaterialTheme.colorScheme.surface
     }
 
     Card(
         onClick = { if (isLive) handleQuizCardClick(quiz) },
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = cardColor
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = cardColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(dimensionResource(id = R.dimen.medium_padding))
+                .padding(16.dp)
+                .alpha(if (isExpired) 0.7f else 1f)
         ) {
 
-            /* ---------- HEADER ---------- */
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
+
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = quiz.title,
                         style = MaterialTheme.typography.titleMedium
                     )
+                    Spacer(Modifier.height(2.dp))
                     Text(
                         text = quiz.category,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
-                Column(horizontalAlignment = Alignment.End) {
-                    when {
-                        isExpired -> {
-                            Text(
-                                text = stringResource(R.string.expired),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.error
-                            )
-                        }
-
-                        isLive -> {
-                            Text(
-                                text = stringResource(R.string.quiz_is_live),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            RelativeTimeText(
-                                time = expirationTime,
-                                type = RelativeTimeType.EXPIRATION,
-                                now = now
-                            )
-                        }
-
-                        else -> {
-                            RelativeTimeText(
-                                time = activeTime,
-                                type = RelativeTimeType.ACTIVATION,
-                                now = now
-                            )
-                        }
-                    }
-                }
+                StatusBadge(
+                    isLive = isLive,
+                    isExpired = isExpired,
+                    activeTime = activeTime,
+                    expirationTime = expirationTime,
+                    now = now
+                )
             }
-
-            /* ---------- FIXED HEIGHT PROGRESS AREA ---------- */
-            Spacer(modifier = Modifier.height(8.dp))
 
             if (isLive && progress > 0f) {
+                Spacer(Modifier.height(12.dp))
                 LinearProgressIndicator(
                     progress = { progress },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(6.dp),
+                    trackColor =
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
                 )
-            } else {
-                Spacer(modifier = Modifier.height(4.dp))
             }
 
-            /* ---------- FIXED FOOTER SPACE ---------- */
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
 
+
+@Composable
+private fun StatusBadge(
+    isLive: Boolean,
+    isExpired: Boolean,
+    activeTime: Date,
+    expirationTime: Date,
+    now: Long
+) {
+    Column(horizontalAlignment = Alignment.End) {
+
+        when {
+            isExpired -> {
+                Text(
+                    text = stringResource(R.string.expired),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
+            isLive -> {
+                Text(
+                    text = stringResource(R.string.quiz_is_live),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.height(2.dp))
+                RelativeTimeText(
+                    time = expirationTime,
+                    type = RelativeTimeType.EXPIRATION,
+                    now = now
+                )
+            }
+
+            else -> {
+                RelativeTimeText(
+                    time = activeTime,
+                    type = RelativeTimeType.ACTIVATION,
+                    now = now
+                )
+            }
+        }
+    }
+}
 
 @Composable
 private fun RelativeTimeText(
@@ -181,7 +194,10 @@ private fun RelativeTimeText(
             pluralStringResource(minutesPlural, minutes.toInt(), minutes.toInt())
     }
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(top = 2.dp)
+    ) {
         Icon(
             imageVector =
                 if (type == RelativeTimeType.ACTIVATION)
@@ -189,10 +205,10 @@ private fun RelativeTimeText(
                 else
                     Icons.Outlined.Schedule,
             contentDescription = null,
-            modifier = Modifier.size(16.dp),
+            modifier = Modifier.size(14.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Spacer(modifier = Modifier.width(6.dp))
+        Spacer(Modifier.width(4.dp))
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall

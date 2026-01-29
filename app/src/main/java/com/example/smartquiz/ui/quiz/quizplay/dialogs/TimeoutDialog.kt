@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 @Composable
 fun TimeoutDialog() {
     AlertDialog(
-        onDismissRequest = {}, // ⛔ cannot dismiss
+        onDismissRequest = {},
         title = {
             Text(
                 text = "Time’s Up!",

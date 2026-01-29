@@ -12,11 +12,8 @@ import javax.inject.Singleton
 class SessionManager @Inject constructor(
     @ApplicationContext context: Context
 ) {
-
     private val prefs =
         context.getSharedPreferences(PREFS_NAME , Context.MODE_PRIVATE)
-
-
 
     fun saveUid(uid: String) {
         prefs.edit().putString(KEY_UID, uid).apply()

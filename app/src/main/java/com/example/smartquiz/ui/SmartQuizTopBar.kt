@@ -1,7 +1,10 @@
+
+
 package com.example.smartquiz.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.*
@@ -19,33 +22,50 @@ fun SmartQuizTopBar(
 
     var showMenu by remember { mutableStateOf(false) }
 
+    val isQuizPlayScreen = currentRoute?.startsWith(Routes.QUIZ_PLAY) == true
+
     val showProfileIcon = when {
         currentRoute == Routes.PROFILE -> false
-        currentRoute?.startsWith(Routes.QUIZ_PLAY) == true -> false
+        isQuizPlayScreen -> false
         else -> true
     }
 
     val showOverflowMenu = currentRoute == Routes.PROFILE
 
+
+    val showBackButton =
+        currentRoute != Routes.HOME &&
+                currentRoute != Routes.AUTH &&
+                !isQuizPlayScreen &&currentRoute != Routes.QUIZ_RESULT
+
     TopAppBar(
         title = {
             Text(
                 text = when {
-                    currentRoute?.startsWith(Routes.QUIZ_PLAY) == true -> "Quiz"
-                    currentRoute == Routes.HISTORY -> "History"
+                    isQuizPlayScreen -> "Quiz"
+                    currentRoute == Routes.HISTORY -> "Score Card"
                     currentRoute == Routes.PROFILE -> "Profile"
                     else -> "SmartQuiz"
                 },
                 style = MaterialTheme.typography.titleLarge
             )
         },
+
+        navigationIcon = {
+            if (showBackButton && navController.previousBackStackEntry != null) {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Outlined.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            }
+        },
+
         actions = {
 
-            /* ---------- PROFILE ICON ---------- */
             if (showProfileIcon) {
-                IconButton(
-                    onClick = { navController.navigate(Routes.PROFILE) }
-                ) {
+                IconButton(onClick = { navController.navigate(Routes.PROFILE) }) {
                     Icon(
                         imageVector = Icons.Outlined.AccountCircle,
                         contentDescription = "Profile"
@@ -53,7 +73,6 @@ fun SmartQuizTopBar(
                 }
             }
 
-            /* ---------- OVERFLOW MENU ---------- */
             if (showOverflowMenu) {
                 IconButton(onClick = { showMenu = true }) {
                     Icon(
@@ -85,3 +104,5 @@ fun SmartQuizTopBar(
         }
     )
 }
+
+

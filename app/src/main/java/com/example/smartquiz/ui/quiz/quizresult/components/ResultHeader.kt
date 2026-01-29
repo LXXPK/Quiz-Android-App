@@ -7,7 +7,7 @@ import androidx.compose.ui.text.font.FontWeight
 @Composable
 fun ResultHeader() {
     Text(
-        text = "🎉 Quiz Completed!",
+        text = "Quiz Completed!",
         style = MaterialTheme.typography.headlineSmall,
         fontWeight = FontWeight.Bold
     )

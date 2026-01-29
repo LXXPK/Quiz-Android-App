@@ -239,7 +239,7 @@ private fun EmptyHistoryState() {
     }
 }
 
-/* ---------- UTIL ---------- */
+
 
 private fun formatDate(time: Long): String {
     val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())

@@ -1,3 +1,4 @@
+
 package com.example.smartquiz.ui.quiz.quizplay
 
 import androidx.compose.foundation.layout.*
@@ -13,7 +14,6 @@ fun QuizPlayContent(
     viewModel: QuizPlayViewModel
 ) {
     val questions by viewModel.questions.collectAsState()
-    val currentIndex by viewModel.currentIndex.collectAsState()
     val showPalette by viewModel.showPalette.collectAsState()
     val showSubmitDialog by viewModel.showSubmitDialog.collectAsState()
     val showTimeoutDialog by viewModel.showTimeoutDialog.collectAsState()
@@ -28,6 +28,12 @@ fun QuizPlayContent(
 
         QuizTopSection(viewModel)
 
+
+        if (showPalette) {
+            Spacer(Modifier.height(8.dp))
+            QuestionPalette(viewModel)
+        }
+
         Spacer(Modifier.height(16.dp))
 
         QuestionSection(viewModel)
@@ -39,10 +45,6 @@ fun QuizPlayContent(
         Spacer(Modifier.height(16.dp))
 
         SubmitButton(onClick = viewModel::openSubmitDialog)
-    }
-
-    if (showPalette) {
-        QuestionPalette(viewModel)
     }
 
     if (showSubmitDialog) {

@@ -2,11 +2,13 @@ package com.example.smartquiz.data.repository.quiz
 
 import androidx.room.Transaction
 import com.example.smartquiz.data.local.dao.quiz.*
+import com.example.smartquiz.data.local.dao.user.UserDao
 import com.example.smartquiz.data.local.entity.quiz.*
 import javax.inject.Inject
 
 class QuizRepository @Inject constructor(
     private val quizDao: QuizDao,
+    private  val userDao: UserDao,
     private val questionDao: QuestionDao,
     private val optionDao: OptionDao,
     private val quizAttemptDao: QuizAttemptDao,
@@ -24,6 +26,24 @@ class QuizRepository @Inject constructor(
 
     suspend fun getCategories(): List<String> =
         quizDao.getCategories()
+
+    suspend fun updateUserStreak(userId: String) {
+        val now = System.currentTimeMillis()
+
+        val startOfToday = java.time.LocalDate
+            .now()
+            .atStartOfDay(java.time.ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
+
+        userDao.updateUserStreak(
+            userId = userId,
+            startOfToday = startOfToday,
+            now = now
+        )
+    }
+
+
 
     suspend fun createQuizAttempt(
         quizId: String,

@@ -11,8 +11,69 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.smartquiz.R
+
+//@Composable
+//fun HeaderSection(
+//    userName: String,
+//    streak: Int,
+//    onHistoryClick: () -> Unit,
+//) {
+//    Row(
+//        modifier = Modifier.fillMaxWidth(),
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//
+//        /* ---------- LEFT (WELCOME) ---------- */
+//        Column(modifier = Modifier.weight(1f)) {
+//            Text(
+//                text = "Welcome 👋",
+//                style = MaterialTheme.typography.bodySmall
+//            )
+//            Text(
+//                text = userName,
+//                style = MaterialTheme.typography.titleLarge
+//            )
+//        }
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically,
+//            modifier = Modifier.padding(end = 12.dp)
+//        ) {
+//            Icon(
+//                imageVector = Icons.Outlined.LocalFireDepartment,
+//                contentDescription = "Streak",
+//                tint = MaterialTheme.colorScheme.primary
+//            )
+//            Spacer(Modifier.width(4.dp))
+//            Text(
+//                text = streak.toString(),
+//                style = MaterialTheme.typography.titleMedium,
+//                fontWeight = FontWeight.Bold
+//            )
+//        }
+//
+//        /* ---------- RIGHT (ICONS) ---------- */
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically,
+//            horizontalArrangement = Arrangement.spacedBy(12.dp)
+//        ) {
+//
+//            Icon(
+//                imageVector = Icons.Outlined.History,
+//                contentDescription = "History",
+//                modifier = Modifier
+//                    .size(26.dp)
+//                    .clickable { onHistoryClick() }
+//            )
+//
+//
+//        }
+//    }
+//}
+
 
 @Composable
 fun HeaderSection(
@@ -36,38 +97,42 @@ fun HeaderSection(
                 style = MaterialTheme.typography.titleLarge
             )
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(end = 12.dp)
+
+        /* ---------- STREAK (CUSTOM FIRE ICON) ---------- */
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            color = MaterialTheme.colorScheme.primaryContainer,
+            modifier = Modifier.padding(end = 8.dp)
         ) {
-            Icon(
-                imageVector = Icons.Outlined.LocalFireDepartment,
-                contentDescription = "Streak",
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Spacer(Modifier.width(4.dp))
-            Text(
-                text = streak.toString(),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.fire),
+                    contentDescription = "Current streak",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(Modifier.width(4.dp))
+                Text(
+                    text = streak.toString(),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
 
-        /* ---------- RIGHT (ICONS) ---------- */
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        /* ---------- HISTORY BUTTON ---------- */
+        IconButton(
+            onClick = onHistoryClick,
+            modifier = Modifier.size(40.dp)
         ) {
-
             Icon(
                 imageVector = Icons.Outlined.History,
-                contentDescription = "History",
-                modifier = Modifier
-                    .size(26.dp)
-                    .clickable { onHistoryClick() }
+                contentDescription = "View history",
+                tint = MaterialTheme.colorScheme.primary
             )
-
-
         }
     }
 }

@@ -1,4 +1,3 @@
-
 package com.example.smartquiz.ui.quiz.quizplay.components
 
 import androidx.compose.foundation.layout.*
@@ -21,14 +20,9 @@ fun QuizTopSection(
     val questions by viewModel.questions.collectAsState()
     val remainingTime by viewModel.remainingTimeText.collectAsState()
     val progress by viewModel.timerProgress.collectAsState()
-    val attempted by viewModel.attemptedCount.collectAsState()
-    val unattempted by viewModel.unattemptedCount.collectAsState()
-
-    var showStats by remember { mutableStateOf(false) }
+    val showPalette by viewModel.showPalette.collectAsState()
 
     Column {
-
-
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -55,22 +49,20 @@ fun QuizTopSection(
                     style = MaterialTheme.typography.labelLarge
                 )
 
-                IconButton(onClick = { showStats = !showStats }) {
+                IconButton(onClick = viewModel::togglePalette) {
                     Icon(
                         imageVector =
-                            if (showStats)
+                            if (showPalette)
                                 Icons.Default.KeyboardArrowUp
                             else
                                 Icons.Default.KeyboardArrowDown,
-                        contentDescription = "Show stats"
+                        contentDescription = "Question Palette"
                     )
                 }
             }
         }
 
         Spacer(Modifier.height(6.dp))
-
-
 
         LinearProgressIndicator(
             progress = { progress },
@@ -80,28 +72,5 @@ fun QuizTopSection(
             color = MaterialTheme.colorScheme.primary,
             trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
         )
-
-
-
-        if (showStats) {
-            Spacer(Modifier.height(10.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 4.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                AssistChip(
-                    onClick = {},
-                    label = { Text("Attempted: $attempted") }
-                )
-
-                AssistChip(
-                    onClick = {},
-                    label = { Text("Unattempted: $unattempted") }
-                )
-            }
-        }
     }
 }

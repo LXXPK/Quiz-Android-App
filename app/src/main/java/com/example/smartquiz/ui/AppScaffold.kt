@@ -28,7 +28,6 @@ fun AppScaffold() {
                     currentRoute = currentRoute,
                     navController = navController,
                     onLogoutClick = {
-                        // 🔥 Logout logic
                         navController.navigate(Routes.AUTH) {
                             popUpTo(0) { inclusive = true }
                         }

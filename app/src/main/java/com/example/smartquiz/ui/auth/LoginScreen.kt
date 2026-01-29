@@ -26,7 +26,7 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var isLoginMode by remember { mutableStateOf(true) }
 
-    /* ---------- SIDE EFFECTS ---------- */
+
 
     LaunchedEffect(authViewModel.errorMessage) {
         authViewModel.errorMessage?.let {
@@ -95,7 +95,7 @@ fun LoginScreen(
             SocialLoginSection(
                 onGoogleSignIn = {
                     keyboardController?.hide()
-                    scope.launch { authHandler.signIn() }
+                            scope.launch { authHandler.signIn() }
                 }
             )
         }

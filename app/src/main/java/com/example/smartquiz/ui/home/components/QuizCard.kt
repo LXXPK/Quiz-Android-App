@@ -1,34 +1,53 @@
+
 package com.example.smartquiz.ui.home.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
-import com.example.smartquiz.ui.theme.SmartQuizTheme
 
 @Composable
-fun QuizCard(handleQuizCardClick: (QuizEntity) -> Unit, quiz: QuizEntity, modifier: Modifier = Modifier) {
+fun QuizCard(
+    handleQuizCardClick: (QuizEntity) -> Unit,
+    quiz: QuizEntity,
+    containerColor: Color,
+    modifier: Modifier = Modifier
+) {
     Card(
         onClick = { handleQuizCardClick(quiz) },
         modifier = modifier
+            .fillMaxWidth()
+           ,
+        colors = CardDefaults.cardColors(
+            containerColor = containerColor
+        )
     ) {
         Column(
-            modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_padding))
+            modifier = Modifier.padding(
+                horizontal = dimensionResource(id = R.dimen.medium_padding),
+                vertical = dimensionResource(id = R.dimen.large_padding)
+            )
         ) {
+
             Text(
                 text = quiz.title,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = quiz.category,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

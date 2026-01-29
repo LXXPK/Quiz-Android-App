@@ -1,25 +1,25 @@
 
 package com.example.smartquiz.ui.home.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
-import com.example.smartquiz.ui.theme.SmartQuizTheme
 
 @Composable
 fun HorizontalTitledQuizList(
@@ -31,8 +31,25 @@ fun HorizontalTitledQuizList(
     limit: Int = 0,
 ) {
     val items = if (limit > 0) quizzes.take(limit) else quizzes
+    val listState = rememberLazyListState()
 
-    Column(modifier = modifier) {
+    val cardColors = listOf(
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+        MaterialTheme.colorScheme.secondary.copy(alpha = 0.08f),
+        MaterialTheme.colorScheme.tertiary.copy(alpha = 0.08f),
+        MaterialTheme.colorScheme.surfaceVariant
+    )
+
+    val currentIndex by remember {
+        derivedStateOf { listState.firstVisibleItemIndex }
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -42,19 +59,60 @@ fun HorizontalTitledQuizList(
                 text = title,
                 style = MaterialTheme.typography.titleLarge
             )
-            TextButton(onClick = onViewAllClick) {
+
+            TextButton(
+                onClick = onViewAllClick,
+                modifier = Modifier.heightIn(min = 48.dp)
+            ) {
                 Text(text = stringResource(id = R.string.view_all))
             }
         }
+
+        Spacer(Modifier.height(8.dp))
+
+
         LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.medium_padding))
+            state = listState,
+            horizontalArrangement = Arrangement.spacedBy(
+                dimensionResource(id = R.dimen.medium_padding)
+            )
         ) {
-            items(items) { quiz ->
+            itemsIndexed(items) { index, quiz ->
                 QuizCard(
                     quiz = quiz,
-                    handleQuizCardClick = onQuizCardClick
+                    handleQuizCardClick = onQuizCardClick,
+                    containerColor = cardColors[index % cardColors.size]
                 )
+            }
+
+        }
+
+
+        if (items.size > 1) {
+            Spacer(Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                items.forEachIndexed { index, _ ->
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 4.dp)
+                            .size(
+                                if (index == currentIndex) 8.dp else 6.dp
+                            )
+                            .background(
+                                color =
+                                    if (index == currentIndex)
+                                        MaterialTheme.colorScheme.primary
+                                    else
+                                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                                shape = CircleShape
+                            )
+                    )
+                }
             }
         }
     }
