@@ -8,5 +8,7 @@ data class UserEntity(
     @PrimaryKey val userId: String,
     val name: String,
     val email: String,
-    val photoUrl: String?
+    val photoUrl: String?,
+    val currentStreak: Int = 0,
+    val lastActivityDate: Long = 0
 )
