@@ -112,7 +112,7 @@ fun InterestsSection(
                                     disabled =
                                         interest !in selected &&
                                                 selected.size >= maxSelection,
-                                    onClick = { onToggleInterest(interest) } // ✅
+                                    onClick = { onToggleInterest(interest) }
                                 )
                             }
                         }

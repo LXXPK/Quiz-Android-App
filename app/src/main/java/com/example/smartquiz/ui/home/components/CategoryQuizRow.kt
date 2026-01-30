@@ -48,8 +48,6 @@ fun CategoryQuizRow(
             .fillMaxWidth()
 
     ) {
-
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -67,10 +65,7 @@ fun CategoryQuizRow(
                 Text("View All")
             }
         }
-
         Spacer(modifier = Modifier.height(8.dp))
-
-
         LazyRow(
             state = listState,
             horizontalArrangement = Arrangement.spacedBy(16.dp)

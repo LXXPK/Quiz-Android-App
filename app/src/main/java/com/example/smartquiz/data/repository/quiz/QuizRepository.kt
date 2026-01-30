@@ -35,10 +35,17 @@ class QuizRepository @Inject constructor(
             .atStartOfDay(java.time.ZoneId.systemDefault())
             .toInstant()
             .toEpochMilli()
+        val startOfYesterday = java.time.LocalDate
+            .now()
+            .minusDays(1)
+            .atStartOfDay(java.time.ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
 
         userDao.updateUserStreak(
             userId = userId,
             startOfToday = startOfToday,
+            startOfYesterday = startOfYesterday,
             now = now
         )
     }
