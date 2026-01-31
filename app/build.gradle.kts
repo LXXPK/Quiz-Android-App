@@ -104,4 +104,7 @@ dependencies {
 
     // Benchmark
     implementation(libs.androidx.benchmark.common)
+
+    // Charts
+    implementation(libs.aay.chart)
 }
