@@ -20,7 +20,7 @@ fun QuizPlayScreen(
 
     BackHandler(enabled = true) {}
 
-    LaunchedEffect(quizId) {
+    LaunchedEffect(Unit) {
         viewModel.loadQuiz(quizId, attemptId)
     }
 

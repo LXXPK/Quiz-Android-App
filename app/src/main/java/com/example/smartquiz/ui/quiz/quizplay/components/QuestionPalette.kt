@@ -80,6 +80,7 @@ fun QuestionPalette(
             Spacer(Modifier.height(16.dp))
 
             LazyVerticalGrid(
+                modifier = Modifier.height(70.dp),
                 columns = GridCells.Fixed(5),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)

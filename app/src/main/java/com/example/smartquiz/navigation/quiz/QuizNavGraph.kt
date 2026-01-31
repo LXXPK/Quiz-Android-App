@@ -83,7 +83,6 @@ fun NavGraphBuilder.quizNavGraph(
             onFinish = {
                 navController.navigate(Routes.QUIZ_RESULT)
 
-
             }
         )
     }

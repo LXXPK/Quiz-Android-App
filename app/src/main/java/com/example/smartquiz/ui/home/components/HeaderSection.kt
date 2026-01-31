@@ -16,63 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 
-//@Composable
-//fun HeaderSection(
-//    userName: String,
-//    streak: Int,
-//    onHistoryClick: () -> Unit,
-//) {
-//    Row(
-//        modifier = Modifier.fillMaxWidth(),
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//
-//        /* ---------- LEFT (WELCOME) ---------- */
-//        Column(modifier = Modifier.weight(1f)) {
-//            Text(
-//                text = "Welcome 👋",
-//                style = MaterialTheme.typography.bodySmall
-//            )
-//            Text(
-//                text = userName,
-//                style = MaterialTheme.typography.titleLarge
-//            )
-//        }
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//            modifier = Modifier.padding(end = 12.dp)
-//        ) {
-//            Icon(
-//                imageVector = Icons.Outlined.LocalFireDepartment,
-//                contentDescription = "Streak",
-//                tint = MaterialTheme.colorScheme.primary
-//            )
-//            Spacer(Modifier.width(4.dp))
-//            Text(
-//                text = streak.toString(),
-//                style = MaterialTheme.typography.titleMedium,
-//                fontWeight = FontWeight.Bold
-//            )
-//        }
-//
-//        /* ---------- RIGHT (ICONS) ---------- */
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//            horizontalArrangement = Arrangement.spacedBy(12.dp)
-//        ) {
-//
-//            Icon(
-//                imageVector = Icons.Outlined.History,
-//                contentDescription = "History",
-//                modifier = Modifier
-//                    .size(26.dp)
-//                    .clickable { onHistoryClick() }
-//            )
-//
-//
-//        }
-//    }
-//}
 
 
 @Composable
@@ -86,7 +29,7 @@ fun HeaderSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        /* ---------- LEFT (WELCOME) ---------- */
+
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = "Welcome 👋",
@@ -98,7 +41,6 @@ fun HeaderSection(
             )
         }
 
-        /* ---------- STREAK (CUSTOM FIRE ICON) ---------- */
         Surface(
             shape = MaterialTheme.shapes.large,
             color = MaterialTheme.colorScheme.primaryContainer,
@@ -123,7 +65,7 @@ fun HeaderSection(
             }
         }
 
-        /* ---------- HISTORY BUTTON ---------- */
+
         IconButton(
             onClick = onHistoryClick,
             modifier = Modifier.size(40.dp)

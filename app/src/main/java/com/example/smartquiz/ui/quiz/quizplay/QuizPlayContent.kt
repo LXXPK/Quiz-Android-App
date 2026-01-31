@@ -2,6 +2,8 @@
 package com.example.smartquiz.ui.quiz.quizplay
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,12 +25,12 @@ fun QuizPlayContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp)
+
+
     ) {
-
         QuizTopSection(viewModel)
-
-
         if (showPalette) {
             Spacer(Modifier.height(8.dp))
             QuestionPalette(viewModel)

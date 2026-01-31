@@ -23,7 +23,7 @@ fun QuizResultScreen(
     val percentage by viewModel.percentage.collectAsState()
     val remainingTime by viewModel.remainingTimeText.collectAsState()
 
-    // ✅ NEW: time taken
+
     val timeTaken by viewModel.timeTakenText.collectAsState()
 
     val incorrect = attempted - correct
@@ -69,7 +69,7 @@ fun QuizResultScreen(
 
         Spacer(Modifier.height(12.dp))
 
-        // ✅ NEW: Time taken info
+
         TimeInfoRow(
             label = "Time Taken",
             value = timeTaken

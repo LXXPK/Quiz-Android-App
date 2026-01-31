@@ -1,5 +1,8 @@
 package com.example.smartquiz.ui.quiz.quizplay.components
 
+
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -12,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
 
+
 @Composable
 fun QuizTopSection(
     viewModel: QuizPlayViewModel
@@ -21,6 +25,27 @@ fun QuizTopSection(
     val remainingTime by viewModel.remainingTimeText.collectAsState()
     val progress by viewModel.timerProgress.collectAsState()
     val showPalette by viewModel.showPalette.collectAsState()
+
+
+    val timerState by viewModel.timerColorState.collectAsState()
+    val isBlinking by viewModel.isBlinking.collectAsState()
+
+    val timerColor = when (timerState) {
+        QuizPlayViewModel.TimerColorState.NORMAL ->
+            MaterialTheme.colorScheme.primary
+
+        QuizPlayViewModel.TimerColorState.WARNING ->
+            MaterialTheme.colorScheme.tertiary
+
+        QuizPlayViewModel.TimerColorState.DANGER ->
+            MaterialTheme.colorScheme.error
+    }
+
+    val blinkAlpha by animateFloatAsState(
+        targetValue = if (isBlinking) 0.4f else 1f,
+        animationSpec = tween(durationMillis = 600),
+        label = "blink"
+    )
 
     Column {
 
@@ -39,14 +64,16 @@ fun QuizTopSection(
 
                 Icon(
                     imageVector = Icons.Outlined.Timer,
-                    contentDescription = "Timer"
+                    contentDescription = "Timer",
+                    tint = timerColor.copy(alpha = blinkAlpha)
                 )
 
                 Spacer(Modifier.width(6.dp))
 
                 Text(
                     text = remainingTime,
-                    style = MaterialTheme.typography.labelLarge
+                    style = MaterialTheme.typography.labelLarge,
+                    color = timerColor.copy(alpha = blinkAlpha)
                 )
 
                 IconButton(onClick = viewModel::togglePalette) {
@@ -69,8 +96,8 @@ fun QuizTopSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(6.dp),
-            color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+            color = timerColor,
+            trackColor = timerColor.copy(alpha = 0.25f)
         )
     }
 }

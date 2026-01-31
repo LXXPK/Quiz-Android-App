@@ -45,6 +45,17 @@ android {
     buildFeatures {
         compose = true
     }
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE.md",
+                "META-INF/NOTICE.txt",
+                "META-INF/*"
+            )
+        }
+    }
 }
 
 dependencies {
@@ -71,8 +82,13 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("io.mockk:mockk:1.13.10")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("io.mockk:mockk-android:1.13.10")
+    testImplementation("org.mockito:mockito-core:5.8.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+
 
     // Firebase
     implementation(platform(libs.firebase.bom))
