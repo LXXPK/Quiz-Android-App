@@ -8,8 +8,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,8 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
 
@@ -35,11 +33,11 @@ fun QuestionPalette(
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        tonalElevation = 6.dp,
-        shadowElevation = 6.dp
+        tonalElevation = dimensionResource(id = R.dimen.palette_elevation),
+        shadowElevation = dimensionResource(id = R.dimen.palette_elevation)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_padding))
         ) {
 
             Row(
@@ -54,7 +52,7 @@ fun QuestionPalette(
 
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_small)))
 
 
             Row(
@@ -63,27 +61,27 @@ fun QuestionPalette(
             ) {
                 PaletteLegendItem(
                     color = colors.primaryContainer,
-                    label = "Answered"
+                    label = stringResource(id = R.string.label_answered)
                 )
 
                 PaletteLegendItem(
                     color = colors.errorContainer,
-                    label = "Visited"
+                    label = stringResource(id = R.string.label_visited)
                 )
 
                 PaletteLegendItem(
                     color = colors.surfaceVariant,
-                    label = "Not Visited"
+                    label = stringResource(id = R.string.label_not_visited)
                 )
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.medium_padding)))
 
             LazyVerticalGrid(
-                modifier = Modifier.height(70.dp),
+                modifier = Modifier.height(dimensionResource(id = R.dimen.palette_grid_height)),
                 columns = GridCells.Fixed(5),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_small)),
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_small))
             ) {
                 itemsIndexed(questions) { index, question ->
 
@@ -106,7 +104,7 @@ fun QuestionPalette(
 
                     Box(
                         modifier = Modifier
-                            .size(44.dp)
+                            .size(dimensionResource(id = R.dimen.palette_item_size))
                             .clip(CircleShape)
                             .background(backgroundColor)
                             .clickable {
@@ -137,11 +135,11 @@ private fun PaletteLegendItem(
     ) {
         Box(
             modifier = Modifier
-                .size(12.dp)
+                .size(dimensionResource(id = R.dimen.palette_legend_icon_size))
                 .clip(CircleShape)
                 .background(color)
         )
-        Spacer(Modifier.width(6.dp))
+        Spacer(Modifier.width(dimensionResource(id = R.dimen.spacing_result_stat_internal)))
         Text(
             text = label,
             style = MaterialTheme.typography.labelMedium

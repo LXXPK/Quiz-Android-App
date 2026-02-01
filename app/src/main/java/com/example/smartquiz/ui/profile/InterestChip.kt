@@ -7,7 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import com.example.smartquiz.R
 
 @Composable
 fun InterestChip(
@@ -20,14 +21,16 @@ fun InterestChip(
         if (selected)
             MaterialTheme.colorScheme.primary
         else
-            MaterialTheme.colorScheme.surfaceVariant
+            MaterialTheme.colorScheme.surfaceVariant,
+        label = "chipBg"
     )
 
     val textColor by animateColorAsState(
         if (selected)
             MaterialTheme.colorScheme.onPrimary
         else
-            MaterialTheme.colorScheme.onSurfaceVariant
+            MaterialTheme.colorScheme.onSurfaceVariant,
+        label = "chipText"
     )
 
     AssistChip(
@@ -35,7 +38,7 @@ fun InterestChip(
         enabled = !disabled,
         label = { Text(label, color = textColor) },
         modifier = Modifier
-            .height(40.dp)
+            .height(dimensionResource(id = R.dimen.chip_height_standard))
             .alpha(if (disabled) 0.4f else 1f),
         colors = AssistChipDefaults.assistChipColors(
             containerColor = bgColor

@@ -8,8 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 
 @Composable
@@ -19,8 +19,8 @@ fun StartQuizButton(
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .height(54.dp),
-        shape = RoundedCornerShape(12.dp),
+            .height(dimensionResource(id = R.dimen.button_height_large)),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.button_corner_radius_medium)),
         onClick = onClick
     ) {
         Text(

@@ -6,8 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import com.example.smartquiz.R
 
 @Composable
 fun ResultStatCard(
@@ -24,11 +25,11 @@ fun ResultStatCard(
         )
     ) {
         Column(
-            modifier = Modifier.padding(14.dp),
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_result_stat)),
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
             Icon(icon, contentDescription = title, tint = color)
-            Spacer(Modifier.height(6.dp))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_result_stat_internal)))
             Text(value, fontWeight = FontWeight.Bold)
             Text(title, style = MaterialTheme.typography.bodySmall)
         }

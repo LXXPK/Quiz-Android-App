@@ -10,15 +10,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aay.compose.baseComponents.model.GridOrientation
 import com.aay.compose.lineChart.LineChart
 import com.aay.compose.lineChart.model.LineParameters
 import com.aay.compose.lineChart.model.LineType
+import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 import java.text.SimpleDateFormat
@@ -37,7 +39,7 @@ fun QuizProgressLineChart(
 
     val lineParameters = listOf(
         LineParameters(
-            label = "Score Trend",
+            label = stringResource(id = R.string.graph_score_trend),
             data = lastAttempts.map { it.score.toDouble() },
             lineColor = MaterialTheme.colorScheme.primary,
             lineType = LineType.CURVED_LINE,
@@ -53,16 +55,22 @@ fun QuizProgressLineChart(
     Column(modifier = modifier.fillMaxWidth()) {
         // Axis Description
         Text(
-            text = "Y-axis: Score (%) | X-axis: Date",
+            text = stringResource(id = R.string.graph_axis_description),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.secondary,
-//            modifier = Modifier.padding(horizontal = 16.dp, top = 8.dp)
+//            modifier = Modifier.padding(
+//                horizontal = dimensionResource(id = R.dimen.medium_padding),
+//                top = dimensionResource(id = R.dimen.small_padding)
+//            )
         )
 
         Box(modifier = Modifier
             .fillMaxWidth()
-            .height(250.dp)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .height(dimensionResource(id = R.dimen.chart_height_small))
+            .padding(
+                horizontal = dimensionResource(id = R.dimen.medium_padding),
+                vertical = dimensionResource(id = R.dimen.small_padding)
+            )
         ) {
             LineChart(
                 modifier = Modifier.fillMaxSize(),
@@ -73,11 +81,11 @@ fun QuizProgressLineChart(
                 animateChart = true,
                 showGridWithSpacer = true,
                 yAxisStyle = TextStyle(
-                    fontSize = 12.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_size_chart_axis).value.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 ),
                 xAxisStyle = TextStyle(
-                    fontSize = 12.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_size_chart_axis).value.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.W400
                 ),
@@ -93,16 +101,19 @@ fun QuizProgressLineChart(
         val averageScore = scores.average()
 
         val hintText = when {
-            lastScore > averageScore -> "You're performing above your average! Keep it up."
-            lastScore < averageScore -> "Your last score was a bit lower than usual. You've got this!"
-            else -> "Consistency is key. You're maintaining a steady performance."
+            lastScore > averageScore -> stringResource(id = R.string.graph_hint_above_avg)
+            lastScore < averageScore -> stringResource(id = R.string.graph_hint_below_avg)
+            else -> stringResource(id = R.string.graph_hint_consistent)
         }
 
         Text(
             text = hintText,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
-//            modifier = Modifier.padding(horizontal = 16.dp, bottom = 8.dp)
+//            modifier = Modifier.padding(
+//                horizontal = dimensionResource(id = R.dimen.medium_padding),
+//                bottom = dimensionResource(id = R.dimen.small_padding)
+//            )
         )
     }
 }

@@ -6,7 +6,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import com.example.smartquiz.R
 import com.example.smartquiz.ui.quiz.quizplay.components.*
 import com.example.smartquiz.ui.quiz.quizplay.dialogs.*
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
@@ -26,25 +27,25 @@ fun QuizPlayContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
+            .padding(dimensionResource(id = R.dimen.medium_padding))
 
 
     ) {
         QuizTopSection(viewModel)
         if (showPalette) {
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.small_padding)))
             QuestionPalette(viewModel)
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.medium_padding)))
 
         QuestionSection(viewModel)
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_large)))
 
         NavigationSection(viewModel)
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.medium_padding)))
 
         SubmitButton(onClick = viewModel::openSubmitDialog)
     }

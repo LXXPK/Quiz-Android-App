@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 
 @Composable
@@ -32,11 +32,11 @@ fun LoginForm(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(8.dp),
+        elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.small_padding)),
         shape = MaterialTheme.shapes.large
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.spacing_large)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -51,7 +51,7 @@ fun LoginForm(
                     .onFocusChanged { if (it.isFocused) onEmailFocused() }
             )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_small)))
 
             OutlinedTextField(
                 value = password,
@@ -65,12 +65,12 @@ fun LoginForm(
                     .onFocusChanged { if (it.isFocused) onPasswordFocused() }
             )
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_medium)))
 
             Button(
                 onClick = onSubmit,
                 enabled = !isLoading,
-                contentPadding = PaddingValues(horizontal = 40.dp, vertical = 12.dp)
+                contentPadding = PaddingValues(horizontal = dimensionResource(id = R.dimen.spacing_xlarge), vertical = dimensionResource(id = R.dimen.spacing_small))
             ) {
                 Text(
                     stringResource(
@@ -86,11 +86,14 @@ fun LoginForm(
             }
 
             TextButton(onClick = onToggleMode) {
-                Text(if (isLoginMode) "Register" else "Back to Login")
+                Text(
+                    if (isLoginMode) stringResource(id = R.string.action_register)
+                    else stringResource(id = R.string.action_login)
+                )
             }
 
             if (isLoading) {
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_medium)))
                 CircularProgressIndicator()
             }
         }

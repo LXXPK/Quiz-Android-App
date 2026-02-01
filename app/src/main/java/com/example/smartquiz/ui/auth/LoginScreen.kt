@@ -1,4 +1,3 @@
-
 package com.example.smartquiz.ui.auth
 
 import androidx.compose.foundation.layout.*
@@ -11,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import com.example.smartquiz.R
 import com.example.smartquiz.viewmodel.auth.AuthViewModel
 import kotlinx.coroutines.launch
-import com.example.smartquiz.ui.auth.GoogleAuthHandler
 import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
@@ -80,13 +79,13 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(24.dp),
+                .padding(dimensionResource(id = R.dimen.large_padding)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             LoginHeader(isLoginMode = isLoginMode)
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.large_padding)))
 
             LoginForm(
                 email = email,
@@ -116,7 +115,7 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.large_padding)))
 
             SocialLoginSection(
                 onGoogleSignIn = {

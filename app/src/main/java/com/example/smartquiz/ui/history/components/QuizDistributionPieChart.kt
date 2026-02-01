@@ -11,12 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aay.compose.donutChart.PieChart
 import com.aay.compose.donutChart.model.PieChartData
+import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 
@@ -59,15 +60,15 @@ fun QuizDistributionPieChart(
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .height(320.dp)
-                .padding(16.dp),
+                .height(dimensionResource(id = R.dimen.chart_height_pie))
+                .padding(dimensionResource(id = R.dimen.medium_padding)),
             contentAlignment = Alignment.Center
         ) {
 
             // ✨ Subtle center glow (visual depth)
             Box(
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(dimensionResource(id = R.dimen.pie_glow_size))
                     .background(
                         brush = Brush.radialGradient(
                             colors = listOf(
@@ -85,7 +86,7 @@ fun QuizDistributionPieChart(
                 ratioLineColor = MaterialTheme.colorScheme.outline,
                 textRatioStyle = TextStyle(
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 12.sp
+                    fontSize = dimensionResource(id = R.dimen.font_size_chart_axis).value.sp
                 )
             )
         }

@@ -6,8 +6,9 @@ import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import com.example.smartquiz.R
 
 @Composable
 fun TimeInfoRow(
@@ -23,7 +24,7 @@ fun TimeInfoRow(
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary
         )
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(dimensionResource(id = R.dimen.small_padding)))
         Text(label, modifier = Modifier.weight(1f))
         Text(value, fontWeight = FontWeight.Medium)
     }

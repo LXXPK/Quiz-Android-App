@@ -5,8 +5,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartquiz.R
 import com.example.smartquiz.viewmodel.profile.ProfileViewModel
 
 @Composable
@@ -42,7 +43,7 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
-            .padding(16.dp)
+            .padding(dimensionResource(id = R.dimen.medium_padding))
             .verticalScroll(rememberScrollState())
     ) {
 
@@ -51,7 +52,7 @@ fun ProfileScreen(
             email = user?.email.orEmpty()
         )
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_xlarge)))
 
         InterestsSection(
             allInterests = allCategories,

@@ -7,13 +7,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aay.compose.barChart.BarChart
 import com.aay.compose.barChart.model.BarParameters
+import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
 import com.example.smartquiz.ui.theme.SmartQuizTheme
 
@@ -29,7 +31,7 @@ fun QuizRecentBarChart(
 
     val barParameters = listOf(
         BarParameters(
-            dataName = "Scores",
+            dataName = stringResource(id = R.string.graph_recent_scores_label),
             data = lastAttempts.map { it.score.toDouble() },
             barColor = MaterialTheme.colorScheme.secondary
         )
@@ -37,10 +39,16 @@ fun QuizRecentBarChart(
 
     val xAxisData = lastAttempts.map { it.quizId.take(5) }
 
+    val axisTextStyle = TextStyle(
+        fontSize = dimensionResource(id = R.dimen.font_size_chart_axis).value.sp,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        fontWeight = FontWeight.W400
+    )
+
     Box(modifier = modifier
         .fillMaxWidth()
-        .height(400.dp)
-        .padding(16.dp)
+        .height(dimensionResource(id = R.dimen.chart_height_standard))
+        .padding(dimensionResource(id = R.dimen.medium_padding))
     ) {
         BarChart(
             chartParameters = barParameters,
@@ -49,17 +57,10 @@ fun QuizRecentBarChart(
             isShowGrid = true,
             animateChart = true,
             showGridWithSpacer = true,
-            yAxisStyle = TextStyle(
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            ),
-            xAxisStyle = TextStyle(
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.W400
-            ),
+            yAxisStyle = axisTextStyle,
+            xAxisStyle = axisTextStyle,
             yAxisRange = 10,
-            barWidth = 20.dp
+            barWidth = dimensionResource(id = R.dimen.chart_bar_width)
         )
     }
 }

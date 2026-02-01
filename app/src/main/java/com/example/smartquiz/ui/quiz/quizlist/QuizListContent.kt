@@ -7,7 +7,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 import com.example.smartquiz.ui.quiz.quizlist.components.*
 
@@ -19,15 +21,17 @@ fun QuizListContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(16.dp).verticalScroll(rememberScrollState())
+        modifier = modifier
+            .padding(dimensionResource(id = R.dimen.medium_padding))
+            .verticalScroll(rememberScrollState())
     ) {
 
         Text(
-            text = "Category: $category",
+            text = stringResource(id = R.string.label_category_format, category),
             style = MaterialTheme.typography.titleLarge
         )
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_small)))
 
         if (quizzes.isEmpty()) {
             EmptyQuizState()

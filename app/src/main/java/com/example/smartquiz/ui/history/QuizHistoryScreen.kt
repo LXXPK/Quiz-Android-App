@@ -13,9 +13,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
 import com.example.smartquiz.viewmodel.history.QuizHistoryViewModel
 import java.text.SimpleDateFormat
@@ -66,8 +68,8 @@ fun QuizHistoryScreen(
                 else -> {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        contentPadding = PaddingValues(dimensionResource(id = R.dimen.medium_padding)),
+                        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.medium_padding))
                     ) {
 
 
@@ -87,19 +89,20 @@ fun QuizHistoryScreen(
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(16.dp),
+                                        .padding(dimensionResource(id = R.dimen.medium_padding)),
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
-                                        text = "Performance Insights",
+                                        text = stringResource(id = R.string.graph_performance_insights),
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.SemiBold
                                     )
 
                                     Icon(
                                         imageVector = Icons.Outlined.BarChart,
-                                        contentDescription = "Toggle insights",
+                                        // TODO: Check this. Toggle insight is lost
+                                        contentDescription = stringResource(id = R.string.view_all),
                                         tint = MaterialTheme.colorScheme.primary
                                     )
                                 }
@@ -119,10 +122,10 @@ fun QuizHistoryScreen(
 
                         item {
                             Text(
-                                text = "Quiz History",
+                                text = stringResource(id = R.string.quiz_history_title),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier.padding(top = 8.dp)
+                                modifier = Modifier.padding(top = dimensionResource(id = R.dimen.small_padding))
                             )
                         }
 
@@ -142,20 +145,20 @@ fun QuizHistoryScreen(
 
 @Composable
 private fun HistoryStatsSection(uiState: QuizHistoryUiState) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_small))) {
 
         Text(
-            text = "Your Performance",
+            text = stringResource(id = R.string.history_title_performance),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_small))
         ) {
             StatCard(
-                title = "Quizzes",
+                title = stringResource(id = R.string.history_stat_quizzes),
                 value = uiState.totalQuizzes.toString(),
                 icon = Icons.Outlined.History,
                 color = MaterialTheme.colorScheme.primary,
@@ -163,7 +166,7 @@ private fun HistoryStatsSection(uiState: QuizHistoryUiState) {
             )
 
             StatCard(
-                title = "Avg Score",
+                title = stringResource(id = R.string.history_stat_avg_score),
                 value = "${"%.1f".format(uiState.averageScore)}%",
                 icon = Icons.Outlined.BarChart,
                 color = MaterialTheme.colorScheme.tertiary,
@@ -171,7 +174,7 @@ private fun HistoryStatsSection(uiState: QuizHistoryUiState) {
             )
 
             StatCard(
-                title = "Best",
+                title = stringResource(id = R.string.history_stat_best),
                 value = "${uiState.highestScore}%",
                 icon = Icons.Outlined.EmojiEvents,
                 color = MaterialTheme.colorScheme.secondary,
@@ -197,8 +200,8 @@ private fun StatCard(
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_padding)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.extra_small_padding))
         ) {
             Icon(
                 imageVector = icon,
@@ -224,11 +227,11 @@ private fun StatCard(
 private fun HistoryItemCard(attempt: QuizAttemptEntity) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.card_elevation_small))
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_padding)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.small_padding))
         ) {
 
             Row(
@@ -244,11 +247,11 @@ private fun HistoryItemCard(attempt: QuizAttemptEntity) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Outlined.Score,
-                        contentDescription = "Score",
+                        contentDescription = stringResource(id = R.string.history_stat_score),
                         tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(dimensionResource(id = R.dimen.icon_small))
                     )
-                    Spacer(Modifier.width(4.dp))
+                    Spacer(Modifier.width(dimensionResource(id = R.dimen.extra_small_padding)))
                     val maxScore = 50 // or derive dynamically later
                     val percentage = (attempt.score * 100) / maxScore
                     Text(
@@ -274,23 +277,23 @@ private fun EmptyHistoryState() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(dimensionResource(id = R.dimen.spacing_xlarge)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = Icons.Outlined.History,
             contentDescription = null,
-            modifier = Modifier.size(64.dp),
+            modifier = Modifier.size(dimensionResource(id = R.dimen.icon_large)),
             tint = MaterialTheme.colorScheme.primary
         )
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_small)))
         Text(
-            text = "No quiz history yet",
+            text = stringResource(id = R.string.history_empty_title),
             style = MaterialTheme.typography.titleMedium
         )
         Text(
-            text = "Start playing quizzes to see your progress here!",
+            text = stringResource(id = R.string.history_empty_subtitle),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

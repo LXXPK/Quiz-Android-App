@@ -4,7 +4,6 @@ package com.example.smartquiz.ui.home.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -14,8 +13,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 
 @Composable
@@ -60,15 +60,15 @@ fun CategoryQuizRow(
 
             TextButton(
                 onClick = onViewAll,
-                modifier = Modifier.heightIn(min = 48.dp)
+                modifier = Modifier.heightIn(min = dimensionResource(id = R.dimen.min_touch_target))
             ) {
-                Text("View All")
+                Text(stringResource(id = R.string.view_all))
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_padding)))
         LazyRow(
             state = listState,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.medium_padding))
         ) {
 
             itemsIndexed(quizzes.take(6)) { index, quiz ->
@@ -84,7 +84,7 @@ fun CategoryQuizRow(
 
 
         if (quizzes.size > 1) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.medium_padding)))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -94,9 +94,12 @@ fun CategoryQuizRow(
                 quizzes.take(6).forEachIndexed { index, _ ->
                     Box(
                         modifier = Modifier
-                            .padding(horizontal = 4.dp)
+                            .padding(horizontal = dimensionResource(id = R.dimen.extra_small_padding))
                             .size(
-                                if (index == currentIndex) 8.dp else 6.dp
+                                if (index == currentIndex) 
+                                    dimensionResource(id = R.dimen.indicator_size_active) 
+                                else 
+                                    dimensionResource(id = R.dimen.indicator_size_inactive)
                             )
                             .background(
                                 color =

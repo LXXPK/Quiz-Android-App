@@ -1,5 +1,4 @@
 
-
 package com.example.smartquiz.ui.home
 
 import androidx.compose.foundation.layout.*
@@ -47,7 +46,7 @@ fun HomeScreenContent(
                 onHistoryClick = onHistoryClick
             )
         }
-        item { Spacer(modifier = Modifier.height(12.dp)) }
+        item { Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_small))) }
 
         item {
             HomeBannerCarousel(
@@ -59,7 +58,7 @@ fun HomeScreenContent(
             )
         }
 
-        item { Spacer(modifier = Modifier.height(12.dp)) }
+        item { Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_small))) }
 
         item {
 
@@ -86,7 +85,7 @@ fun HomeScreenContent(
                                 MaterialTheme.colorScheme.surfaceVariant
                         )
                     ) {
-                        Column(Modifier.padding(16.dp)) {
+                        Column(Modifier.padding(dimensionResource(id = R.dimen.medium_padding))) {
                             Text(
                                 text = stringResource(
                                     R.string.home_personalize_title
@@ -118,7 +117,7 @@ fun HomeScreenContent(
                     onViewAll = { onCategoryViewAll(category) },
                     onQuizClick = handleQuizCardClick
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.large_padding)))
             }
         }
 
@@ -134,7 +133,7 @@ fun HomeScreenContent(
                             shape = MaterialTheme.shapes.large
                         )
 
-                        .padding(16.dp)
+                        .padding(dimensionResource(id = R.dimen.medium_padding))
                 ) {
                     Text(
                         text = stringResource(R.string.active_quizzes),
@@ -142,7 +141,7 @@ fun HomeScreenContent(
                         color = MaterialTheme.colorScheme.primary
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_small)))
 
                     uiState.activeQuizzes.forEach { quiz ->
                         val (activeTime, expirationTime, progress) =

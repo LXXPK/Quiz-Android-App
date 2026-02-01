@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import com.example.smartquiz.R
 
 @Composable
 fun FinalScoreCard(
@@ -19,13 +21,16 @@ fun FinalScoreCard(
         )
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.spacing_large)),
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
-            Text("Final Score", style = MaterialTheme.typography.titleMedium)
-            Spacer(Modifier.height(6.dp))
             Text(
-                "$score / $maxScore",
+                text = stringResource(id = R.string.final_score_title),
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_result_stat_internal)))
+            Text(
+                text = stringResource(id = R.string.final_score_format, score, maxScore),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary

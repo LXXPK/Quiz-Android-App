@@ -15,27 +15,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 
 @Composable
 fun QuizInstructionsCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.button_corner_radius_medium))
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_padding)),
             verticalArrangement =
-                androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+                androidx.compose.foundation.layout.Arrangement.spacedBy(dimensionResource(id = R.dimen.small_padding))
         ) {
             Row {
                 Icon(
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null
                 )
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.width(dimensionResource(id = R.dimen.small_padding)))
                 Text(
                     text = stringResource(R.string.quiz_instructions_title),
                     style = MaterialTheme.typography.titleMedium

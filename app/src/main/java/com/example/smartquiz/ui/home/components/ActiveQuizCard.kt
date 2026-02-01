@@ -9,12 +9,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 import kotlinx.coroutines.delay
@@ -58,12 +55,12 @@ fun ActiveQuizCard(
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = cardColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.card_elevation_small))
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.medium_padding))
                 .alpha(if (isExpired) 0.7f else 1f)
         ) {
 
@@ -79,7 +76,7 @@ fun ActiveQuizCard(
                         text = quiz.title,
                         style = MaterialTheme.typography.titleMedium
                     )
-                    Spacer(Modifier.height(2.dp))
+                    Spacer(Modifier.height(dimensionResource(id = R.dimen.extra_small_padding)))
                     Text(
                         text = quiz.category,
                         style = MaterialTheme.typography.bodySmall,
@@ -97,18 +94,18 @@ fun ActiveQuizCard(
             }
 
             if (isLive && progress > 0f) {
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_small)))
                 LinearProgressIndicator(
                     progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(6.dp),
+                        .height(dimensionResource(id = R.dimen.progress_indicator_height_standard)),
                     trackColor =
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.small_padding)))
         }
     }
 }
@@ -139,7 +136,7 @@ private fun StatusBadge(
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
-                Spacer(Modifier.height(2.dp))
+                Spacer(Modifier.height(dimensionResource(id = R.dimen.extra_small_padding)))
                 RelativeTimeText(
                     time = expirationTime,
                     type = RelativeTimeType.EXPIRATION,
@@ -196,7 +193,7 @@ private fun RelativeTimeText(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(top = 2.dp)
+        modifier = Modifier.padding(top = dimensionResource(id = R.dimen.extra_small_padding))
     ) {
         Icon(
             imageVector =
@@ -205,10 +202,10 @@ private fun RelativeTimeText(
                 else
                     Icons.Outlined.Schedule,
             contentDescription = null,
-            modifier = Modifier.size(14.dp),
+            modifier = Modifier.size(dimensionResource(id = R.dimen.icon_extra_small)),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Spacer(Modifier.width(4.dp))
+        Spacer(Modifier.width(dimensionResource(id = R.dimen.extra_small_padding)))
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall

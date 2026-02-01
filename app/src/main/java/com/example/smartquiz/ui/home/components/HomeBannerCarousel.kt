@@ -10,16 +10,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.smartquiz.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -76,7 +74,7 @@ fun HomeBannerCarousel(
 
         LazyRow(
             state = listState,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.banner_spacing))
         ) {
 
 
@@ -90,10 +88,10 @@ fun HomeBannerCarousel(
                 Card(
                     modifier = Modifier
                         .width(cardWidth)
-                        .height(170.dp),
-                    shape = RoundedCornerShape(20.dp),
+                        .height(dimensionResource(id = R.dimen.banner_height)),
+                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.banner_corner_radius)),
                     elevation = CardDefaults.cardElevation(
-                        defaultElevation = if (isCenter) 10.dp else 4.dp
+                        defaultElevation = if (isCenter) dimensionResource(id = R.dimen.banner_elevation_center) else dimensionResource(id = R.dimen.card_elevation_small)
                     ),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
@@ -116,7 +114,7 @@ fun HomeBannerCarousel(
         }
 
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.banner_indicator_spacing_top)))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -124,9 +122,9 @@ fun HomeBannerCarousel(
             banners.forEachIndexed { index, _ ->
                 Box(
                     modifier = Modifier
-                        .padding(horizontal = 5.dp)
-                        .height(4.dp)
-                        .width(if (index == centerIndex) 28.dp else 16.dp)
+                        .padding(horizontal = dimensionResource(id = R.dimen.banner_indicator_padding_horizontal))
+                        .height(dimensionResource(id = R.dimen.banner_indicator_height))
+                        .width(if (index == centerIndex) dimensionResource(id = R.dimen.banner_indicator_width_active) else dimensionResource(id = R.dimen.banner_indicator_width_inactive))
                         .background(
                             if (index == centerIndex)
                                 MaterialTheme.colorScheme.primary

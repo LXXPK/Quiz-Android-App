@@ -1,10 +1,8 @@
-
 package com.example.smartquiz.ui.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -14,10 +12,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 
@@ -47,7 +43,7 @@ fun HorizontalTitledQuizList(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = dimensionResource(id = R.dimen.small_padding))
     ) {
 
         Row(
@@ -62,13 +58,13 @@ fun HorizontalTitledQuizList(
 
             TextButton(
                 onClick = onViewAllClick,
-                modifier = Modifier.heightIn(min = 48.dp)
+                modifier = Modifier.heightIn(min = dimensionResource(id = R.dimen.min_touch_target))
             ) {
                 Text(text = stringResource(id = R.string.view_all))
             }
         }
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.small_padding)))
 
 
         LazyRow(
@@ -89,7 +85,7 @@ fun HorizontalTitledQuizList(
 
 
         if (items.size > 1) {
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.medium_padding)))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -99,9 +95,12 @@ fun HorizontalTitledQuizList(
                 items.forEachIndexed { index, _ ->
                     Box(
                         modifier = Modifier
-                            .padding(horizontal = 4.dp)
+                            .padding(horizontal = dimensionResource(id = R.dimen.extra_small_padding))
                             .size(
-                                if (index == currentIndex) 8.dp else 6.dp
+                                if (index == currentIndex) 
+                                    dimensionResource(id = R.dimen.indicator_size_active) 
+                                else 
+                                    dimensionResource(id = R.dimen.indicator_size_inactive)
                             )
                             .background(
                                 color =

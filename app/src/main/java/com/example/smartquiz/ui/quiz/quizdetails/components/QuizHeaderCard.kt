@@ -11,8 +11,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.shape.RoundedCornerShape
+import com.example.smartquiz.R
 
 @Composable
 fun QuizHeaderCard(
@@ -22,15 +24,15 @@ fun QuizHeaderCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.button_corner_radius_medium)),
+        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.card_elevation_medium))
     ) {
-        Column(Modifier.padding(16.dp)) {
+        Column(Modifier.padding(dimensionResource(id = R.dimen.medium_padding))) {
             Text(text = title, style = MaterialTheme.typography.titleLarge)
-            Spacer(Modifier.height(6.dp))
-            Text(text = "Category: $category")
-            Spacer(Modifier.height(4.dp))
-            Text(text = "Total Questions: $questionCount")
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_result_stat_internal)))
+            Text(text = stringResource(id = R.string.label_category_format, category))
+            Spacer(Modifier.height(dimensionResource(id = R.dimen.extra_small_padding)))
+            Text(text = stringResource(id = R.string.label_total_questions_format, questionCount))
         }
     }
 }

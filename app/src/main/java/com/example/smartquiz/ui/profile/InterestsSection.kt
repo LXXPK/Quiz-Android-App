@@ -1,7 +1,6 @@
 package com.example.smartquiz.ui.profile
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -10,7 +9,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.smartquiz.R
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -32,15 +34,18 @@ fun InterestsSection(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Your Interests", style = MaterialTheme.typography.titleMedium)
             Text(
-                "${selected.size}/$maxSelection selected",
+                text = stringResource(id = R.string.label_your_interests),
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = stringResource(id = R.string.label_interests_selected, selected.size, maxSelection),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.primary
             )
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_small)))
 
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -48,7 +53,7 @@ fun InterestsSection(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant
             )
         ) {
-            Column(Modifier.padding(16.dp)) {
+            Column(Modifier.padding(dimensionResource(id = R.dimen.medium_padding))) {
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -56,7 +61,7 @@ fun InterestsSection(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        if (isEditMode) "Select interests" else "Your interests",
+                        text = if (isEditMode) stringResource(id = R.string.label_select_interests) else stringResource(id = R.string.label_your_interests),
                         style = MaterialTheme.typography.titleSmall
                     )
 
@@ -65,7 +70,7 @@ fun InterestsSection(
                             if (selected.isNotEmpty()) {
                                 TextButton(onClick = onClearAll) {
                                     Text(
-                                        "Clear",
+                                        text = stringResource(id = R.string.action_clear),
                                         color = MaterialTheme.colorScheme.error
                                     )
                                 }
@@ -77,12 +82,12 @@ fun InterestsSection(
                     }
                 }
 
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(dimensionResource(id = R.dimen.small_padding)))
 
                 if (!isEditMode) {
                     FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_small)),
+                        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_small))
                     ) {
                         selected.forEach {
                             InterestChip(label = it, selected = true)
@@ -90,20 +95,20 @@ fun InterestsSection(
                     }
 
                     TextButton(onClick = onEdit) {
-                        Text("Edit interests")
+                        Text(stringResource(id = R.string.action_edit_interests))
                     }
                 }
 
                 if (isEditMode && expand) {
                     Column(
                         modifier = Modifier
-                            .heightIn(max = 220.dp)
+                            .heightIn(max = 220.dp) // Specific UI constraint, maybe move to dimens if repeated
                             .verticalScroll(rememberScrollState())
                     ) {
                         FlowRow(
                             maxItemsInEachRow = 3,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_small)),
+                            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_small))
                         ) {
                             allInterests.forEach { interest ->
                                 InterestChip(
@@ -117,14 +122,14 @@ fun InterestsSection(
                             }
                         }
 
-                        Spacer(Modifier.height(16.dp))
+                        Spacer(Modifier.height(dimensionResource(id = R.dimen.medium_padding)))
 
                         Button(
                             onClick = onSave,
                             enabled = selected.isNotEmpty(),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text("Save Profile")
+                            Text(stringResource(id = R.string.action_save_profile))
                         }
                     }
                 }

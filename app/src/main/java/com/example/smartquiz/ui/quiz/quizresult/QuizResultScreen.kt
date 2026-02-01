@@ -7,7 +7,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import com.example.smartquiz.R
 import com.example.smartquiz.ui.quiz.quizresult.components.*
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
 
@@ -34,17 +36,17 @@ fun QuizResultScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(20.dp),
+            .padding(dimensionResource(id = R.dimen.spacing_large)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         ResultHeader()
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_large)))
 
         ResultScoreCircle(percentage)
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.large_padding)))
 
         ResultStatsRow(
             correct = correct,
@@ -52,37 +54,37 @@ fun QuizResultScreen(
             skipped = unattempted
         )
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.large_padding)))
 
         FinalScoreCard(
             score = score,
             maxScore = maxScore
         )
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.large_padding)))
 
         // Existing
         TimeInfoRow(
-            label = "Time Left",
+            label = stringResource(id = R.string.label_time_left),
             value = remainingTime
         )
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_small)))
 
 
         TimeInfoRow(
-            label = "Time Taken",
+            label = stringResource(id = R.string.label_time_taken),
             value = timeTaken
         )
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(dimensionResource(id = R.dimen.spacing_xlarge)))
 
         Button(
             onClick = onDone,
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium
         ) {
-            Text("Back to Home")
+            Text(stringResource(id = R.string.action_back_to_home))
         }
     }
 }

@@ -14,7 +14,57 @@
     <dimen name="spacing_xlarge">32dp</dimen>
 
     <dimen name="icon_small">18dp</dimen>
+    <dimen name="icon_medium">28dp</dimen>
     <dimen name="icon_large">64dp</dimen>
 
     <dimen name="card_elevation_small">4dp</dimen>
+    <dimen name="card_elevation_medium">6dp</dimen>
+
+    <!-- Chart Dimensions -->
+    <dimen name="chart_height_standard">300dp</dimen>
+    <dimen name="chart_height_large">340dp</dimen>
+    <dimen name="chart_height_pie">320dp</dimen>
+    <dimen name="chart_height_small">250dp</dimen>
+    <dimen name="chart_bar_width">20dp</dimen>
+    <dimen name="pie_glow_size">200dp</dimen>
+
+    <!-- Font Sizes -->
+    <dimen name="font_size_chart_label">10sp</dimen>
+    <dimen name="font_size_chart_scalar">9sp</dimen>
+    <dimen name="font_size_chart_axis">12sp</dimen>
+
+    <!-- Specific Component Sizes -->
+    <dimen name="button_height_large">54dp</dimen>
+    <dimen name="button_corner_radius_medium">12dp</dimen>
+    <dimen name="chip_height_standard">40dp</dimen>
+    <dimen name="interests_scroll_max_height">220dp</dimen>
+    
+    <dimen name="padding_result_stat">14dp</dimen>
+    <dimen name="spacing_result_stat_internal">6dp</dimen>
+
+    <!-- Palette Dimensions -->
+    <dimen name="palette_elevation">6dp</dimen>
+    <dimen name="palette_grid_height">70dp</dimen>
+    <dimen name="palette_item_size">44dp</dimen>
+    <dimen name="palette_legend_icon_size">12dp</dimen>
+
+    <dimen name="quiz_grid_item_height">130dp</dimen>
+
+    <dimen name="min_touch_target">48dp</dimen>
+    <dimen name="indicator_size_active">8dp</dimen>
+    <dimen name="indicator_size_inactive">6dp</dimen>
+    
+    <dimen name="icon_extra_small">14dp</dimen>
+    <dimen name="progress_indicator_height_standard">6dp</dimen>
+
+    <!-- Banner Carousel -->
+    <dimen name="banner_height">170dp</dimen>
+    <dimen name="banner_corner_radius">20dp</dimen>
+    <dimen name="banner_elevation_center">10dp</dimen>
+    <dimen name="banner_spacing">12dp</dimen>
+    <dimen name="banner_indicator_spacing_top">10dp</dimen>
+    <dimen name="banner_indicator_padding_horizontal">5dp</dimen>
+    <dimen name="banner_indicator_height">4dp</dimen>
+    <dimen name="banner_indicator_width_active">28dp</dimen>
+    <dimen name="banner_indicator_width_inactive">16dp</dimen>
 </resources>
