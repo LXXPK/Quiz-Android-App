@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-common-ktx:20.4.3@aar" external-system-id="GRADLE">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/8.13/transforms/8d0213fe3a550f630c860e87555cab41/transformed/firebase-common-ktx-20.4.3/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/8.13/transforms/8d0213fe3a550f630c860e87555cab41/transformed/firebase-common-ktx-20.4.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/8.13/transforms/eeeabdc4ee43de72cc71ec2d9029175e/transformed/firebase-common-ktx-20.4.3/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/8.13/transforms/eeeabdc4ee43de72cc71ec2d9029175e/transformed/firebase-common-ktx-20.4.3/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

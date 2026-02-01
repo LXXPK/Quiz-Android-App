@@ -14,51 +14,81 @@ import androidx.compose.ui.graphics.Color
 
 
 
+//private val LightColorScheme = lightColorScheme(
+//    primary = BluePrimary,
+//    onPrimary = Color.White,
+//
+//    secondary = OrangeAccent,
+//    onSecondary = Color.White,
+//
+//    tertiary = GreenSuccess,
+//    onTertiary = Color.White,
+//
+//    error = RedError,
+//    onError = Color.White,
+//
+//    background = LightBackground,
+//    onBackground = Color(0xFF0F172A),
+//
+//    surface = CardSurface,
+//    onSurface = Color(0xFF0F172A),
+//
+//    surfaceVariant = Color(0xFFE2E8F0),
+//    onSurfaceVariant = Color(0xFF475569)
+//)
+
 private val LightColorScheme = lightColorScheme(
-    primary = BluePrimary,
+    primary = QuizBluePrimary,
+    secondary = QuizOrangeAccent,
+    tertiary = QuizBlueSecondary,
+
+    background = QuizLightBackground,
+    surface = QuizLightSurface,
+    surfaceVariant = QuizLightSurfaceVariant,
+
+    error = QuizError,
     onPrimary = Color.White,
-
-    secondary = OrangeAccent,
-    onSecondary = Color.White,
-
-    tertiary = GreenSuccess,
-    onTertiary = Color.White,
-
-    error = RedError,
-    onError = Color.White,
-
-    background = LightBackground,
-    onBackground = Color(0xFF0F172A),
-
-    surface = CardSurface,
-    onSurface = Color(0xFF0F172A),
-
-    surfaceVariant = Color(0xFFE2E8F0),
-    onSurfaceVariant = Color(0xFF475569)
+    onSurface = Color(0xFF020617),
 )
+
+
+//private val DarkColorScheme = darkColorScheme(
+//    primary = DarkBluePrimary,
+//    onPrimary = Color.Black,
+//
+//    secondary = DarkOrangeAccent,
+//    onSecondary = Color.Black,
+//
+//    tertiary = DarkGreenSuccess,
+//    onTertiary = Color.Black,
+//
+//    error = DarkRedError,
+//    onError = Color.Black,
+//
+//    background = DarkBackground,
+//    onBackground = Color(0xFFE5E7EB),
+//
+//    surface = DarkSurface,
+//    onSurface = Color(0xFFE5E7EB),
+//
+//    surfaceVariant = DarkSurfaceVariant,
+//    onSurfaceVariant = Color(0xFFCBD5E1)
+//)
 
 private val DarkColorScheme = darkColorScheme(
-    primary = DarkBluePrimary,
-    onPrimary = Color.Black,
+    primary = QuizDarkBluePrimary,
+    secondary = QuizDarkOrangeAccent,
+    tertiary = QuizBlueSecondary,
 
-    secondary = DarkOrangeAccent,
-    onSecondary = Color.Black,
+    background = QuizDarkBackground,
+    surface = QuizDarkSurface,
+    surfaceVariant = QuizDarkSurfaceVariant,
 
-    tertiary = DarkGreenSuccess,
-    onTertiary = Color.Black,
-
-    error = DarkRedError,
-    onError = Color.Black,
-
-    background = DarkBackground,
-    onBackground = Color(0xFFE5E7EB),
-
-    surface = DarkSurface,
+    error = QuizDarkError,
+    onPrimary = Color(0xFF020617),
     onSurface = Color(0xFFE5E7EB),
-
-    surfaceVariant = DarkSurfaceVariant,
-    onSurfaceVariant = Color(0xFFCBD5E1)
 )
+
 
 
 @Composable

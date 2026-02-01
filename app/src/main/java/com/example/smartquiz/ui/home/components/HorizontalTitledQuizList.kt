@@ -34,9 +34,9 @@ fun HorizontalTitledQuizList(
     val listState = rememberLazyListState()
 
     val cardColors = listOf(
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-        MaterialTheme.colorScheme.secondary.copy(alpha = 0.08f),
-        MaterialTheme.colorScheme.tertiary.copy(alpha = 0.08f),
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+        MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+        MaterialTheme.colorScheme.tertiary.copy(alpha = 0.3f),
         MaterialTheme.colorScheme.surfaceVariant
     )
 
