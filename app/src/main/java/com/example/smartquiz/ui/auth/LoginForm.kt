@@ -1,4 +1,3 @@
-
 package com.example.smartquiz.ui.auth
 
 import androidx.compose.foundation.layout.*
@@ -32,11 +31,14 @@ fun LoginForm(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(8.dp),
-        shape = MaterialTheme.shapes.large
+        shape = MaterialTheme.shapes.large,
+        elevation = CardDefaults.cardElevation(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(22.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -48,10 +50,14 @@ fun LoginForm(
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(emailFocusRequester)
-                    .onFocusChanged { if (it.isFocused) onEmailFocused() }
+                    .onFocusChanged { if (it.isFocused) onEmailFocused() },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    cursorColor = MaterialTheme.colorScheme.primary
+                )
             )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(14.dp))
 
             OutlinedTextField(
                 value = password,
@@ -62,36 +68,55 @@ fun LoginForm(
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(passwordFocusRequester)
-                    .onFocusChanged { if (it.isFocused) onPasswordFocused() }
+                    .onFocusChanged { if (it.isFocused) onPasswordFocused() },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    cursorColor = MaterialTheme.colorScheme.primary
+                )
             )
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(24.dp))
 
             Button(
                 onClick = onSubmit,
                 enabled = !isLoading,
-                contentPadding = PaddingValues(horizontal = 40.dp, vertical = 12.dp)
+                modifier = Modifier.fillMaxWidth(0.8f),
+                contentPadding = PaddingValues(vertical = 14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
             ) {
                 Text(
                     stringResource(
-                        if (isLoginMode) R.string.action_login else R.string.action_register
+                        if (isLoginMode)
+                            R.string.action_login
+                        else
+                            R.string.action_register
                     )
                 )
             }
 
             if (isLoginMode) {
                 TextButton(onClick = onForgotPassword) {
-                    Text(stringResource(R.string.action_forgot_password))
+                    Text(
+                        stringResource(R.string.action_forgot_password),
+                        color = MaterialTheme.colorScheme.secondary
+                    )
                 }
             }
 
             TextButton(onClick = onToggleMode) {
-                Text(if (isLoginMode) "Register" else "Back to Login")
+                Text(
+                    if (isLoginMode) "Register" else "Back to Login",
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
 
             if (isLoading) {
                 Spacer(Modifier.height(16.dp))
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }

@@ -10,6 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.*
 import com.example.smartquiz.navigation.RootNavGraph
 import com.example.smartquiz.navigation.Routes
+import com.example.smartquiz.ui.common.SmartSnackbar
 import com.example.smartquiz.viewmodel.auth.AuthViewModel
 
 @Composable
@@ -42,8 +43,14 @@ fun AppScaffold(
             }
         },
         snackbarHost = {
-            SnackbarHost(snackbarHostState)
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data ->
+                    SmartSnackbar(data = data)
+                }
+            )
         }
+
     ) { padding ->
         RootNavGraph(
             navController = navController,

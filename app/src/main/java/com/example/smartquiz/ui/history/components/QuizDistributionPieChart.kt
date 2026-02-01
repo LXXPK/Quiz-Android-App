@@ -64,7 +64,7 @@ fun QuizDistributionPieChart(
             contentAlignment = Alignment.Center
         ) {
 
-            // ✨ Subtle center glow (visual depth)
+
             Box(
                 modifier = Modifier
                     .size(200.dp)
@@ -78,7 +78,7 @@ fun QuizDistributionPieChart(
                     )
             )
 
-            // 🟠 Pie / Donut Chart (NO unsupported params)
+
             PieChart(
                 modifier = Modifier.fillMaxSize(),
                 pieChartData = pieChartData,

@@ -14,81 +14,65 @@ import androidx.compose.ui.graphics.Color
 
 
 
-//private val LightColorScheme = lightColorScheme(
-//    primary = BluePrimary,
-//    onPrimary = Color.White,
-//
-//    secondary = OrangeAccent,
-//    onSecondary = Color.White,
-//
-//    tertiary = GreenSuccess,
-//    onTertiary = Color.White,
-//
-//    error = RedError,
-//    onError = Color.White,
-//
-//    background = LightBackground,
-//    onBackground = Color(0xFF0F172A),
-//
-//    surface = CardSurface,
-//    onSurface = Color(0xFF0F172A),
-//
-//    surfaceVariant = Color(0xFFE2E8F0),
-//    onSurfaceVariant = Color(0xFF475569)
-//)
-
 private val LightColorScheme = lightColorScheme(
-    primary = QuizBluePrimary,
-    secondary = QuizOrangeAccent,
-    tertiary = QuizBlueSecondary,
+    primary = PrimaryLight,
+    onPrimary = OnPrimaryLight,
+    primaryContainer = PrimaryLight.copy(alpha = 0.15f),
+    onPrimaryContainer = PrimaryLight,
 
-    background = QuizLightBackground,
-    surface = QuizLightSurface,
-    surfaceVariant = QuizLightSurfaceVariant,
+    secondary = SecondaryLight,
+    onSecondary = OnSecondaryLight,
+    secondaryContainer = SecondaryLight.copy(alpha = 0.15f),
+    onSecondaryContainer = SecondaryLight,
 
-    error = QuizError,
-    onPrimary = Color.White,
-    onSurface = Color(0xFF020617),
+    tertiary = AccentLight,
+    onTertiary = OnAccentLight,
+    tertiaryContainer = AccentLight.copy(alpha = 0.18f),
+    onTertiaryContainer = OnAccentLight,
+
+    background = BackgroundLight,
+    onBackground = OnBackgroundLight,
+
+    surface = SurfaceLight,
+    onSurface = OnSurfaceLight,
+    surfaceVariant = SurfaceVariantLight,
+    onSurfaceVariant = OnSurfaceVariantLight,
+
+    outline = OutlineLight,
+
+    error = ErrorLight,
+    onError = OnErrorLight
 )
-
-
-//private val DarkColorScheme = darkColorScheme(
-//    primary = DarkBluePrimary,
-//    onPrimary = Color.Black,
-//
-//    secondary = DarkOrangeAccent,
-//    onSecondary = Color.Black,
-//
-//    tertiary = DarkGreenSuccess,
-//    onTertiary = Color.Black,
-//
-//    error = DarkRedError,
-//    onError = Color.Black,
-//
-//    background = DarkBackground,
-//    onBackground = Color(0xFFE5E7EB),
-//
-//    surface = DarkSurface,
-//    onSurface = Color(0xFFE5E7EB),
-//
-//    surfaceVariant = DarkSurfaceVariant,
-//    onSurfaceVariant = Color(0xFFCBD5E1)
-//)
 
 private val DarkColorScheme = darkColorScheme(
-    primary = QuizDarkBluePrimary,
-    secondary = QuizDarkOrangeAccent,
-    tertiary = QuizBlueSecondary,
+    primary = PrimaryDark,
+    onPrimary = OnPrimaryDark,
+    primaryContainer = PrimaryDark.copy(alpha = 0.25f),
+    onPrimaryContainer = PrimaryDark,
 
-    background = QuizDarkBackground,
-    surface = QuizDarkSurface,
-    surfaceVariant = QuizDarkSurfaceVariant,
+    secondary = SecondaryDark,
+    onSecondary = OnSecondaryDark,
+    secondaryContainer = SecondaryDark.copy(alpha = 0.25f),
+    onSecondaryContainer = SecondaryDark,
 
-    error = QuizDarkError,
-    onPrimary = Color(0xFF020617),
-    onSurface = Color(0xFFE5E7EB),
+    tertiary = AccentDark,
+    onTertiary = OnAccentDark,
+    tertiaryContainer = AccentDark.copy(alpha = 0.25f),
+    onTertiaryContainer = OnAccentDark,
+
+    background = BackgroundDark,
+    onBackground = OnBackgroundDark,
+
+    surface = SurfaceDark,
+    onSurface = OnSurfaceDark,
+    surfaceVariant = SurfaceVariantDark,
+    onSurfaceVariant = OnSurfaceVariantDark,
+
+    outline = OutlineDark,
+
+    error = ErrorDark,
+    onError = OnErrorDark
 )
-
 
 
 @Composable

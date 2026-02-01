@@ -1,6 +1,8 @@
 package com.example.smartquiz.ui.home.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.HourglassTop
 import androidx.compose.material.icons.outlined.Schedule
@@ -9,11 +11,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
@@ -25,7 +26,6 @@ private enum class RelativeTimeType {
     ACTIVATION,
     EXPIRATION
 }
-
 
 @Composable
 fun ActiveQuizCard(
@@ -48,46 +48,50 @@ fun ActiveQuizCard(
     val isLive = now in activeTime.time until expirationTime.time
     val isExpired = now >= expirationTime.time
 
-    val cardColor = when {
+    val surfaceColor = when {
         isExpired -> MaterialTheme.colorScheme.surfaceVariant
+        isLive -> MaterialTheme.colorScheme.surface
         else -> MaterialTheme.colorScheme.surface
     }
 
     Card(
-        onClick = { if (isLive) handleQuizCardClick(quiz) },
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(containerColor = cardColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = surfaceColor),
+        onClick = { if (isLive) handleQuizCardClick(quiz) }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-                .alpha(if (isExpired) 0.7f else 1f)
+                .alpha(if (isExpired) 0.65f else 1f)
         ) {
 
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = quiz.title,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
                     )
-                    Spacer(Modifier.height(2.dp))
+
+                    Spacer(Modifier.height(4.dp))
+
                     Text(
                         text = quiz.category,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
-                StatusBadge(
+                StatusChip(
                     isLive = isLive,
                     isExpired = isExpired,
                     activeTime = activeTime,
@@ -96,65 +100,83 @@ fun ActiveQuizCard(
                 )
             }
 
+
             if (isLive && progress > 0f) {
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(14.dp))
                 LinearProgressIndicator(
                     progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(6.dp),
+                    color = MaterialTheme.colorScheme.primary,
                     trackColor =
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
                 )
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
 
-
 @Composable
-private fun StatusBadge(
+private fun StatusChip(
     isLive: Boolean,
     isExpired: Boolean,
     activeTime: Date,
     expirationTime: Date,
     now: Long
 ) {
+    val (label, icon, color) = when {
+        isExpired -> Triple(
+            stringResource(R.string.expired),
+            Icons.Outlined.Schedule,
+            MaterialTheme.colorScheme.error
+        )
+
+        isLive -> Triple(
+            stringResource(R.string.quiz_is_live),
+            Icons.Outlined.Schedule,
+            MaterialTheme.colorScheme.primary
+        )
+
+        else -> Triple(
+            "",
+            Icons.Outlined.HourglassTop,
+            MaterialTheme.colorScheme.secondary
+        )
+    }
+
     Column(horizontalAlignment = Alignment.End) {
 
-        when {
-            isExpired -> {
-                Text(
-                    text = stringResource(R.string.expired),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.error
+        if (label.isNotEmpty()) {
+            AssistChip(
+                onClick = {},
+                enabled = false,
+                label = {
+                    Text(
+                        text = label,
+                        fontWeight = FontWeight.Medium
+                    )
+                },
+                leadingIcon = {
+                    Icon(icon, null)
+                },
+                colors = AssistChipDefaults.assistChipColors(
+                    containerColor = color.copy(alpha = 0.15f),
+                    labelColor = color,
+                    leadingIconContentColor = color
                 )
-            }
-
-            isLive -> {
-                Text(
-                    text = stringResource(R.string.quiz_is_live),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Spacer(Modifier.height(2.dp))
-                RelativeTimeText(
-                    time = expirationTime,
-                    type = RelativeTimeType.EXPIRATION,
-                    now = now
-                )
-            }
-
-            else -> {
-                RelativeTimeText(
-                    time = activeTime,
-                    type = RelativeTimeType.ACTIVATION,
-                    now = now
-                )
-            }
+            )
         }
+
+        Spacer(Modifier.height(6.dp))
+
+        RelativeTimeText(
+            time = if (isLive) expirationTime else activeTime,
+            type =
+                if (isLive) RelativeTimeType.EXPIRATION
+                else RelativeTimeType.ACTIVATION,
+            now = now
+        )
     }
 }
 
@@ -195,8 +217,7 @@ private fun RelativeTimeText(
     }
 
     Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(top = 2.dp)
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector =
@@ -208,10 +229,11 @@ private fun RelativeTimeText(
             modifier = Modifier.size(14.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Spacer(Modifier.width(4.dp))
+        Spacer(Modifier.width(6.dp))
         Text(
             text = text,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

@@ -1,5 +1,3 @@
-
-
 package com.example.smartquiz.ui
 
 import androidx.compose.material.icons.Icons
@@ -9,6 +7,8 @@ import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 import com.example.smartquiz.navigation.Routes
 
@@ -22,7 +22,8 @@ fun SmartQuizTopBar(
 
     var showMenu by remember { mutableStateOf(false) }
 
-    val isQuizPlayScreen = currentRoute?.startsWith(Routes.QUIZ_PLAY) == true
+    val isQuizPlayScreen =
+        currentRoute?.startsWith(Routes.QUIZ_PLAY) == true
 
     val showProfileIcon = when {
         currentRoute == Routes.PROFILE -> false
@@ -32,13 +33,13 @@ fun SmartQuizTopBar(
 
     val showOverflowMenu = currentRoute == Routes.PROFILE
 
-
     val showBackButton =
         currentRoute != Routes.HOME &&
                 currentRoute != Routes.AUTH &&
-                !isQuizPlayScreen &&currentRoute != Routes.QUIZ_RESULT
+                !isQuizPlayScreen &&
+                currentRoute != Routes.QUIZ_RESULT
 
-    TopAppBar(
+    CenterAlignedTopAppBar(
         title = {
             Text(
                 text = when {
@@ -47,7 +48,8 @@ fun SmartQuizTopBar(
                     currentRoute == Routes.PROFILE -> "Profile"
                     else -> "SmartQuiz"
                 },
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold
             )
         },
 
@@ -56,7 +58,8 @@ fun SmartQuizTopBar(
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         imageVector = Icons.Outlined.ArrowBack,
-                        contentDescription = "Back"
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -65,10 +68,13 @@ fun SmartQuizTopBar(
         actions = {
 
             if (showProfileIcon) {
-                IconButton(onClick = { navController.navigate(Routes.PROFILE) }) {
+                IconButton(
+                    onClick = { navController.navigate(Routes.PROFILE) }
+                ) {
                     Icon(
                         imageVector = Icons.Outlined.AccountCircle,
-                        contentDescription = "Profile"
+                        contentDescription = "Profile",
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -86,7 +92,12 @@ fun SmartQuizTopBar(
                     onDismissRequest = { showMenu = false }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Logout") },
+                        text = {
+                            Text(
+                                "Logout",
+                                fontWeight = FontWeight.Medium
+                            )
+                        },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Outlined.Logout,
@@ -101,8 +112,13 @@ fun SmartQuizTopBar(
                     )
                 }
             }
-        }
+        },
+
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface
+        ),
+
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     )
 }
-
-

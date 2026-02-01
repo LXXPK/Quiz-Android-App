@@ -1,9 +1,9 @@
 package com.example.smartquiz.ui.quiz.quizplay.components
 
-
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -12,9 +12,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
-
 
 @Composable
 fun QuizTopSection(
@@ -26,78 +26,86 @@ fun QuizTopSection(
     val progress by viewModel.timerProgress.collectAsState()
     val showPalette by viewModel.showPalette.collectAsState()
 
-
     val timerState by viewModel.timerColorState.collectAsState()
     val isBlinking by viewModel.isBlinking.collectAsState()
 
     val timerColor = when (timerState) {
         QuizPlayViewModel.TimerColorState.NORMAL ->
             MaterialTheme.colorScheme.primary
-
         QuizPlayViewModel.TimerColorState.WARNING ->
             MaterialTheme.colorScheme.tertiary
-
         QuizPlayViewModel.TimerColorState.DANGER ->
             MaterialTheme.colorScheme.error
     }
 
     val blinkAlpha by animateFloatAsState(
         targetValue = if (isBlinking) 0.4f else 1f,
-        animationSpec = tween(durationMillis = 600),
+        animationSpec = tween(600),
         label = "blink"
     )
 
-    Column {
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+    Surface(
+        shape = RoundedCornerShape(20.dp),
+        tonalElevation = 6.dp
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
         ) {
 
-            Text(
-                text = "Question ${current + 1}/${questions.size}",
-                style = MaterialTheme.typography.labelLarge
-            )
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                Icon(
-                    imageVector = Icons.Outlined.Timer,
-                    contentDescription = "Timer",
-                    tint = timerColor.copy(alpha = blinkAlpha)
-                )
-
-                Spacer(Modifier.width(6.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
                 Text(
-                    text = remainingTime,
+                    text = "Question ${current + 1} of ${questions.size}",
                     style = MaterialTheme.typography.labelLarge,
-                    color = timerColor.copy(alpha = blinkAlpha)
+                    fontWeight = FontWeight.Medium
                 )
 
-                IconButton(onClick = viewModel::togglePalette) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+
                     Icon(
-                        imageVector =
-                            if (showPalette)
-                                Icons.Default.KeyboardArrowUp
-                            else
-                                Icons.Default.KeyboardArrowDown,
-                        contentDescription = "Question Palette"
+                        imageVector = Icons.Outlined.Timer,
+                        contentDescription = null,
+                        tint = timerColor.copy(alpha = blinkAlpha)
                     )
+
+                    Spacer(Modifier.width(6.dp))
+
+                    Text(
+                        text = remainingTime,
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        color = timerColor.copy(alpha = blinkAlpha)
+                    )
+
+                    IconButton(
+                        onClick = viewModel::togglePalette
+                    ) {
+                        Icon(
+                            imageVector =
+                                if (showPalette)
+                                    Icons.Default.KeyboardArrowUp
+                                else
+                                    Icons.Default.KeyboardArrowDown,
+                            contentDescription = "Toggle Palette"
+                        )
+                    }
                 }
             }
+
+            Spacer(Modifier.height(10.dp))
+
+            LinearProgressIndicator(
+                progress = { progress },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(6.dp),
+                color = timerColor,
+                trackColor = timerColor.copy(alpha = 0.2f)
+            )
         }
-
-        Spacer(Modifier.height(6.dp))
-
-        LinearProgressIndicator(
-            progress = { progress },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(6.dp),
-            color = timerColor,
-            trackColor = timerColor.copy(alpha = 0.25f)
-        )
     }
 }

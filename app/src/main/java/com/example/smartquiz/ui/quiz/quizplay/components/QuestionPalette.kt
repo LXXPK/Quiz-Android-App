@@ -1,4 +1,3 @@
-
 package com.example.smartquiz.ui.quiz.quizplay.components
 
 import androidx.compose.foundation.background
@@ -8,8 +7,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -19,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
@@ -33,26 +32,23 @@ fun QuestionPalette(
 
     val colors = MaterialTheme.colorScheme
 
-    Surface(
+    Card(
         modifier = Modifier.fillMaxWidth(),
-        tonalElevation = 6.dp,
-        shadowElevation = 6.dp
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colors.surface
+        )
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.quiz_question_palette_title),
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-            }
+            Text(
+                text = stringResource(R.string.quiz_question_palette_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
 
             Spacer(Modifier.height(12.dp))
 
@@ -62,28 +58,29 @@ fun QuestionPalette(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 PaletteLegendItem(
-                    color = colors.primaryContainer,
+                    color = colors.primary,
                     label = "Answered"
                 )
 
                 PaletteLegendItem(
-                    color = colors.errorContainer,
+                    color = colors.secondary,
                     label = "Visited"
                 )
 
                 PaletteLegendItem(
-                    color = colors.surfaceVariant,
+                    color = colors.outline,
                     label = "Not Visited"
                 )
             }
 
             Spacer(Modifier.height(16.dp))
 
+
             LazyVerticalGrid(
-                modifier = Modifier.height(70.dp),
+                modifier = Modifier.height(80.dp),
                 columns = GridCells.Fixed(5),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 itemsIndexed(questions) { index, question ->
 
@@ -93,20 +90,20 @@ fun QuestionPalette(
                         visited.contains(index)
 
                     val backgroundColor = when {
-                        isAnswered -> colors.primaryContainer
-                        isVisited -> colors.errorContainer
+                        isAnswered -> colors.primary
+                        isVisited -> colors.secondary
                         else -> colors.surfaceVariant
                     }
 
                     val textColor = when {
-                        isAnswered -> colors.onPrimaryContainer
-                        isVisited -> colors.onErrorContainer
+                        isAnswered -> colors.onPrimary
+                        isVisited -> colors.onSecondary
                         else -> colors.onSurfaceVariant
                     }
 
                     Box(
                         modifier = Modifier
-                            .size(44.dp)
+                            .size(46.dp)
                             .clip(CircleShape)
                             .background(backgroundColor)
                             .clickable {
@@ -118,7 +115,8 @@ fun QuestionPalette(
                         Text(
                             text = "${index + 1}",
                             color = textColor,
-                            style = MaterialTheme.typography.labelLarge
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 }
@@ -137,7 +135,7 @@ private fun PaletteLegendItem(
     ) {
         Box(
             modifier = Modifier
-                .size(12.dp)
+                .size(10.dp)
                 .clip(CircleShape)
                 .background(color)
         )

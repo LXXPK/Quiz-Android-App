@@ -10,23 +10,28 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ResultScoreCircle(percentage: Int) {
-    Box(contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier.size(180.dp),
+        contentAlignment = Alignment.Center
+    ) {
         CircularProgressIndicator(
             progress = percentage / 100f,
-            strokeWidth = 10.dp,
-            modifier = Modifier.size(160.dp),
-            color = MaterialTheme.colorScheme.primary
+            strokeWidth = 12.dp,
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
         )
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = "$percentage%",
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = "Accuracy",
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

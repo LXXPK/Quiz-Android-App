@@ -43,14 +43,14 @@ fun QuizRadarChart(
         fontSize = 9.sp
     )
 
-    // -------- Entry animation trigger --------
+
     var visible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         visible = true
     }
 
-    // -------- Subtle pulse animation (1 cycle) --------
+
     val pulseAlpha by animateFloatAsState(
         targetValue = if (visible) 0.55f else 0.35f,
         animationSpec = tween(

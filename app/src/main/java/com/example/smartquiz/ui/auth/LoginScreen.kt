@@ -1,4 +1,3 @@
-
 package com.example.smartquiz.ui.auth
 
 import androidx.compose.foundation.layout.*
@@ -14,7 +13,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import com.example.smartquiz.viewmodel.auth.AuthViewModel
 import kotlinx.coroutines.launch
-import com.example.smartquiz.ui.auth.GoogleAuthHandler
 import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
@@ -27,16 +25,13 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
 
-
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var isLoginMode by rememberSaveable { mutableStateOf(true) }
     var focusedField by rememberSaveable { mutableStateOf("email") }
 
-
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
-
 
     LaunchedEffect(authViewModel.errorMessage) {
         authViewModel.errorMessage?.let {
@@ -45,14 +40,12 @@ fun LoginScreen(
         }
     }
 
-
     LaunchedEffect(authViewModel.loginSuccess) {
         if (authViewModel.loginSuccess) {
             onLoginSuccess()
             authViewModel.consumeLoginSuccess()
         }
     }
-
 
     LaunchedEffect(focusedField) {
         when (focusedField) {

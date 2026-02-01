@@ -1,74 +1,74 @@
-//package com.example.smartquiz.ui.theme
-//
-//import androidx.compose.ui.graphics.Color
-//
-//val Purple80 = Color(0xFFD0BCFF)
-//val PurpleGrey80 = Color(0xFFCCC2DC)
-//val Pink80 = Color(0xFFEFB8C8)
-//
-//val Purple40 = Color(0xFF6650a4)
-//val PurpleGrey40 = Color(0xFF625b71)
-//val Pink40 = Color(0xFF7D5260)
-//
-//val BluePrimary = Color(0xFF1E3A8A)
-//val OrangeAccent = Color(0xFFF97316)
-//val GreenSuccess = Color(0xFF10B981)
-//val RedError = Color(0xFFEF4444)
-//
-//val LightBackground = Color(0xFFF8FAFC)
-//val CardSurface = Color(0xFFFFFFFF)
-//
-//
-//val DarkBluePrimary = Color(0xFF93C5FD)
-//val DarkOrangeAccent = Color(0xFFFB923C)
-//val DarkGreenSuccess = Color(0xFF34D399)
-//val DarkRedError = Color(0xFFF87171)
-//
-//val DarkBackground = Color(0xFF020617)
-//val DarkSurface = Color(0xFF0F172A)
-//val DarkSurfaceVariant = Color(0xFF1E293B)
-//
-
-
 package com.example.smartquiz.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-/* -------------------------------
-   BRAND COLORS (Quiz Focused)
--------------------------------- */
 
-val QuizBluePrimary = Color(0xFF1E40AF)     // Learning / Focus
-val QuizBlueSecondary = Color(0xFF3B82F6)   // Charts / Highlights
 
-val QuizOrangeAccent = Color(0xFFF97316)   // Action / Energy
-val QuizOrangeSoft = Color(0xFFFED7AA)
+// Indigo (Primary)
+val PrimaryLight = Color(0xFF4F46E5)
+val PrimaryDark = Color(0xFF818CF8)
 
-/* -------------------------------
-   STATUS COLORS
--------------------------------- */
+val OnPrimaryLight = Color(0xFFFFFFFF)
+val OnPrimaryDark = Color(0xFF0F172A)
 
-val QuizSuccess = Color(0xFF16A34A)
-val QuizError = Color(0xFFDC2626)
-val QuizWarning = Color(0xFFFACC15)
+// Teal (Secondary)
+val SecondaryLight = Color(0xFF14B8A6)
+val SecondaryDark = Color(0xFF2DD4BF)
 
-/* -------------------------------
-   LIGHT THEME
--------------------------------- */
+val OnSecondaryLight = Color(0xFFFFFFFF)
+val OnSecondaryDark = Color(0xFF022C22)
 
-val QuizLightBackground = Color(0xFFF8FAFC)
-val QuizLightSurface = Color(0xFFFFFFFF)
-val QuizLightSurfaceVariant = Color(0xFFEFF6FF)
+// Amber (Accent / CTA / Highlights)
+val AccentLight = Color(0xFFF59E0B)
+val AccentDark = Color(0xFFFBBF24)
 
-/* -------------------------------
-   DARK THEME
--------------------------------- */
+val OnAccentLight = Color(0xFF422006)
+val OnAccentDark = Color(0xFF422006)
 
-val QuizDarkBackground = Color(0xFF020617)
-val QuizDarkSurface = Color(0xFF0F172A)
-val QuizDarkSurfaceVariant = Color(0xFF1E293B)
+/* -------------------- BACKGROUND & SURFACE -------------------- */
 
-val QuizDarkBluePrimary = Color(0xFF93C5FD)
-val QuizDarkOrangeAccent = Color(0xFFFB923C)
-val QuizDarkSuccess = Color(0xFF4ADE80)
-val QuizDarkError = Color(0xFFF87171)
+val BackgroundLight = Color(0xFFF8FAFC)
+val BackgroundDark = Color(0xFF020617)
+
+val SurfaceLight = Color(0xFFFFFFFF)
+val SurfaceDark = Color(0xFF0F172A)
+
+val SurfaceVariantLight = Color(0xFFF1F5F9)
+val SurfaceVariantDark = Color(0xFF1E293B)
+
+/* -------------------- OUTLINES & DIVIDERS -------------------- */
+
+val OutlineLight = Color(0xFFE2E8F0)
+val OutlineDark = Color(0xFF334155)
+
+/* -------------------- TEXT COLORS -------------------- */
+
+val OnBackgroundLight = Color(0xFF020617)
+val OnBackgroundDark = Color(0xFFE5E7EB)
+
+val OnSurfaceLight = Color(0xFF020617)
+val OnSurfaceDark = Color(0xFFE5E7EB)
+
+val OnSurfaceVariantLight = Color(0xFF475569)
+val OnSurfaceVariantDark = Color(0xFFCBD5E1)
+
+/* -------------------- STATE COLORS -------------------- */
+
+// Error
+val ErrorLight = Color(0xFFEF4444)
+val ErrorDark = Color(0xFFF87171)
+
+val OnErrorLight = Color(0xFFFFFFFF)
+val OnErrorDark = Color(0xFF450A0A)
+
+// Success (NEW – very useful)
+val SuccessLight = Color(0xFF22C55E)
+val SuccessDark = Color(0xFF4ADE80)
+
+// Warning / Info
+val WarningLight = Color(0xFFF59E0B)
+val WarningDark = Color(0xFFFBBF24)
+
+// Disabled
+val DisabledLight = Color(0xFFCBD5E1)
+val DisabledDark = Color(0xFF475569)

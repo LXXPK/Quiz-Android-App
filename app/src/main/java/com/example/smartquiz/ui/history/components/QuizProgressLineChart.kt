@@ -32,7 +32,7 @@ fun QuizProgressLineChart(
 ) {
     if (attempts.size < 2) return
 
-    // Take last 10 attempts for progress view
+
     val lastAttempts = attempts.takeLast(10)
 
     val lineParameters = listOf(
@@ -51,12 +51,11 @@ fun QuizProgressLineChart(
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
-        // Axis Description
+
         Text(
             text = "Y-axis: Score (%) | X-axis: Date",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.secondary,
-//            modifier = Modifier.padding(horizontal = 16.dp, top = 8.dp)
         )
 
         Box(modifier = Modifier
@@ -87,7 +86,7 @@ fun QuizProgressLineChart(
             )
         }
 
-        // Hints/Insights based on the trend
+
         val scores = lastAttempts.map { it.score }
         val lastScore = scores.last()
         val averageScore = scores.average()
@@ -102,7 +101,7 @@ fun QuizProgressLineChart(
             text = hintText,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
-//            modifier = Modifier.padding(horizontal = 16.dp, bottom = 8.dp)
+
         )
     }
 }

@@ -1,3 +1,5 @@
+
+
 package com.example.smartquiz.ui.quiz.quizplay
 
 import androidx.activity.compose.BackHandler
@@ -9,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
+
+import com.example.smartquiz.ui.quiz.quizplay.components.QuizPlayContent
 
 @Composable
 fun QuizPlayScreen(
@@ -32,7 +36,10 @@ fun QuizPlayScreen(
     }
 
     if (uiState.isLoading) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
             CircularProgressIndicator()
         }
         return

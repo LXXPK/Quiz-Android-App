@@ -19,7 +19,7 @@ fun QuizListContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(16.dp).verticalScroll(rememberScrollState())
+        modifier = modifier.padding(16.dp)
     ) {
 
         Text(

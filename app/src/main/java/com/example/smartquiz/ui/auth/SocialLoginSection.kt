@@ -12,13 +12,19 @@ import com.example.smartquiz.R
 fun SocialLoginSection(
     onGoogleSignIn: () -> Unit
 ) {
-    Text(stringResource(R.string.label_or))
+    Text(
+        stringResource(R.string.label_or),
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
 
     Spacer(Modifier.height(12.dp))
 
     Button(
         onClick = onGoogleSignIn,
-        modifier = Modifier.fillMaxWidth(0.70f)
+        modifier = Modifier.fillMaxWidth(0.7f),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.secondary
+        )
     ) {
         Text(stringResource(R.string.action_sign_in_google))
     }
