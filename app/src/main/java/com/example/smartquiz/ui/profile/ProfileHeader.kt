@@ -15,23 +15,29 @@ fun ProfileHeader(
     name: String,
     email: String
 ) {
+    val initial = name.firstOrNull()?.uppercase() ?: "U"
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(
             modifier = Modifier
-                .size(100.dp)
+                .size(96.dp)
                 .background(
-                    MaterialTheme.colorScheme.primaryContainer,
-                    CircleShape
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = CircleShape
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text("👤", style = MaterialTheme.typography.headlineLarge)
+            Text(
+                text = initial,
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(14.dp))
 
         Text(
             text = name,

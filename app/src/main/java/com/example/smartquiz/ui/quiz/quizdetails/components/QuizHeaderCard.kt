@@ -1,18 +1,11 @@
 package com.example.smartquiz.ui.quiz.quizdetails.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.shape.RoundedCornerShape
 
 @Composable
 fun QuizHeaderCard(
@@ -22,15 +15,38 @@ fun QuizHeaderCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+        shape = MaterialTheme.shapes.large,
+        elevation = CardDefaults.cardElevation(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
-        Column(Modifier.padding(16.dp)) {
-            Text(text = title, style = MaterialTheme.typography.titleLarge)
-            Spacer(Modifier.height(6.dp))
-            Text(text = "Category: $category")
-            Spacer(Modifier.height(4.dp))
-            Text(text = "Total Questions: $questionCount")
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                AssistChip(
+                    onClick = {},
+                    enabled = false,
+                    label = { Text(category) }
+                )
+
+                AssistChip(
+                    onClick = {},
+                    enabled = false,
+                    label = { Text("$questionCount Questions") }
+                )
+            }
         }
     }
 }

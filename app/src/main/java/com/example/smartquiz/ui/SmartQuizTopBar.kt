@@ -2,10 +2,13 @@ package com.example.smartquiz.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 import com.example.smartquiz.navigation.Routes
 
@@ -19,41 +22,63 @@ fun SmartQuizTopBar(
 
     var showMenu by remember { mutableStateOf(false) }
 
+    val isQuizPlayScreen =
+        currentRoute?.startsWith(Routes.QUIZ_PLAY) == true
+
     val showProfileIcon = when {
         currentRoute == Routes.PROFILE -> false
-        currentRoute?.startsWith(Routes.QUIZ_PLAY) == true -> false
+        isQuizPlayScreen -> false
         else -> true
     }
 
     val showOverflowMenu = currentRoute == Routes.PROFILE
 
-    TopAppBar(
+    val showBackButton =
+        currentRoute != Routes.HOME &&
+                currentRoute != Routes.AUTH &&
+                !isQuizPlayScreen &&
+                currentRoute != Routes.QUIZ_RESULT
+
+    CenterAlignedTopAppBar(
         title = {
             Text(
                 text = when {
-                    currentRoute?.startsWith(Routes.QUIZ_PLAY) == true -> "Quiz"
-                    currentRoute == Routes.HISTORY -> "History"
+                    isQuizPlayScreen -> "Quiz"
+                    currentRoute == Routes.HISTORY -> "Score Card"
                     currentRoute == Routes.PROFILE -> "Profile"
                     else -> "SmartQuiz"
                 },
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold
             )
         },
+
+        navigationIcon = {
+            if (showBackButton && navController.previousBackStackEntry != null) {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Outlined.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+        },
+
         actions = {
 
-            /* ---------- PROFILE ICON ---------- */
             if (showProfileIcon) {
                 IconButton(
                     onClick = { navController.navigate(Routes.PROFILE) }
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.AccountCircle,
-                        contentDescription = "Profile"
+                        contentDescription = "Profile",
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }
 
-            /* ---------- OVERFLOW MENU ---------- */
             if (showOverflowMenu) {
                 IconButton(onClick = { showMenu = true }) {
                     Icon(
@@ -67,7 +92,12 @@ fun SmartQuizTopBar(
                     onDismissRequest = { showMenu = false }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Logout") },
+                        text = {
+                            Text(
+                                "Logout",
+                                fontWeight = FontWeight.Medium
+                            )
+                        },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Outlined.Logout,
@@ -82,6 +112,13 @@ fun SmartQuizTopBar(
                     )
                 }
             }
-        }
+        },
+
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface
+        ),
+
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     )
 }

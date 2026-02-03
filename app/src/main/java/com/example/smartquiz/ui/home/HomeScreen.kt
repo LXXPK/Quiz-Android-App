@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 import com.example.smartquiz.navigation.Routes
-import com.example.smartquiz.ui.home.HomeViewModel
+import com.example.smartquiz.viewmodel.home.HomeViewModel
 
 
 @Composable

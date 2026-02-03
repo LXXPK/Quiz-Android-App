@@ -23,6 +23,9 @@ fun QuizResultScreen(
     val percentage by viewModel.percentage.collectAsState()
     val remainingTime by viewModel.remainingTimeText.collectAsState()
 
+
+    val timeTaken by viewModel.timeTakenText.collectAsState()
+
     val incorrect = attempted - correct
     val totalQuestions = correct + incorrect + unattempted
     val maxScore = totalQuestions * 10
@@ -58,9 +61,18 @@ fun QuizResultScreen(
 
         Spacer(Modifier.height(24.dp))
 
+        // Existing
         TimeInfoRow(
             label = "Time Left",
             value = remainingTime
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+
+        TimeInfoRow(
+            label = "Time Taken",
+            value = timeTaken
         )
 
         Spacer(Modifier.height(32.dp))

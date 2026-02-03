@@ -1,11 +1,13 @@
-package com.example.smartquiz.ui.quiz.quizplay
+package com.example.smartquiz.ui.quiz.quizplay.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.smartquiz.ui.quiz.quizplay.components.*
-import com.example.smartquiz.ui.quiz.quizplay.dialogs.*
+import com.example.smartquiz.ui.quiz.quizplay.dialogs.SubmitConfirmDialog
+import com.example.smartquiz.ui.quiz.quizplay.dialogs.TimeoutDialog
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
 
 @Composable
@@ -13,37 +15,47 @@ fun QuizPlayContent(
     viewModel: QuizPlayViewModel
 ) {
     val questions by viewModel.questions.collectAsState()
-    val currentIndex by viewModel.currentIndex.collectAsState()
     val showPalette by viewModel.showPalette.collectAsState()
     val showSubmitDialog by viewModel.showSubmitDialog.collectAsState()
     val showTimeoutDialog by viewModel.showTimeoutDialog.collectAsState()
 
     if (questions.isEmpty()) return
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        QuizTopSection(viewModel)
 
-        Spacer(Modifier.height(16.dp))
+        item {
+            QuizTopSection(viewModel)
+        }
 
-        QuestionSection(viewModel)
 
-        Spacer(Modifier.height(20.dp))
+        if (showPalette) {
+            item {
+                QuestionPalette(viewModel)
+            }
+        }
 
-        NavigationSection(viewModel)
 
-        Spacer(Modifier.height(16.dp))
+        item {
+            QuestionSection(viewModel)
+        }
 
-        SubmitButton(onClick = viewModel::openSubmitDialog)
+
+        item {
+            NavigationSection(viewModel)
+        }
+
+
+        item {
+            SubmitButton(onClick = viewModel::openSubmitDialog)
+        }
     }
 
-    if (showPalette) {
-        QuestionPalette(viewModel)
-    }
 
     if (showSubmitDialog) {
         SubmitConfirmDialog(viewModel)

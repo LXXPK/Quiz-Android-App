@@ -10,34 +10,76 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = PrimaryLight,
+    onPrimary = OnPrimaryLight,
+    primaryContainer = PrimaryLight.copy(alpha = 0.15f),
+    onPrimaryContainer = PrimaryLight,
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondary = SecondaryLight,
+    onSecondary = OnSecondaryLight,
+    secondaryContainer = SecondaryLight.copy(alpha = 0.15f),
+    onSecondaryContainer = SecondaryLight,
+
+    tertiary = AccentLight,
+    onTertiary = OnAccentLight,
+    tertiaryContainer = AccentLight.copy(alpha = 0.18f),
+    onTertiaryContainer = OnAccentLight,
+
+    background = BackgroundLight,
+    onBackground = OnBackgroundLight,
+
+    surface = SurfaceLight,
+    onSurface = OnSurfaceLight,
+    surfaceVariant = SurfaceVariantLight,
+    onSurfaceVariant = OnSurfaceVariantLight,
+
+    outline = OutlineLight,
+
+    error = ErrorLight,
+    onError = OnErrorLight
 )
+
+private val DarkColorScheme = darkColorScheme(
+    primary = PrimaryDark,
+    onPrimary = OnPrimaryDark,
+    primaryContainer = PrimaryDark.copy(alpha = 0.25f),
+    onPrimaryContainer = PrimaryDark,
+
+    secondary = SecondaryDark,
+    onSecondary = OnSecondaryDark,
+    secondaryContainer = SecondaryDark.copy(alpha = 0.25f),
+    onSecondaryContainer = SecondaryDark,
+
+    tertiary = AccentDark,
+    onTertiary = OnAccentDark,
+    tertiaryContainer = AccentDark.copy(alpha = 0.25f),
+    onTertiaryContainer = OnAccentDark,
+
+    background = BackgroundDark,
+    onBackground = OnBackgroundDark,
+
+    surface = SurfaceDark,
+    onSurface = OnSurfaceDark,
+    surfaceVariant = SurfaceVariantDark,
+    onSurfaceVariant = OnSurfaceVariantDark,
+
+    outline = OutlineDark,
+
+    error = ErrorDark,
+    onError = OnErrorDark
+)
+
 
 @Composable
 fun SmartQuizTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

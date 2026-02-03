@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Alignment
+
 
 @Composable
 fun TimeInfoRow(
@@ -16,15 +18,22 @@ fun TimeInfoRow(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = Icons.Outlined.AccessTime,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary
         )
-        Spacer(Modifier.width(8.dp))
-        Text(label, modifier = Modifier.weight(1f))
-        Text(value, fontWeight = FontWeight.Medium)
+        Spacer(Modifier.width(10.dp))
+        Text(
+            text = label,
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = value,
+            fontWeight = FontWeight.Medium
+        )
     }
 }

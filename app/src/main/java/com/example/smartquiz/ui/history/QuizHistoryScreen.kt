@@ -20,12 +20,16 @@ import com.example.smartquiz.data.local.entity.quiz.QuizAttemptEntity
 import com.example.smartquiz.viewmodel.history.QuizHistoryViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import com.example.smartquiz.ui.history.components.QuizGraphsSection
+
 
 @Composable
 fun QuizHistoryScreen(
     viewModel: QuizHistoryViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var showInsights by remember { mutableStateOf(true) }
+
 
     LaunchedEffect(Unit) {
         viewModel.loadHistory()
@@ -66,14 +70,68 @@ fun QuizHistoryScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
 
+
                         item {
                             HistoryStatsSection(uiState)
                         }
+
+
+                        item {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                ),
+                                onClick = { showInsights = !showInsights }
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = "Performance Insights",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+
+                                    Icon(
+                                        imageVector = Icons.Outlined.BarChart,
+                                        contentDescription = "Toggle insights",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
+                        }
+
+
+                        if (showInsights) {
+                            item {
+                                QuizGraphsSection(
+                                    attempts = uiState.attempts,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                        }
+
+
+                        item {
+                            Text(
+                                text = "Quiz History",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                        }
+
 
                         items(uiState.attempts) { attempt ->
                             HistoryItemCard(attempt)
                         }
                     }
+
                 }
             }
         }
@@ -239,7 +297,7 @@ private fun EmptyHistoryState() {
     }
 }
 
-/* ---------- UTIL ---------- */
+
 
 private fun formatDate(time: Long): String {
     val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())

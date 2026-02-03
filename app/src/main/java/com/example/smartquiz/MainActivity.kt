@@ -20,9 +20,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SmartQuizTheme {
-
                 AppScaffold()
-
             }
         }
     }

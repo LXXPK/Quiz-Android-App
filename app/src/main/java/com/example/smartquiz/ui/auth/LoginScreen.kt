@@ -1,16 +1,19 @@
 package com.example.smartquiz.ui.auth
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import com.example.smartquiz.viewmodel.auth.AuthViewModel
 import kotlinx.coroutines.launch
-import com.example.smartquiz.utils.*
-import androidx.compose.material3.*
+import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
 fun LoginScreen(
@@ -22,15 +25,18 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var isLoginMode by remember { mutableStateOf(true) }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var isLoginMode by rememberSaveable { mutableStateOf(true) }
+    var focusedField by rememberSaveable { mutableStateOf("email") }
 
-    /* ---------- SIDE EFFECTS ---------- */
+    val emailFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
 
     LaunchedEffect(authViewModel.errorMessage) {
         authViewModel.errorMessage?.let {
             snackbarHostState.showSnackbar(it)
+            authViewModel.clearError()
         }
     }
 
@@ -38,6 +44,13 @@ fun LoginScreen(
         if (authViewModel.loginSuccess) {
             onLoginSuccess()
             authViewModel.consumeLoginSuccess()
+        }
+    }
+
+    LaunchedEffect(focusedField) {
+        when (focusedField) {
+            "email" -> emailFocusRequester.requestFocus()
+            "password" -> passwordFocusRequester.requestFocus()
         }
     }
 
@@ -52,34 +65,40 @@ fun LoginScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.padding(24.dp),
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             LoginHeader(isLoginMode = isLoginMode)
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(24.dp))
 
             LoginForm(
                 email = email,
                 password = password,
                 isLoginMode = isLoginMode,
                 isLoading = authViewModel.isLoading,
+                emailFocusRequester = emailFocusRequester,
+                passwordFocusRequester = passwordFocusRequester,
+                onEmailFocused = { focusedField = "email" },
+                onPasswordFocused = { focusedField = "password" },
                 onEmailChange = { email = it },
                 onPasswordChange = { password = it },
                 onSubmit = {
                     keyboardController?.hide()
-
                     if (isLoginMode) {
                         authViewModel.loginWithEmailPassword(email, password)
                     } else {
                         authViewModel.registerWithEmailPassword(email, password)
                     }
-
                 },
                 onForgotPassword = {
                     keyboardController?.hide()

@@ -25,9 +25,6 @@ fun QuizDetailsContent(
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
     ) {
 
-
-
-
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

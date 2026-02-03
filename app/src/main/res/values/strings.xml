@@ -95,7 +95,7 @@
     </string>
     <string name="quiz_time_limit">Time Limit</string>
     <string name="quiz_time_limit_description">
-        2 Minutes (Auto submit on timeout)
+        5 Minutes (Auto submit on timeout)
     </string>
 
 

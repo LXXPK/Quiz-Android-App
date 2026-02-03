@@ -1,6 +1,7 @@
 package com.example.smartquiz.ui.profile
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -16,29 +17,44 @@ fun InterestChip(
     disabled: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
-    val bgColor by animateColorAsState(
+    val containerColor by animateColorAsState(
         if (selected)
-            MaterialTheme.colorScheme.primary
+            MaterialTheme.colorScheme.primaryContainer
         else
-            MaterialTheme.colorScheme.surfaceVariant
+            MaterialTheme.colorScheme.surface,
+        label = "chip-bg"
     )
 
     val textColor by animateColorAsState(
         if (selected)
-            MaterialTheme.colorScheme.onPrimary
+            MaterialTheme.colorScheme.onPrimaryContainer
         else
-            MaterialTheme.colorScheme.onSurfaceVariant
+            MaterialTheme.colorScheme.onSurface,
+        label = "chip-text"
     )
 
     AssistChip(
         onClick = { onClick?.invoke() },
         enabled = !disabled,
-        label = { Text(label, color = textColor) },
+        label = {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelLarge,
+                color = textColor
+            )
+        },
         modifier = Modifier
-            .height(40.dp)
-            .alpha(if (disabled) 0.4f else 1f),
+            .height(42.dp)
+            .alpha(if (disabled) 0.45f else 1f),
+        border = BorderStroke(
+            1.dp,
+            if (selected)
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+            else
+                MaterialTheme.colorScheme.outline
+        ),
         colors = AssistChipDefaults.assistChipColors(
-            containerColor = bgColor
+            containerColor = containerColor
         )
     )
 }

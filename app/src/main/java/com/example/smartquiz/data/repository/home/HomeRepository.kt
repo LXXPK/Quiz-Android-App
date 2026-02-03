@@ -6,6 +6,7 @@ import com.example.smartquiz.data.local.dao.user.UserDao
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 import com.example.smartquiz.data.local.entity.user.InterestEntity
 import com.example.smartquiz.data.local.entity.user.UserEntity
+import com.example.smartquiz.utils.StreakUtils
 import javax.inject.Inject
 
 class HomeRepository @Inject constructor(
@@ -29,4 +30,7 @@ class HomeRepository @Inject constructor(
     suspend fun getActiveQuizzes(): List<QuizEntity> {
         return quizDao.getActiveQuizzes()
     }
+
+
+
 }

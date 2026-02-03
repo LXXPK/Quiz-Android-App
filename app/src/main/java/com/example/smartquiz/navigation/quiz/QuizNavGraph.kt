@@ -1,18 +1,18 @@
 package com.example.smartquiz.navigation.quiz
 
+import android.net.Uri
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
-import com.example.smartquiz.R
 import androidx.navigation.compose.composable
+import com.example.smartquiz.R
 import com.example.smartquiz.navigation.Routes
 import com.example.smartquiz.ui.quiz.quizdetails.QuizDetailsScreen
 import com.example.smartquiz.ui.quiz.quizlist.QuizListScreen
 import com.example.smartquiz.ui.quiz.quizplay.QuizPlayScreen
 import com.example.smartquiz.ui.quiz.quizresult.QuizResultScreen
-import com.example.smartquiz.utils.AppConstants
 import com.example.smartquiz.utils.NavConstants
 import com.example.smartquiz.viewmodel.quiz.QuizListViewModel
 import com.example.smartquiz.viewmodel.quiz.QuizPlayViewModel
@@ -21,6 +21,7 @@ fun NavGraphBuilder.quizNavGraph(
     navController: NavController
 ) {
 
+
     composable(
         route = "${Routes.QUIZ_LIST}/{${NavConstants.ARG_CATEGORY}}",
         arguments = listOf(
@@ -28,19 +29,24 @@ fun NavGraphBuilder.quizNavGraph(
                 type = NavType.StringType
             }
         )
-    ) { backStack ->
+    ) { backStackEntry ->
+
+
+        val category = Uri.decode(
+            backStackEntry.arguments!!
+                .getString(NavConstants.ARG_CATEGORY)!!
+        )
+
         QuizListScreen(
-            category = backStack.arguments!!
-                .getString(NavConstants.ARG_CATEGORY)!!,
+            category = category,
             onQuizSelected = { quizId ->
                 navController.navigate(
-                    Routes.quizDetails(
-                        quizId = quizId
-                    )
+                    Routes.quizDetails(quizId)
                 )
             }
         )
     }
+
 
     composable(
         route = "${Routes.QUIZ_DETAILS}/{${NavConstants.ARG_QUIZ_ID}}",
@@ -49,13 +55,14 @@ fun NavGraphBuilder.quizNavGraph(
                 type = NavType.StringType
             }
         )
-    ) { backStack ->
+    ) { backStackEntry ->
         QuizDetailsScreen(
-            quizId = backStack.arguments!!
+            quizId = backStackEntry.arguments!!
                 .getString(NavConstants.ARG_QUIZ_ID)!!,
             navController = navController
         )
     }
+
 
     composable(
         route = Routes.QUIZ_PLAY,
@@ -67,18 +74,18 @@ fun NavGraphBuilder.quizNavGraph(
                 type = NavType.IntType
             }
         )
-    ) { backStack ->
+    ) { backStackEntry ->
 
-        val parentEntry = remember(backStack) {
+        val parentEntry = remember(backStackEntry) {
             navController.getBackStackEntry(Routes.QUIZ_PLAY)
         }
 
         val viewModel: QuizPlayViewModel = hiltViewModel(parentEntry)
 
         QuizPlayScreen(
-            quizId = backStack.arguments!!
+            quizId = backStackEntry.arguments!!
                 .getString(NavConstants.ARG_QUIZ_ID)!!,
-            attemptId = backStack.arguments!!
+            attemptId = backStackEntry.arguments!!
                 .getInt(NavConstants.ARG_ATTEMPT_ID),
             viewModel = viewModel,
             onFinish = {
@@ -87,9 +94,10 @@ fun NavGraphBuilder.quizNavGraph(
         )
     }
 
-    composable(Routes.QUIZ_RESULT) { backStack ->
 
-        val parentEntry = remember(backStack) {
+    composable(Routes.QUIZ_RESULT) { backStackEntry ->
+
+        val parentEntry = remember(backStackEntry) {
             navController.getBackStackEntry(Routes.QUIZ_PLAY)
         }
 
@@ -103,7 +111,9 @@ fun NavGraphBuilder.quizNavGraph(
         )
     }
 
+
     composable(Routes.SUGGESTED_QUIZZES) {
+
         val viewModel: QuizListViewModel = hiltViewModel()
 
         LaunchedEffect(Unit) {
@@ -113,10 +123,10 @@ fun NavGraphBuilder.quizNavGraph(
         QuizListScreen(
             category = stringResource(R.string.home_recommended_title),
             onQuizSelected = { quizId ->
-                navController.navigate(Routes.quizDetails(quizId))
+                navController.navigate(
+                    Routes.quizDetails(quizId)
+                )
             }
         )
     }
-
-
 }
