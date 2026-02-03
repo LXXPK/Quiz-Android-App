@@ -1,5 +1,7 @@
 package com.example.smartquiz.navigation
 
+import android.net.Uri
+
 object Routes {
 
     const val AUTH = "auth"
@@ -18,8 +20,11 @@ object Routes {
 
     fun suggestedQuizzes() = SUGGESTED_QUIZZES
 
-    fun quizList(category: String) =
-        "$QUIZ_LIST/$category"
+//    fun quizList(category: String) =
+//        "$QUIZ_LIST/$category"
+
+    fun quizList(category: String): String =
+        "$QUIZ_LIST/${Uri.encode(category)}"
 
     fun quizDetails(quizId: String) =
         "$QUIZ_DETAILS/$quizId"

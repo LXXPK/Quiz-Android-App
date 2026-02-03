@@ -5,6 +5,7 @@
     import com.example.smartquiz.data.local.session.SessionManager
     import com.example.smartquiz.data.repository.history.HistoryRepository
     import com.example.smartquiz.ui.history.QuizHistoryUiState
+    import com.example.smartquiz.utils.QuizConstants.MAX_SCORE
     import dagger.hilt.android.lifecycle.HiltViewModel
     import kotlinx.coroutines.flow.MutableStateFlow
     import kotlinx.coroutines.flow.asStateFlow
@@ -21,9 +22,7 @@
         private val _uiState = MutableStateFlow(QuizHistoryUiState())
         val uiState = _uiState.asStateFlow()
 
-        companion object {
-            private const val MAX_SCORE = 50
-        }
+
 
         fun loadHistory() {
             val uid = sessionManager.getUid()

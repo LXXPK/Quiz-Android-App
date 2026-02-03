@@ -3,6 +3,8 @@
 package com.example.smartquiz.ui.home
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
@@ -17,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 import com.example.smartquiz.data.local.entity.quiz.QuizEntity
 import com.example.smartquiz.ui.home.components.*
-import com.example.smartquiz.ui.home.HomeViewModel
+import com.example.smartquiz.viewmodel.home.HomeViewModel
 
 
 @Composable
@@ -45,20 +47,22 @@ fun HomeScreenContent(
                 onHistoryClick = onHistoryClick
             )
         }
+        item { Spacer(modifier = Modifier.height(12.dp)) }
 
         item {
             HomeBannerCarousel(
                 banners = listOf(
-                    stringResource(R.string.home_banner_daily_challenge),
-                    stringResource(R.string.home_banner_weekly_top),
-                    stringResource(R.string.home_banner_boost_streak)
+                    R.drawable.banner1,
+                    R.drawable.banner2,
+                    R.drawable.banner4
                 )
             )
         }
 
-        item { Spacer(modifier = Modifier.height(24.dp)) }
+        item { Spacer(modifier = Modifier.height(12.dp)) }
 
         item {
+
             when {
                 uiState.suggestedQuizzes.isNotEmpty() -> {
                     HorizontalTitledQuizList(
@@ -107,45 +111,57 @@ fun HomeScreenContent(
 
         uiState.quizzesByCategory.forEach { (category, quizzes) ->
             item {
-                Spacer(modifier = Modifier.height(24.dp))
+
                 CategoryQuizRow(
                     category = category,
                     quizzes = quizzes,
                     onViewAll = { onCategoryViewAll(category) },
                     onQuizClick = handleQuizCardClick
                 )
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
 
-        /* ---------- ACTIVE QUIZZES ---------- */
+
+
         if (uiState.activeQuizzes.isNotEmpty()) {
             item {
-                Text(
-                    text = stringResource(R.string.active_quizzes),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(
-                        top = 24.dp,
-                        bottom = 12.dp
-                    )
-                )
-            }
-
-            items(uiState.activeQuizzes) { quiz ->
-                val (activeTime, expirationTime, progress) =
-                    homeViewModel.getQuizProgress(quiz)
-
-                ActiveQuizCard(
-                    quiz = quiz,
-                    handleQuizCardClick = handleQuizCardClick,
-                    activeTime = activeTime,
-                    expirationTime = expirationTime,
-                    progress = progress,
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 6.dp)
-                )
-            }
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = MaterialTheme.shapes.large
+                        )
 
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.active_quizzes),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    uiState.activeQuizzes.forEach { quiz ->
+                        val (activeTime, expirationTime, progress) =
+                            homeViewModel.getQuizProgress(quiz)
+
+                        ActiveQuizCard(
+                            quiz = quiz,
+                            handleQuizCardClick = handleQuizCardClick,
+                            activeTime = activeTime,
+                            expirationTime = expirationTime,
+                            progress = progress,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 6.dp)
+                        )
+                    }
+                }
+            }
         }
+
     }
 }

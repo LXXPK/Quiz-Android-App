@@ -15,11 +15,9 @@ fun NavGraphBuilder.homeNavGraph(
 ) {
     composable(Routes.HOME) {
 
-        val authViewModel: AuthViewModel = hiltViewModel()
 
         HomeScreen(
             handleQuizCardClick = { quiz ->
-                val uid = authViewModel.getUid() ?: return@HomeScreen
                 navController.navigate(
                     Routes.quizDetails(quiz.quizId)
                 )

@@ -14,4 +14,26 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE userId = :uid")
     suspend fun getUserById(uid: String): UserEntity?
+
+    @Query("""
+    UPDATE users 
+    SET 
+        currentStreak = 
+            CASE 
+                WHEN lastActivityDate IS NULL THEN 1
+                WHEN lastActivityDate >= :startOfToday THEN currentStreak
+                WHEN lastActivityDate >= :startOfYesterday THEN currentStreak + 1
+                ELSE 1
+
+            END,
+        lastActivityDate = :now
+    WHERE userId = :userId
+""")
+    suspend fun updateUserStreak(
+        userId: String,
+        startOfToday: Long,
+        startOfYesterday: Long,
+        now: Long
+    )
+
 }

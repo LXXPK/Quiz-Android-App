@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val firebaseAuth: FirebaseAuth
 ) : ViewModel() {
 
     var isLoading by mutableStateOf(false)
@@ -27,14 +28,12 @@ class AuthViewModel @Inject constructor(
     var loginSuccess by mutableStateOf(false)
         private set
 
-    private val auth = FirebaseAuth.getInstance()
-
     fun loginWithEmailPassword(email: String, password: String) {
-        if (!validate(email, password)) return
+        if (!validateLogin(email, password)) return
         isLoading = true
         errorMessage = null
 
-        auth.signInWithEmailAndPassword(email, password)
+        firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 it.user?.let(::onFirebaseLoginSuccess)
             }
@@ -44,31 +43,12 @@ class AuthViewModel @Inject constructor(
             }
     }
 
-    private fun validate(email: String, password: String): Boolean {
-        return when {
-            email.isBlank() || password.isBlank() -> {
-                errorMessage = "Fields cannot be empty"
-                false
-            }
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                errorMessage = "Invalid email format"
-                false
-            }
-            password.length < 6 -> {
-                errorMessage = "Password must be at least 6 characters"
-                false
-            }
-            else -> true
-        }
-    }
-
-
     fun registerWithEmailPassword(email: String, password: String) {
-        if (!validate(email, password)) return
+        if (!validateRegister(email, password)) return
         isLoading = true
         errorMessage = null
 
-        auth.createUserWithEmailAndPassword(email, password)
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 it.user?.let(::onFirebaseLoginSuccess)
             }
@@ -92,7 +72,7 @@ class AuthViewModel @Inject constructor(
         isLoading = true
         errorMessage = null
 
-        auth.sendPasswordResetEmail(email)
+        firebaseAuth.sendPasswordResetEmail(email)
             .addOnSuccessListener {
                 errorMessage = "Password reset email sent"
                 isLoading = false
@@ -103,6 +83,42 @@ class AuthViewModel @Inject constructor(
             }
     }
 
+    private fun validateLogin(email: String, password: String): Boolean {
+        errorMessage = null
+
+        return when {
+            email.isBlank() || password.isBlank() -> {
+                errorMessage = "Email and password are required"
+                false
+            }
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                errorMessage = "Invalid email format"
+                false
+            }
+            else -> true
+        }
+    }
+
+    private fun validateRegister(email: String, password: String): Boolean {
+        errorMessage = null
+
+        return when {
+            email.isBlank() || password.isBlank() -> {
+                errorMessage = "All fields are required"
+                false
+            }
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                errorMessage = "Invalid email format"
+                false
+            }
+            password.length < 6 -> {
+                errorMessage = "Password must be at least 6 characters"
+                false
+            }
+            else -> true
+        }
+    }
+
 
     fun onFirebaseLoginSuccess(user: FirebaseUser) {
         viewModelScope.launch {
@@ -110,6 +126,10 @@ class AuthViewModel @Inject constructor(
             loginSuccess = true
             isLoading = false
         }
+    }
+
+    fun clearError() {
+        errorMessage = null
     }
 
     fun consumeLoginSuccess() {

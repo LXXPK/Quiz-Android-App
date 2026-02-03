@@ -28,27 +28,33 @@ fun InterestsSection(
 ) {
     Column {
 
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Your Interests", style = MaterialTheme.typography.titleMedium)
             Text(
-                "${selected.size}/$maxSelection selected",
-                style = MaterialTheme.typography.bodySmall,
+                text = "Your Interests",
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(
+                text = "${selected.size}/$maxSelection",
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.primary
             )
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(14.dp))
 
         Card(
             modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.extraLarge,
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            elevation = CardDefaults.cardElevation(4.dp)
         ) {
-            Column(Modifier.padding(16.dp)) {
+            Column(Modifier.padding(18.dp)) {
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -56,54 +62,49 @@ fun InterestsSection(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        if (isEditMode) "Select interests" else "Your interests",
+                        text = if (isEditMode) "Select up to $maxSelection"
+                        else "Selected interests",
                         style = MaterialTheme.typography.titleSmall
                     )
 
                     if (isEditMode) {
-                        Row {
-                            if (selected.isNotEmpty()) {
-                                TextButton(onClick = onClearAll) {
-                                    Text(
-                                        "Clear",
-                                        color = MaterialTheme.colorScheme.error
-                                    )
-                                }
-                            }
-                            IconButton(onClick = onExpandToggle) {
-                                Icon(Icons.Default.KeyboardArrowDown, null)
-                            }
+                        IconButton(onClick = onExpandToggle) {
+                            Icon(Icons.Default.KeyboardArrowDown, null)
                         }
                     }
                 }
 
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(12.dp))
 
+                // Read mode
                 if (!isEditMode) {
                     FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         selected.forEach {
                             InterestChip(label = it, selected = true)
                         }
                     }
 
+                    Spacer(Modifier.height(12.dp))
+
                     TextButton(onClick = onEdit) {
                         Text("Edit interests")
                     }
                 }
 
+
                 if (isEditMode && expand) {
                     Column(
                         modifier = Modifier
-                            .heightIn(max = 220.dp)
+                            .heightIn(max = 240.dp)
                             .verticalScroll(rememberScrollState())
                     ) {
                         FlowRow(
                             maxItemsInEachRow = 3,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             allInterests.forEach { interest ->
                                 InterestChip(
@@ -112,19 +113,32 @@ fun InterestsSection(
                                     disabled =
                                         interest !in selected &&
                                                 selected.size >= maxSelection,
-                                    onClick = { onToggleInterest(interest) } // ✅
+                                    onClick = { onToggleInterest(interest) }
                                 )
                             }
                         }
 
-                        Spacer(Modifier.height(16.dp))
+                        Spacer(Modifier.height(20.dp))
 
                         Button(
                             onClick = onSave,
                             enabled = selected.isNotEmpty(),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = MaterialTheme.shapes.large
                         ) {
-                            Text("Save Profile")
+                            Text("Save Preferences")
+                        }
+
+                        if (selected.isNotEmpty()) {
+                            TextButton(
+                                onClick = onClearAll,
+                                modifier = Modifier.align(Alignment.End)
+                            ) {
+                                Text(
+                                    "Clear all",
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         }
                     }
                 }

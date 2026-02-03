@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.example.smartquiz.R
 
 @Composable
@@ -13,21 +13,19 @@ fun SocialLoginSection(
     onGoogleSignIn: () -> Unit
 ) {
     Text(
-        text = stringResource(R.string.label_or)
+        stringResource(R.string.label_or),
+        color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 
-    Spacer(
-        modifier = Modifier.height(
-            dimensionResource(R.dimen.spacing_medium)
-        )
-    )
+    Spacer(Modifier.height(12.dp))
 
     Button(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onGoogleSignIn
-    ) {
-        Text(
-            text = stringResource(R.string.action_sign_in_google)
+        onClick = onGoogleSignIn,
+        modifier = Modifier.fillMaxWidth(0.7f),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.secondary
         )
+    ) {
+        Text(stringResource(R.string.action_sign_in_google))
     }
 }
